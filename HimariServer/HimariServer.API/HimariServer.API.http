@@ -1,0 +1,6 @@
+@HimariServer.API_HostAddress = http://localhost:5263
+
+GET {{HimariServer.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
