@@ -1,4 +1,6 @@
 ﻿using HimariServer.Repository.DBContext;
+using HimariServer.Repository.Repositories.Implements;
+using HimariServer.Repository.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
@@ -14,9 +16,20 @@ namespace HimariServer.Repository.UnitOfWork
         private readonly HimariServerContext _context;
         private IDbContextTransaction _transaction;
 
+        private IUserRepository _userRepository;
+
         public UnitOfWork(HimariServerContext context) {
             _context = context;
         }
+
+        public IUserRepository UsersRepository {
+            get
+            {
+                return _userRepository ??= new UserRepository(_context);
+
+            }
+        }
+
         public void Commit()
         {
             try

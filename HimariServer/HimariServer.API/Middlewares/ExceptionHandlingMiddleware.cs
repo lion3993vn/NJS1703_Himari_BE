@@ -1,7 +1,7 @@
 ﻿using HimariServer.Service.Exceptions;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-using HimariServer.API.Models;
+using HimariServer.Service.BusinessModels.ResultModels;
 
 namespace HimariServer.API.Middlewares
 {

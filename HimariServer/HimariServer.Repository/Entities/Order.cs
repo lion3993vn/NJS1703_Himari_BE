@@ -5,13 +5,11 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class Order
+public partial class Order : BaseEntity
 {
     public int Id { get; set; }
 
     public string OrderCode { get; set; }
-
-    public DateTime? CreateDate { get; set; }
 
     public double? OrderPrice { get; set; }
 

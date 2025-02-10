@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class User
+public partial class User : BaseEntity
 {
-    public int Id { get; set; }
-
     public string FullName { get; set; }
 
     public string UnsignName { get; set; }
@@ -17,17 +15,13 @@ public partial class User
 
     public string GoogleId { get; set; }
 
-    public string HashPassword { get; set; }
+    public string? AvatarUrl { get; set; }
 
     public string PhoneNumber { get; set; }
 
     public string Address { get; set; }
 
     public int? Point { get; set; }
-
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
 
     public string Status { get; set; }
 

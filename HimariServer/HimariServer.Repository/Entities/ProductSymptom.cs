@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class ProductSymptom
+public partial class ProductSymptom : BaseEntity
 {
-    public int Id { get; set; }
-
     public int? PartSymptomId { get; set; }
 
     public int? ProductId { get; set; }

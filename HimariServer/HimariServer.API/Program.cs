@@ -1,6 +1,9 @@
+using HimariServer.API.Middlewares;
 using HimariServer.Repository.DBContext;
+using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Mappers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -16,7 +19,25 @@ namespace HimariServer.API
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState
+                        .Where(m => m.Value.Errors.Count > 0)
+                        .SelectMany(m => m.Value.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+
+                    var response = new BaseResponseModel
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = string.Join("; ", errors)
+                    };
+
+                    return new BadRequestObjectResult(response);
+                };
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -88,6 +109,17 @@ namespace HimariServer.API
 
             builder.Services.AddInfractstructure(builder.Configuration);
 
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetSection("RedisSettings:RedisConnectionString").Value;
+                options.InstanceName = builder.Configuration.GetSection("RedisSettings:InstanceName").Value;
+                options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
+                {
+                    AbortOnConnectFail = true,
+                    EndPoints = { options.Configuration }
+                };
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -109,6 +141,8 @@ namespace HimariServer.API
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.Run();
         }

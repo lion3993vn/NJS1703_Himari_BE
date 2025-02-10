@@ -5,19 +5,13 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class Brand
+public partial class Brand : BaseEntity
 {
-    public int Id { get; set; }
-
     public string BrandName { get; set; }
 
     public string Description { get; set; }
 
     public string Status { get; set; }
-
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

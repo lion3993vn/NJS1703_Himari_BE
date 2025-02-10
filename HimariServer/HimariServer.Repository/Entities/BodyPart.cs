@@ -5,19 +5,13 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class BodyPart
+public partial class BodyPart : BaseEntity
 {
-    public int Id { get; set; }
-
     public string BodyPartName { get; set; }
 
     public string Description { get; set; }
 
     public string Status { get; set; }
-
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
 
     public virtual ICollection<CustomerConsulting> CustomerConsultings { get; set; } = new List<CustomerConsulting>();
 

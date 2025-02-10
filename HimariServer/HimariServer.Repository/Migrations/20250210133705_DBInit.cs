@@ -20,8 +20,9 @@ namespace HimariServer.Repository.Migrations
                     BodyPartName = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Description = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,8 +38,9 @@ namespace HimariServer.Repository.Migrations
                     BrandName = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,8 +57,9 @@ namespace HimariServer.Repository.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     ParentCategoryId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,7 +77,10 @@ namespace HimariServer.Repository.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleName = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true)
+                    RoleName = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,7 +94,10 @@ namespace HimariServer.Repository.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    BodyPartId = table.Column<int>(type: "int", nullable: true)
+                    BodyPartId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,11 +121,12 @@ namespace HimariServer.Repository.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: true),
                     ImageUrl = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
                     BrandId = table.Column<int>(type: "int", nullable: true),
-                    Gender = table.Column<bool>(type: "bit", nullable: true)
+                    Gender = table.Column<bool>(type: "bit", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,14 +153,15 @@ namespace HimariServer.Repository.Migrations
                     UnsignName = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Email = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     GoogleId = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    HashPassword = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    AvatarUrl = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     PhoneNumber = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Address = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Point = table.Column<int>(type: "int", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    RoleId = table.Column<int>(type: "int", nullable: true)
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -169,7 +180,10 @@ namespace HimariServer.Repository.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PartSymptomId = table.Column<int>(type: "int", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,10 +208,11 @@ namespace HimariServer.Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Content = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,7 +231,10 @@ namespace HimariServer.Repository.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
-                    BodyPartId = table.Column<int>(type: "int", nullable: true)
+                    BodyPartId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,10 +258,12 @@ namespace HimariServer.Repository.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderCode = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     OrderPrice = table.Column<double>(type: "float", nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    AccountId = table.Column<int>(type: "int", nullable: true)
+                    AccountId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,7 +282,10 @@ namespace HimariServer.Repository.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerConsultingId = table.Column<int>(type: "int", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -288,7 +311,10 @@ namespace HimariServer.Repository.Migrations
                     OrderId = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: true),
-                    Price = table.Column<int>(type: "int", nullable: true)
+                    Price = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -312,11 +338,13 @@ namespace HimariServer.Repository.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PaymentCode = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     Amount = table.Column<double>(type: "float", nullable: true),
                     Description = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     Status = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
-                    OrderId = table.Column<int>(type: "int", nullable: true)
+                    OrderId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

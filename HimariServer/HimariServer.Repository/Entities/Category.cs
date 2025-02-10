@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class Category
+public partial class Category : BaseEntity
 {
-    public int Id { get; set; }
-
     public string CategoryName { get; set; }
 
     public string Description { get; set; }
@@ -16,10 +14,6 @@ public partial class Category
     public int? ParentCategoryId { get; set; }
 
     public string Status { get; set; }
-
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
 
     public virtual ICollection<Category> InverseParentCategory { get; set; } = new List<Category>();
 

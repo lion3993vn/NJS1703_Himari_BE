@@ -10,9 +10,4 @@
     <ProjectReference Include="..\HimariServer.Repository\HimariServer.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Interfaces\" />
-    <Folder Include="Services\Implements\" />
-  </ItemGroup>
-
 </Project>

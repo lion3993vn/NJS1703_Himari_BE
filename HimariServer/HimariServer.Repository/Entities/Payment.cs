@@ -5,13 +5,9 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class Payment
+public partial class Payment : BaseEntity
 {
-    public int Id { get; set; }
-
     public string PaymentCode { get; set; }
-
-    public DateTime? CreateDate { get; set; }
 
     public double? Amount { get; set; }
 

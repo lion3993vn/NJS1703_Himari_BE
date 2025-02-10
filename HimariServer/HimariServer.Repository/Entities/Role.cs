@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class Role
+public partial class Role : BaseEntity
 {
-    public int Id { get; set; }
-
     public string RoleName { get; set; }
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();

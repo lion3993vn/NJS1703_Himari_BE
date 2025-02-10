@@ -17,7 +17,7 @@ namespace HimariServer.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,8 +34,11 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Status")
                         .IsUnicode(false)
@@ -45,8 +48,8 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -71,19 +74,22 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Status")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__BodyPart__3214EC070D8B18BB");
@@ -103,18 +109,21 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Status")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Brand__3214EC07FDBEE05E");
@@ -134,11 +143,14 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("ParentCategoryId")
                         .HasColumnType("int");
@@ -147,8 +159,8 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Category__3214EC07F747C397");
@@ -166,11 +178,20 @@ namespace HimariServer.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("CustomerConsultingId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Consulti__3214EC07AE03378C");
@@ -193,8 +214,17 @@ namespace HimariServer.Repository.Migrations
                     b.Property<int?>("BodyPartId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Customer__3214EC07B8F96589");
@@ -217,8 +247,11 @@ namespace HimariServer.Repository.Migrations
                     b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("OrderCode")
                         .IsUnicode(false)
@@ -230,6 +263,9 @@ namespace HimariServer.Repository.Migrations
                     b.Property<string>("Status")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Order__3214EC073B6A676E");
@@ -247,6 +283,12 @@ namespace HimariServer.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
@@ -258,6 +300,9 @@ namespace HimariServer.Repository.Migrations
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__OrderDet__3214EC076368A2AF");
@@ -280,9 +325,18 @@ namespace HimariServer.Repository.Migrations
                     b.Property<int?>("BodyPartId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__PartSymp__3214EC070B2656E5");
@@ -303,12 +357,15 @@ namespace HimariServer.Repository.Migrations
                     b.Property<double?>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -320,6 +377,9 @@ namespace HimariServer.Repository.Migrations
                     b.Property<string>("Status")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Payment__3214EC070A0AEE9E");
@@ -343,8 +403,8 @@ namespace HimariServer.Repository.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -355,6 +415,9 @@ namespace HimariServer.Repository.Migrations
                     b.Property<string>("ImageUrl")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("Price")
                         .HasColumnType("int");
@@ -370,8 +433,8 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Product__3214EC0715285C8F");
@@ -391,11 +454,20 @@ namespace HimariServer.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("PartSymptomId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__ProductS__3214EC0744847958");
@@ -415,9 +487,18 @@ namespace HimariServer.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("RoleName")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__Role__3214EC073A531F92");
@@ -437,8 +518,12 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<string>("AvatarUrl")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsUnicode(false)
@@ -452,9 +537,8 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<string>("HashPassword")
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PhoneNumber")
                         .IsUnicode(false)
@@ -474,8 +558,8 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK__User__3214EC07C8A523E4");

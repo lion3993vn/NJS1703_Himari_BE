@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace HimariServer.Repository.Entities;
 
-public partial class Product
+public partial class Product : BaseEntity
 {
-    public int Id { get; set; }
-
     public string ProductName { get; set; }
 
     public string Description { get; set; }
@@ -20,10 +18,6 @@ public partial class Product
     public string ImageUrl { get; set; }
 
     public string Status { get; set; }
-
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
 
     public int? CategoryId { get; set; }
 
