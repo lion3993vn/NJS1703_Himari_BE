@@ -18,9 +18,4 @@
     <ProjectReference Include="..\HimariServer.Service\HimariServer.Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\ResponseModels\" />
-    <Folder Include="Models\RequestModels\" />
-  </ItemGroup>
-
 </Project>
