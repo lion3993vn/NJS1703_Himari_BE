@@ -16,21 +16,22 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'  # Thay bằng phiên bản .NET của bạn
-
-      - name: Change Working Directory
-        run: cd HimariServer
       
       - name: Restore Dependencies
         run: dotnet restore
+        working-directory: ./HimariServer
 
       - name: Build Application
         run: dotnet build --configuration Release --no-restore
+        working-directory: ./HimariServer
 
       - name: Run Tests
         run: dotnet test --configuration Release --no-build --verbosity normal
+        working-directory: ./HimariServer
 
       - name: Publish Application
         run: dotnet publish -c Release -o publish
+        working-directory: ./HimariServer
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
