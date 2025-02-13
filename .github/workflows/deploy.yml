@@ -3,7 +3,7 @@ name: CI/CD for ASP.NET Core
 on:
   push:
     branches:
-      - main  # Thay đổi nếu branch chính của bạn khác
+      - main  
 
 jobs:
   build:
@@ -15,23 +15,23 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  # Thay bằng phiên bản .NET của bạn
-      
+          dotnet-version: '8.0.x'  
+
       - name: Restore Dependencies
         run: dotnet restore
-        working-directory: ./HimariServer
+        working-directory: HimariServer  # Chạy từ thư mục chứa source
 
       - name: Build Application
         run: dotnet build --configuration Release --no-restore
-        working-directory: ./HimariServer
+        working-directory: HimariServer
 
       - name: Run Tests
         run: dotnet test --configuration Release --no-build --verbosity normal
-        working-directory: ./HimariServer
+        working-directory: HimariServer
 
       - name: Publish Application
         run: dotnet publish -c Release -o publish
-        working-directory: ./HimariServer
+        working-directory: HimariServer
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -50,18 +50,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: app
-          path: HimariServer/app
+          path: app  # Tải artifact vào thư mục `app`
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
-        working-directory: ./HimariServer
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -r -o StrictHostKeyChecking=no -i private_key app $SERVER_USER@$SERVER_IP:/var/www/app
-          ssh -o StrictHostKeyChecking=no -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
+          scp -r app $SERVER_USER@$SERVER_IP:/var/www/app
+          ssh $SERVER_USER@$SERVER_IP << 'EOF'
             cd /var/www/app
             sudo systemctl restart kestrel-app
           EOF
