@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace HimariServer.API
 {
@@ -100,10 +101,24 @@ namespace HimariServer.API
                 };
             });
 
+            // ===================== CONFIG DATABASE CONNECTION =======================
+
+            var connection = string.Empty;
+            if (builder.Environment.IsDevelopment())
+            {
+                connection = builder.Configuration.GetConnectionString("HimariServerLocal");
+            }
+            else
+            {
+                connection = builder.Configuration.GetConnectionString("HimariServerLocal");
+            }
+
             builder.Services.AddDbContext<HimariServerContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("HimariServerLocal"));
+                options.UseSqlServer(connection);
             });
+
+            // ==========================================================
 
             builder.Services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
 
