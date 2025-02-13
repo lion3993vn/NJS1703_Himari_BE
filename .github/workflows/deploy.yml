@@ -57,7 +57,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_USER: ${{ secrets.USER }}
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -r -o StrictHostKeyChecking=no -i private_key app $SERVER_USER@$SERVER_IP:/var/www/app
