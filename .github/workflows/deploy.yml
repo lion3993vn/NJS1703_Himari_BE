@@ -58,7 +58,7 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
-          cd /HimariServer
+          cd HimariServer
           echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -r -o StrictHostKeyChecking=no -i private_key app $SERVER_USER@$SERVER_IP:/var/www/app
           ssh -o StrictHostKeyChecking=no -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
