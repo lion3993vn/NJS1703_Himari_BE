@@ -53,6 +53,7 @@ jobs:
           path: HimariServer/app
 
       - name: Deploy to Server
+        working-directory: ./HimariServer
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
@@ -61,7 +62,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -r -o StrictHostKeyChecking=no -i private_key app $SERVER_USER@$SERVER_IP:/var/www/app
           ssh -o StrictHostKeyChecking=no -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
-            cd HimariServer
             cd /var/www/app
             sudo systemctl restart kestrel-app
           EOF
