@@ -16,9 +16,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'  # Thay bằng phiên bản .NET của bạn
-
-      - name: Locate Project Path
-        run: cd /home/wiz/wiz-share/NJS1703_Himari_BE/HimariServer
       
       - name: Restore Dependencies
         run: dotnet restore
