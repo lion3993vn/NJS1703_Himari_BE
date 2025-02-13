@@ -16,6 +16,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'  # Thay bằng phiên bản .NET của bạn
+
+      - name: Change Working Directory
+        run: cd HimariServer
       
       - name: Restore Dependencies
         run: dotnet restore
