@@ -61,8 +61,10 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          scp -r app $SERVER_USER@$SERVER_IP:/var/www/app
-          ssh $SERVER_USER@$SERVER_IP << 'EOF'
+          ssh -p 2222 $SERVER_USER@$SERVER_IP "mkdir -p /var/www/app"
+          scp -P 2222 -r app $SERVER_USER@$SERVER_IP:/var/www/app
+          ssh -p 2222 $SERVER_USER@$SERVER_IP << 'EOF'
             cd /var/www/app
             sudo systemctl restart kestrel-app
           EOF
+
