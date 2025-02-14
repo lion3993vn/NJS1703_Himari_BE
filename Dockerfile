@@ -29,4 +29,4 @@ RUN dotnet publish "./HimariServer.API.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "HimariServer.API.dll"]
+ENTRYPOINT ["dotnet", "HimariServer.API.dll", "--urls=http://0.0.0.0:12345"]
