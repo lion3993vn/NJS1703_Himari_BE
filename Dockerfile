@@ -12,9 +12,9 @@ EXPOSE 12346
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["HimariServer.API/HimariServer.API.csproj", "HimariServer.API/"]
-COPY ["HimariServer.Services/HimariServer.Services.csproj", "HimariServer.Services/"]
-COPY ["HimariServer.Repositories/HimariServer.Repositories.csproj", "HimariServer.Repositories/"]
+COPY ["HimariServer/HimariServer.API/HimariServer.API.csproj", "HimariServer.API/"]
+COPY ["HimariServer/HimariServer.Services/HimariServer.Services.csproj", "HimariServer.Services/"]
+COPY ["HimariServer/HimariServer.Repositories/HimariServer.Repositories.csproj", "HimariServer.Repositories/"]
 RUN dotnet restore "./HimariServer.API/HimariServer.API.csproj"
 COPY . .
 WORKDIR "/src/HimariServer.API"
