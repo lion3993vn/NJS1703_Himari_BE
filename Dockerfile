@@ -16,8 +16,8 @@ COPY ["HimariServer/HimariServer.API/HimariServer.API.csproj", "HimariServer.API
 COPY ["HimariServer/HimariServer.Service/HimariServer.Service.csproj", "HimariServer.Service/"]
 COPY ["HimariServer/HimariServer.Repository/HimariServer.Repository.csproj", "HimariServer.Repository/"]
 RUN dotnet restore "./HimariServer.API/HimariServer.API.csproj"
-COPY . .
 WORKDIR "/src/HimariServer.API"
+COPY . .
 RUN dotnet build "./HimariServer.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
