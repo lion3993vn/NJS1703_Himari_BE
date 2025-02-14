@@ -13,8 +13,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["HimariServer/HimariServer.API/HimariServer.API.csproj", "HimariServer.API/"]
-COPY ["HimariServer/HimariServer.Services/HimariServer.Services.csproj", "HimariServer.Services/"]
-COPY ["HimariServer/HimariServer.Repositories/HimariServer.Repositories.csproj", "HimariServer.Repositories/"]
+COPY ["HimariServer/HimariServer.Service/HimariServer.Service.csproj", "HimariServer.Service/"]
+COPY ["HimariServer/HimariServer.Repository/HimariServer.Repository.csproj", "HimariServer.Repository/"]
 RUN dotnet restore "./HimariServer.API/HimariServer.API.csproj"
 COPY . .
 WORKDIR "/src/HimariServer.API"
