@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
+using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,19 @@ namespace HimariServer.Service.Mappers
         public MapperConfigProfile()
         {
             CreateMap<User, UserModel>().ReverseMap();
+
+            CreateMap<Category, CategoryModels>()
+            .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategory != null ? src.ParentCategory.CategoryName : null));
+            CreateMap<Pagination<Category>, Pagination<CategoryModels>>().ConvertUsing<PaginationConverter<Category, CategoryModels>>();
+        }
+    }
+
+    public class PaginationConverter<TSource, TDestination> : ITypeConverter<Pagination<TSource>, Pagination<TDestination>>
+    {
+        public Pagination<TDestination> Convert(Pagination<TSource> source, Pagination<TDestination> destination, ResolutionContext context)
+        {
+            var mappedItems = context.Mapper.Map<List<TDestination>>(source);
+            return new Pagination<TDestination>(mappedItems, source.TotalCount, source.CurrentPage, source.PageSize);
         }
     }
 }

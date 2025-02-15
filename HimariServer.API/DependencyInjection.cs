@@ -20,6 +20,10 @@ namespace HimariServer.API
             // config user service
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+
+            // config category service
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
             return services;
         }
     }
