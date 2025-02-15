@@ -23,7 +23,11 @@ namespace HimariServer.API
 
             // config category service
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryService, CategoryService>();    
+            
+            // config product service
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
             return services;
         }
     }

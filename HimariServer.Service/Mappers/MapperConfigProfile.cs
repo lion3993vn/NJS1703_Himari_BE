@@ -2,6 +2,7 @@
 using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Service.BusinessModels.CategoryModels;
+using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,10 @@ namespace HimariServer.Service.Mappers
             CreateMap<Category, CategoryModels>()
             .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategory != null ? src.ParentCategory.CategoryName : null));
             CreateMap<Pagination<Category>, Pagination<CategoryModels>>().ConvertUsing<PaginationConverter<Category, CategoryModels>>();
+
+            CreateMap<Product, ProductModels>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName: null));
+            CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
+            CreateMap<UpdateProductModel, Product>().ReverseMap();
         }
     }
 
