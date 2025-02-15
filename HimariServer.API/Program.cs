@@ -77,27 +77,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(options =>
-//            {
-//                options.SaveToken = true;
-//                options.RequireHttpsMetadata = false;
-//                options.TokenValidationParameters = new TokenValidationParameters
-//                {
-//                    ValidateIssuer = true,
-//                    ValidateAudience = true,
-//                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
-//                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-//                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"])),
-//                    ValidateLifetime = true,
-//                    ClockSkew = TimeSpan.Zero
-//                };
-//            });
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -111,9 +90,9 @@ builder.Services.AddAuthentication(options =>
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = "HimariServer",
-                    ValidIssuer = "http://wizlab.io.vn",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is the longest security key the Himari team has made the security key for HimariSecureKey123456789")),
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"])),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
@@ -133,16 +112,16 @@ builder.Services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
 
 builder.Services.AddInfractstructure(builder.Configuration);
 
-//builder.Services.AddStackExchangeRedisCache(options =>
-//{
-//    options.Configuration = builder.Configuration.GetSection("RedisSettings:RedisConnectionString").Value;
-//    options.InstanceName = builder.Configuration.GetSection("RedisSettings:InstanceName").Value;
-//    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
-//    {
-//        AbortOnConnectFail = true,
-//        EndPoints = { options.Configuration }
-//    };
-//});
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetSection("RedisSettings:RedisConnectionString").Value;
+    options.InstanceName = builder.Configuration.GetSection("RedisSettings:InstanceName").Value;
+    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
+    {
+        AbortOnConnectFail = true,
+        EndPoints = { options.Configuration }
+    };
+});
 
 var app = builder.Build();
 
