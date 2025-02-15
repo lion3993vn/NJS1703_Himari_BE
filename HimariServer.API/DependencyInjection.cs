@@ -14,8 +14,8 @@ namespace HimariServer.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // config redis service
-            //services.Configure<RedisSettings>(config.GetSection("RedisSettings"));
-            //services.AddScoped<IRedisService, RedisService>();
+            services.Configure<RedisSettings>(config.GetSection("RedisSettings"));
+            services.AddScoped<IRedisService, RedisService>();
 
             // config user service
             services.AddScoped<IUserRepository, UserRepository>();
