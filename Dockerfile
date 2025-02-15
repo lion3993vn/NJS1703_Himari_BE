@@ -12,12 +12,12 @@ EXPOSE 12346
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["HimariServer/HimariServer.API/HimariServer.API.csproj", "HimariServer.API/"]
-COPY ["HimariServer/HimariServer.Service/HimariServer.Service.csproj", "HimariServer.Service/"]
-COPY ["HimariServer/HimariServer.Repository/HimariServer.Repository.csproj", "HimariServer.Repository/"]
+COPY ["HimariServer.API/HimariServer.API.csproj", "HimariServer.API/"]
+COPY ["HimariServer.Service/HimariServer.Service.csproj", "HimariServer.Service/"]
+COPY ["HimariServer.Repository/HimariServer.Repository.csproj", "HimariServer.Repository/"]
 RUN dotnet restore "./HimariServer.API/HimariServer.API.csproj"
-WORKDIR "/src/HimariServer.API"
 COPY . .
+WORKDIR "/src/HimariServer.API"
 RUN dotnet build "./HimariServer.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

@@ -83,38 +83,31 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
-{
-    options.SaveToken = true;
-    options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["JWT:ValidAudience"],
-        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
-    };
-});
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"])),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
 // ===================== CONFIG DATABASE CONNECTION =======================
 
-var connection = string.Empty;
-if (builder.Environment.IsDevelopment())
-{
-    connection = builder.Configuration.GetConnectionString("HimariServerLocal");
-}
-else
-{
-    connection = builder.Configuration.GetConnectionString("HimariServerLocal");
-}
-
 builder.Services.AddDbContext<HimariServerContext>(options =>
 {
-    options.UseSqlServer(connection);
+options.UseSqlServer(builder.Configuration.GetConnectionString("HimariServerLocal"));
 });
 
 // ==========================================================
 
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
 
 builder.Services.AddInfractstructure(builder.Configuration);
