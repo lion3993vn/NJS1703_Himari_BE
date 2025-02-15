@@ -98,19 +98,9 @@ builder.Services.AddAuthentication(options =>
 
 // ===================== CONFIG DATABASE CONNECTION =======================
 
-var connection = string.Empty;
-if (builder.Environment.IsDevelopment())
-{
-    connection = builder.Configuration.GetConnectionString("HimariServerLocal");
-}
-else
-{
-    connection = builder.Configuration.GetConnectionString("HimariServerLocal");
-}
-
 builder.Services.AddDbContext<HimariServerContext>(options =>
 {
-    options.UseSqlServer(connection);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HimariServerLocal"));
 });
 
 // ==========================================================
