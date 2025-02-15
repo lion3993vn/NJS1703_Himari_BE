@@ -8,8 +8,6 @@ namespace HimariServer.Service.BusinessModels.CategoryModels
 {
     public class CategoryModels
     {
-        public int? Id { get; set; }
-
         public string CategoryName { get; set; }
 
         public string Description { get; set; }
