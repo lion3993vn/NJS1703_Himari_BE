@@ -17,6 +17,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IDbContextTransaction _transaction;
 
         private IUserRepository _userRepository;
+        private CategoryRepository _categoryRepository;
 
         public UnitOfWork(HimariServerContext context) {
             _context = context;
@@ -26,6 +27,15 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _userRepository ??= new UserRepository(_context);
+
+            }
+        }
+
+        public ICategoryRepository CategoryRepository
+        {
+            get
+            {
+                return _categoryRepository ??= new CategoryRepository(_context);
 
             }
         }
