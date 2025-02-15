@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HimariServer.API", "HimariServer.API\HimariServer.API.csproj", "{EEE1D844-E5DA-462A-9495-0FDD846F2968}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HimariServer.API", "HimariServer.API\HimariServer.API.csproj", "{EEE1D844-E5DA-462A-9495-0FDD846F2968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HimariServer.Repository", "HimariServer.Repository\HimariServer.Repository.csproj", "{3F705350-3AD8-49B4-81FC-0B38385FB01B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HimariServer.Repository", "HimariServer.Repository\HimariServer.Repository.csproj", "{3F705350-3AD8-49B4-81FC-0B38385FB01B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HimariServer.Service", "HimariServer.Service\HimariServer.Service.csproj", "{C73FE838-A5EA-4FC8-9970-200CF609FACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HimariServer.Service", "HimariServer.Service\HimariServer.Service.csproj", "{C73FE838-A5EA-4FC8-9970-200CF609FACA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
