@@ -11,7 +11,7 @@ namespace HimariServer.Repository.UnitOfWork
     {
         IUserRepository UsersRepository { get; }
         ICategoryRepository CategoryRepository { get; }
-
+        IProductRepository ProductRepository { get; }
         int Save();
         void Commit();
         void Rollback();
