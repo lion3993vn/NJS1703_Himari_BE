@@ -17,6 +17,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IDbContextTransaction _transaction;
         private IUserRepository _userRepository;
         private IProductRepository _productRepository;
+        private IBlogRepository _blogRepository;
         private CategoryRepository _categoryRepository;
 
         public UnitOfWork(HimariServerContext context) 
@@ -47,6 +48,15 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _productRepository ??= new ProductRepository(_context);
+
+            }
+        }
+
+        public IBlogRepository BlogRepository
+        {
+            get
+            {
+                return _blogRepository ??= new BlogRepository(_context);
 
             }
         }
