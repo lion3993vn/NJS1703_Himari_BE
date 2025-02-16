@@ -28,6 +28,10 @@ namespace HimariServer.API
             // config product service
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
+
+            // config blog service
+            services.AddScoped<IBlogRepository, BlogRepository>();
+            services.AddScoped<IBlogService, BlogService>();
             return services;
         }
     }

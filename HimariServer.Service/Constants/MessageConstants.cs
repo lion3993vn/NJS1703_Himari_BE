@@ -20,6 +20,16 @@ namespace HimariServer.Service.Constants
         public const string PRODUCT_DELETE_SUCCESS = "Product deleted successfully";
         public const string PRODUCT_UPDATE_SUCCESS = "Product updated successfully";
 
+
+        public const string GET_LIST_BLOG_SUCCESS = "Get list blog successfully";
+        public const string BLOG_FOUND = "Blog not founds";
+        public const string BLOG_NOT_FOUND = "Blog not found";
+        public const string BLOG_DELETE_SUCCESS = "Blog deleted successfully";
+        public const string BLOG_UPDATE_SUCCESS = "Blog updated successfully";
+        public const string BLOG_CREATE_SUCCESS = "Blog create successfully";
+        public const string BLOG_REQUIRE_DATA = "Blog is require data";
+
+
         public const string TOKEN_NOT_VALID = "TokenNotValid";
         public const string LOGIN_SUCCESS_MESSAGE = "Login successfully";
         public const string LOGIN_GOOGLE_SUCCESS_MESSAGE = "Login with google successfully";
