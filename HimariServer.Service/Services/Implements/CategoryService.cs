@@ -29,6 +29,33 @@ namespace HimariServer.Service.Services.Implements
             _mapper = mapper;
         }
 
+        public async Task<BaseResponseModel> CreateCategory(AddCategoryModel model)
+        {
+            if(model.ParentCategoryId != null)
+            {
+                var parentCategory = await _unitOfWork.CategoryRepository.GetByIdIncludeAsync(
+                                                        (int)model.ParentCategoryId,
+                                                        filter: query => !query.IsDeleted
+                                                        );
+
+                if (parentCategory == null)
+                {
+                    throw new NotExistException(MessageConstants.CATEGORY_PARENT_NOT_FOUND);
+                }
+            }
+
+            var category = _mapper.Map<Category>(model);
+            await _unitOfWork.CategoryRepository.AddAsync(category);
+            _unitOfWork.Save();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.CATEGORY_CREATE_SUCCESS,
+                Data = _mapper.Map<CategoryModel>(category)
+            };
+        }
+
         public async Task<BaseResponseModel> DeleteCategoryByIdAsync(int id)
         {
             var category = await _unitOfWork.CategoryRepository.GetByIdIncludeAsync(
