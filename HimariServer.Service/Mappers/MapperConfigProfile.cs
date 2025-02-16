@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
+using HimariServer.Service.BusinessModels.BlogModels;
 using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.UserModels;
@@ -22,9 +23,19 @@ namespace HimariServer.Service.Mappers
             .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategory != null ? src.ParentCategory.CategoryName : null));
             CreateMap<Pagination<Category>, Pagination<CategoryModels>>().ConvertUsing<PaginationConverter<Category, CategoryModels>>();
 
+            // product
             CreateMap<Product, ProductModels>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName: null));
             CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
             CreateMap<UpdateProductModel, Product>().ReverseMap();
+
+            // blog
+            CreateMap<Blog, BlogModel>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User != null ? src.User.FullName : null))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User != null ? src.User.Id : (int?)null));
+            CreateMap<Pagination<Blog>, Pagination<BlogModel>>().ConvertUsing<PaginationConverter<Blog, BlogModel>>();
+            CreateMap<UpdateBlogModel, Blog>().ReverseMap();
+            CreateMap<AddBlogModel, Blog>().ReverseMap();
+
         }
     }
 
