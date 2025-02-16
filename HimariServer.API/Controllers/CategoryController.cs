@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,5 +21,24 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _categoryService.GetCategoriesPaginationAsync(paginationParameter));
         }
+
+        [HttpGet("{id}")]
+        public Task<IActionResult> GetCategoryById(int id)
+        {
+            return ValidateAndExecute(async () => await _categoryService.GetCategoryByIdAsync(id));
+        }
+
+        [HttpDelete("{id}")]
+        public Task<IActionResult> DeleteCategoryById(int id)
+        {
+            return ValidateAndExecute(async () => await _categoryService.DeleteCategoryByIdAsync(id));
+        }
+
+        [HttpPut]
+        public Task<IActionResult> UpdateCategoryById([FromBody] CategoryUpdateModel model)
+        {
+            return ValidateAndExecute(async () => await _categoryService.UpdateCategory(model));
+        }
+
     }
 }
