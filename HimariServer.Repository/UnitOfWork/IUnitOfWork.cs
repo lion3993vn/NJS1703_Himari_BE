@@ -10,6 +10,8 @@ namespace HimariServer.Repository.UnitOfWork
     public interface IUnitOfWork : IDisposable
     {
         IUserRepository UsersRepository { get; }
+        ICategoryRepository CategoryRepository { get; }
+        IProductRepository ProductRepository { get; }
         int Save();
         void Commit();
         void Rollback();

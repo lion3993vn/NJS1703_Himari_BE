@@ -39,7 +39,7 @@ namespace HimariServer.Repository.Repositories.Generic
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
 
-        Task<TEntity?> GetByIdIncludeAsync(Guid id,
+        Task<TEntity?> GetByIdIncludeAsync(int id,
             Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
             Expression<Func<TEntity, bool>> filter = null);
     }
