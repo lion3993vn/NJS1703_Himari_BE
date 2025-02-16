@@ -12,7 +12,12 @@ namespace HimariServer.Service.Constants
         public const string ACCOUNT_NOT_EXIST = "Account is not exist";
 
         public const string GET_LIST_CATEGORY_SUCCESS = "Get list category successfully";
+        public const string GET_CATEGORY_SUCCESS = "Get category successfully";
         public const string CATEGORY_NOT_FOUND = "Category not found";
+        public const string CATEGORY_PARENT_NOT_FOUND = "Category parent not found";
+        public const string CATEGORY_UPDATE_SUCCESS = "Category updated successfully";
+        public const string CATEGORY_DELETE_SUCCESS = "Category deleted successfully";
+        public const string CATEGORY_CREATE_SUCCESS = "Category created successfully";
 
         public const string GET_LIST_PRODUCT_SUCCESS = "Get list product successfully";
         public const string PRODUCT_FOUND = "Product not founds";
