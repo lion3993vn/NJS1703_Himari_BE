@@ -40,5 +40,10 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _categoryService.UpdateCategory(model));
         }
 
+        [HttpPost]
+        public Task<IActionResult> CreateCategory(AddCategoryModel model)
+        {
+            return ValidateAndExecute(async () => await _categoryService.CreateCategory(model));
+        }
     }
 }
