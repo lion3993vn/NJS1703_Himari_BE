@@ -128,7 +128,7 @@ namespace HimariServer.Repository.Repositories.Generic
             return result;
         }
 
-        public async Task<TEntity?> GetByIdIncludeAsync(Guid id,
+        public async Task<TEntity?> GetByIdIncludeAsync(int id,
             Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
             Expression<Func<TEntity, bool>> filter = null)
         {
@@ -145,7 +145,7 @@ namespace HimariServer.Repository.Repositories.Generic
             {
                 query = query.Where(filter);
             }
-            return await query.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
     }
 }
