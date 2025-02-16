@@ -15,7 +15,7 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> DeleteBlogById(int id);
         Task<BaseResponseModel> GetBlogById(int id);
         Task<BaseResponseModel> GetBlogsPaginationAsync(PaginationParameter paginationParameter);
-        Task<BaseResponseModel> UpdateBlog(int id, UpdateBlogModel blog);
+        Task<BaseResponseModel> UpdateBlog(UpdateBlogModel blog);
         Task<BaseResponseModel> AddBlog(AddBlogModel blog);
 
     }

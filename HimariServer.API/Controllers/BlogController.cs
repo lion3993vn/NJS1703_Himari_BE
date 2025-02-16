@@ -1,4 +1,5 @@
-﻿using HimariServer.Repository.Commons;
+﻿using System.Security.Claims;
+using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Service.BusinessModels.BlogModels;
 using HimariServer.Service.BusinessModels.ProductModels;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HimariServer.API.Controllers
 {
-    [Route("api/blogs")] 
+    [Route("api/v1/blogs")] 
     [ApiController]
     public class BlogController : BaseController
     {
@@ -38,10 +39,10 @@ namespace HimariServer.API.Controllers
 
         }
 
-        [HttpPut("{id}")]
-        public Task<IActionResult> UpdateBlog(int id, [FromBody] UpdateBlogModel blog)
+        [HttpPut]
+        public Task<IActionResult> UpdateBlog([FromBody] UpdateBlogModel blog)
         {
-            return ValidateAndExecute(async () => await _blogService.UpdateBlog(id, blog));
+            return ValidateAndExecute(async () => await _blogService.UpdateBlog(blog));
         }
 
         [HttpDelete("{id}")]

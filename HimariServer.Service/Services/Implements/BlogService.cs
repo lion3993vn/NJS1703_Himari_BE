@@ -130,9 +130,9 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> UpdateBlog(int id , UpdateBlogModel newBlog)
+        public async Task<BaseResponseModel> UpdateBlog(UpdateBlogModel newBlog)
         {
-            var blog = await _unitOfWork.BlogRepository.GetByIdAsync(id);
+            var blog = await _unitOfWork.BlogRepository.GetByIdAsync(newBlog.Id);
             if (blog == null || blog.IsDeleted)
             {
                 throw new NotExistException(MessageConstants.PRODUCT_NOT_FOUND);
