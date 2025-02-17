@@ -23,8 +23,6 @@ public partial class User : BaseEntity
 
     public int? Point { get; set; }
 
-    public string Status { get; set; }
-
     public int? RoleId { get; set; }
 
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();

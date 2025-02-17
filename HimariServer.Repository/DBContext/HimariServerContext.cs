@@ -55,7 +55,6 @@ public partial class HimariServerContext : DbContext
             entity.ToTable("Blog");
 
             entity.Property(e => e.Content).IsUnicode(false);
-            entity.Property(e => e.Status).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
 
             entity.HasOne(d => d.User).WithMany(p => p.Blogs)
@@ -71,7 +70,6 @@ public partial class HimariServerContext : DbContext
 
             entity.Property(e => e.BodyPartName).IsUnicode(false);
             entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.Status).IsUnicode(false);
         });
 
         modelBuilder.Entity<Brand>(entity =>
@@ -82,7 +80,6 @@ public partial class HimariServerContext : DbContext
 
             entity.Property(e => e.BrandName).IsUnicode(false);
             entity.Property(e => e.Description).HasColumnType("text");
-            entity.Property(e => e.Status).IsUnicode(false);
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -93,7 +90,6 @@ public partial class HimariServerContext : DbContext
 
             entity.Property(e => e.CategoryName).IsUnicode(false);
             entity.Property(e => e.Description).HasColumnType("text");
-            entity.Property(e => e.Status).IsUnicode(false);
 
             entity.HasOne(d => d.ParentCategory).WithMany(p => p.InverseParentCategory)
                 .HasForeignKey(d => d.ParentCategoryId)
@@ -137,7 +133,6 @@ public partial class HimariServerContext : DbContext
             entity.ToTable("Order");
 
             entity.Property(e => e.OrderCode).IsUnicode(false);
-            entity.Property(e => e.Status).IsUnicode(false);
 
             entity.HasOne(d => d.Account).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.AccountId)
@@ -196,7 +191,6 @@ public partial class HimariServerContext : DbContext
             entity.Property(e => e.Description).HasColumnType("text");
             entity.Property(e => e.ImageUrl).IsUnicode(false);
             entity.Property(e => e.ProductName).IsUnicode(false);
-            entity.Property(e => e.Status).IsUnicode(false);
 
             entity.HasOne(d => d.Brand).WithMany(p => p.Products)
                 .HasForeignKey(d => d.BrandId)
@@ -243,7 +237,6 @@ public partial class HimariServerContext : DbContext
             entity.Property(e => e.GoogleId).IsUnicode(false);
             entity.Property(e => e.AvatarUrl).IsUnicode(false);
             entity.Property(e => e.PhoneNumber).IsUnicode(false);
-            entity.Property(e => e.Status).IsUnicode(false);
             entity.Property(e => e.UnsignName).IsUnicode(false);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)

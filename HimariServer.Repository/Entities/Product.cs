@@ -17,8 +17,6 @@ public partial class Product : BaseEntity
 
     public string ImageUrl { get; set; }
 
-    public string Status { get; set; }
-
     public int? CategoryId { get; set; }
 
     public int? BrandId { get; set; }
