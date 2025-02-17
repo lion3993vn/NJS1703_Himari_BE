@@ -4,6 +4,7 @@ using HimariServer.Repository.Entities;
 using HimariServer.Repository.UnitOfWork;
 using HimariServer.Service.BusinessModels.BodyPartModels;
 using HimariServer.Service.BusinessModels.CategoryModels;
+using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Services.Interfaces;
@@ -26,6 +27,20 @@ namespace HimariServer.Service.Services.Implements
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task<BaseResponseModel> AddBodyPart(AddBodyPartModel model)
+        {
+            var bodyPart = _mapper.Map<BodyPart>(model);
+            await _unitOfWork.BodyPartRepository.AddAsync(bodyPart);
+            _unitOfWork.Save();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.ADD_BODY_PART_SUCCESS,
+                Data = _mapper.Map<BodyPartModel>(bodyPart)
+            };
         }
 
         public async Task<BaseResponseModel> DeleteBodyPartByIdAsync(int id)
@@ -97,6 +112,32 @@ namespace HimariServer.Service.Services.Implements
                         listBodyPart.HasPrevious
                     }
                 }
+            };
+        }
+
+        public async Task<BaseResponseModel> UpdateBodyPart(UpdateBodyPartModel model)
+        {
+            var bodyPart = await _unitOfWork.BodyPartRepository.GetByIdIncludeAsync(model.Id,
+                filter: query => !query.IsDeleted);
+
+            if(bodyPart == null)
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = MessageConstants.BODY_PART_NOT_FOUND
+                };
+            }
+
+            _mapper.Map(model, bodyPart);
+            _unitOfWork.BodyPartRepository.UpdateAsync(bodyPart);
+            _unitOfWork.Save();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.UPDATE_BODY_PART_SUCCESS,
+                Data = _mapper.Map<BodyPartModel>(bodyPart)
             };
         }
     }

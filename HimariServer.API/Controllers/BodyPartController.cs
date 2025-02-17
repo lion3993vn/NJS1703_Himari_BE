@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.BodyPartModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +36,17 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _bodyPartService.DeleteBodyPartByIdAsync(id));
         }
 
+        [HttpPost]
+        public Task<IActionResult> AddBodyPart([FromBody]AddBodyPartModel model)
+        {
+            return ValidateAndExecute(async () => await _bodyPartService.AddBodyPart(model));
+        }
+
+        [HttpPut]
+        public Task<IActionResult> UpdateBodyPart([FromBody] UpdateBodyPartModel model)
+        {
+            return ValidateAndExecute(async () => await _bodyPartService.UpdateBodyPart(model));
+        }
 
     }
 }
