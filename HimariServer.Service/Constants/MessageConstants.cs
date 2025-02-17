@@ -19,6 +19,7 @@ namespace HimariServer.Service.Constants
         public const string PRODUCT_NOT_FOUND = "Product not found";
         public const string PRODUCT_DELETE_SUCCESS = "Product deleted successfully";
         public const string PRODUCT_UPDATE_SUCCESS = "Product updated successfully";
+        public const string PRODUCT_CREATE_SUCCESS = "Product created successfully";
 
         public const string TOKEN_NOT_VALID = "TokenNotValid";
         public const string LOGIN_SUCCESS_MESSAGE = "Login successfully";

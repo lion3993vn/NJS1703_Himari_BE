@@ -25,6 +25,7 @@ namespace HimariServer.Service.Mappers
             CreateMap<Product, ProductModels>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName: null));
             CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
             CreateMap<UpdateProductModel, Product>().ReverseMap();
+            CreateMap<CreateProductModel, Product>().ReverseMap();
         }
     }
 
