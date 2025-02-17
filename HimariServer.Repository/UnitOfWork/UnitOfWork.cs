@@ -18,7 +18,8 @@ namespace HimariServer.Repository.UnitOfWork
         private IUserRepository _userRepository;
         private IProductRepository _productRepository;
         private IBlogRepository _blogRepository;
-        private CategoryRepository _categoryRepository;
+        private ICategoryRepository _categoryRepository;
+        private IBodyPartRepository _bodyPartRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -57,6 +58,15 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _blogRepository ??= new BlogRepository(_context);
+
+            }
+        }
+
+        public IBodyPartRepository BodyPartRepository
+        {
+            get
+            {
+                return _bodyPartRepository ??= new BodyPartRepository(_context);
 
             }
         }
