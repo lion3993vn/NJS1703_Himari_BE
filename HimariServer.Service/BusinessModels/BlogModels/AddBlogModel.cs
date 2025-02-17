@@ -12,8 +12,6 @@ namespace HimariServer.Service.BusinessModels.BlogModels
 
         public string? Content { get; set; }
 
-        public string? Status { get; set; }
-
         public int? UserId { get; set; }
     }
 }
