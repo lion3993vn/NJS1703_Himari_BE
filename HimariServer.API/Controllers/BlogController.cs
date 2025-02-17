@@ -1,0 +1,55 @@
+﻿using System.Security.Claims;
+using HimariServer.Repository.Commons;
+using HimariServer.Repository.Entities;
+using HimariServer.Service.BusinessModels.BlogModels;
+using HimariServer.Service.BusinessModels.ProductModels;
+using HimariServer.Service.Services.Implements;
+using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HimariServer.API.Controllers
+{
+    [Route("api/v1/blogs")] 
+    [ApiController]
+    public class BlogController : BaseController
+    {
+        private readonly IBlogService _blogService;
+
+        public BlogController(IBlogService blogService)
+        {
+           _blogService = blogService;
+        }
+        [HttpGet]
+        public Task<IActionResult> GetBlogs(PaginationParameter paginationParameter)
+        {
+            return ValidateAndExecute(async () => await _blogService.GetBlogsPaginationAsync(paginationParameter));
+        }
+
+        [HttpGet("{id}")]
+        public Task<IActionResult> GetBlogById(int id)
+        {
+            return ValidateAndExecute(async () => await _blogService.GetBlogById(id));
+        }
+
+        [HttpPost]
+        public Task<IActionResult> CreateBlog([FromBody] AddBlogModel blog)
+        {
+            return ValidateAndExecute(async () => await _blogService.AddBlog(blog));
+
+        }
+
+        [HttpPut]
+        public Task<IActionResult> UpdateBlog([FromBody] UpdateBlogModel blog)
+        {
+            return ValidateAndExecute(async () => await _blogService.UpdateBlog(blog));
+        }
+
+        [HttpDelete("{id}")]
+        public Task<IActionResult> DeleteBlogById(int id)
+        {
+            return ValidateAndExecute(async () => await _blogService.DeleteBlogById(id));
+        }
+     
+    }
+}

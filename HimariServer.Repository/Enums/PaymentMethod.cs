@@ -8,7 +8,6 @@ namespace HimariServer.Repository.Enums
 {
     public enum PaymentMethod
     {
-        VNPAY,
-        VIETQR
+        Momo,
     }
 }
