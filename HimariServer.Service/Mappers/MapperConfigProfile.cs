@@ -2,6 +2,7 @@
 using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Service.BusinessModels.BlogModels;
+using HimariServer.Service.BusinessModels.BodyPartModels;
 using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.UserModels;
@@ -38,6 +39,10 @@ namespace HimariServer.Service.Mappers
             CreateMap<UpdateBlogModel, Blog>().ReverseMap();
             CreateMap<AddBlogModel, Blog>().ReverseMap();
 
+
+            // body part
+            CreateMap<BodyPart, BodyPartModel>().ReverseMap();
+            CreateMap<Pagination<BodyPart>, Pagination<BodyPartModel>>().ConvertUsing<PaginationConverter<BodyPart, BodyPartModel>>();
         }
     }
 
