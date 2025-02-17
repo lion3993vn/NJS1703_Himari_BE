@@ -20,11 +20,15 @@ namespace HimariServer.Service.Constants
         public const string CATEGORY_CREATE_SUCCESS = "Category created successfully";
 
         public const string GET_LIST_PRODUCT_SUCCESS = "Get list product successfully";
-        public const string PRODUCT_FOUND = "Product not founds";
+        public const string PRODUCT_FOUND = "Product founds";
         public const string PRODUCT_NOT_FOUND = "Product not found";
         public const string PRODUCT_DELETE_SUCCESS = "Product deleted successfully";
         public const string PRODUCT_UPDATE_SUCCESS = "Product updated successfully";
 
+        public const string GET_LIST_BODY_PART_SUCCESS = "Get list body part successfully";
+        public const string BODY_PART_NOT_FOUND = "Body Part not found";
+        public const string GET_BODY_PART_SUCCESS = "Get body part successfully";
+        public const string BODY_PART_DELETE_SUCCESS = "Body part deleted successfully";
 
         public const string GET_LIST_BLOG_SUCCESS = "Get list blog successfully";
         public const string BLOG_FOUND = "Blog not founds";
