@@ -19,8 +19,6 @@ namespace HimariServer.Service.BusinessModels.ProductModels
 
         public required string ImageUrl { get; set; }
 
-        public required string Status { get; set; }
-
         public int? CategoryId { get; set; }
         public int? BrandId { get; set; }
 
