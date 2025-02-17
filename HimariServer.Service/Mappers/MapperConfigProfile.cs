@@ -43,6 +43,8 @@ namespace HimariServer.Service.Mappers
             // body part
             CreateMap<BodyPart, BodyPartModel>().ReverseMap();
             CreateMap<Pagination<BodyPart>, Pagination<BodyPartModel>>().ConvertUsing<PaginationConverter<BodyPart, BodyPartModel>>();
+            CreateMap<AddBodyPartModel, BodyPart>().ReverseMap();
+            CreateMap<UpdateBodyPartModel, BodyPart>().ReverseMap();
         }
     }
 

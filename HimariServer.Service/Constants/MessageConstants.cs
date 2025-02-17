@@ -29,6 +29,8 @@ namespace HimariServer.Service.Constants
         public const string BODY_PART_NOT_FOUND = "Body Part not found";
         public const string GET_BODY_PART_SUCCESS = "Get body part successfully";
         public const string BODY_PART_DELETE_SUCCESS = "Body part deleted successfully";
+        public const string ADD_BODY_PART_SUCCESS = "Add body part successfully";
+        public const string UPDATE_BODY_PART_SUCCESS = "Update body part successfully";
 
         public const string GET_LIST_BLOG_SUCCESS = "Get list blog successfully";
         public const string BLOG_FOUND = "Blog not founds";

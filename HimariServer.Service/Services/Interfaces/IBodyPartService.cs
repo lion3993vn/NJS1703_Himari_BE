@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.BodyPartModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,7 @@ namespace HimariServer.Service.Services.Interfaces
         public Task<BaseResponseModel> GetBodyPartsPaginationAsync(PaginationParameter paginationParameter);
         public Task<BaseResponseModel> GetBodyPartByIdAsync(int id);
         public Task<BaseResponseModel> DeleteBodyPartByIdAsync(int id);
+        public Task<BaseResponseModel> AddBodyPart(AddBodyPartModel model);
+        public Task<BaseResponseModel> UpdateBodyPart(UpdateBodyPartModel model);
     }
 }
