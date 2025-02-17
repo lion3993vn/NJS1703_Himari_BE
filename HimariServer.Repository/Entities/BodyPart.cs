@@ -11,8 +11,6 @@ public partial class BodyPart : BaseEntity
 
     public string Description { get; set; }
 
-    public string Status { get; set; }
-
     public virtual ICollection<CustomerConsulting> CustomerConsultings { get; set; } = new List<CustomerConsulting>();
 
     public virtual ICollection<PartSymptom> PartSymptoms { get; set; } = new List<PartSymptom>();
