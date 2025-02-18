@@ -24,6 +24,7 @@ namespace HimariServer.Service.Constants
         public const string PRODUCT_NOT_FOUND = "Product not found";
         public const string PRODUCT_DELETE_SUCCESS = "Product deleted successfully";
         public const string PRODUCT_UPDATE_SUCCESS = "Product updated successfully";
+        public const string PRODUCT_CREATE_SUCCESS = "Product created successfully";
 
         public const string GET_LIST_BODY_PART_SUCCESS = "Get list body part successfully";
         public const string BODY_PART_NOT_FOUND = "Body Part not found";

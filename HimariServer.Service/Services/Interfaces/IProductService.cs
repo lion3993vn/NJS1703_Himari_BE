@@ -11,6 +11,7 @@ namespace HimariServer.Service.Services.Interfaces
 {
     public interface IProductService
     {
+        Task<BaseResponseModel> CreateProduct(CreateProductModel product);
         Task<BaseResponseModel> DeleteProductById(int id);
         Task<BaseResponseModel> GetProductById(int id);
         Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter);
