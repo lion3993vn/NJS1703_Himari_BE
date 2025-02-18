@@ -80,6 +80,7 @@ public partial class HimariServerContext : DbContext
 
             entity.Property(e => e.BrandName).IsUnicode(false);
             entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Image).HasColumnType("text");
         });
 
         modelBuilder.Entity<Category>(entity =>
