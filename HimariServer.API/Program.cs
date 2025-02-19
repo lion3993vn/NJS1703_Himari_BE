@@ -3,6 +3,7 @@ using HimariServer.API.Middlewares;
 using HimariServer.Repository.DBContext;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Mappers;
+using HimariServer.Service.SettingModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -132,6 +133,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
         EndPoints = { options.Configuration }
     };
 });
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 var app = builder.Build();
 
