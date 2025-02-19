@@ -40,6 +40,10 @@ namespace HimariServer.API
             // config brand service
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IBrandService, BrandService>();
+
+            // config symptom service
+            services.AddScoped<ISymptomRepository, SymptomRepository>();
+            services.AddScoped<ISymptomService, SymptomService>();
             return services;
         }
     }
