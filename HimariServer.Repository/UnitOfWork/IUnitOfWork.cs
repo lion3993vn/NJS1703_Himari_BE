@@ -15,6 +15,7 @@ namespace HimariServer.Repository.UnitOfWork
         IProductRepository ProductRepository { get; }
         IBodyPartRepository BodyPartRepository { get; }
         IBrandRepository BrandRepository { get; }
+        ISymptomRepository SymptomRepository { get; }
         int Save();
         void Commit();
         void Rollback();
