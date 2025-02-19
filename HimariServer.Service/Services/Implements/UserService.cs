@@ -55,8 +55,16 @@ namespace HimariServer.Service.Services.Implements
             }
 
             var existUser = await _unitOfWork.UsersRepository.GetUserByEmailAsync(payload.Email);
-            if(existUser != null)
+            if (existUser != null)
             {
+                if (existUser.IsDeleted)
+                {
+                    return new BaseResponseModel
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = MessageConstants.USER_HAS_BEEN_DELETE,
+                    };
+                }
                 var accessToken = AuthenTokenUtils.GenerateAccessToken(existUser.Email, existUser, _configuration);
                 var refreshToken = AuthenTokenUtils.GenerateRefreshToken(existUser.Email, _configuration);
 
@@ -73,13 +81,16 @@ namespace HimariServer.Service.Services.Implements
             }
             else
             {
-                //TODO tao moi user
+                var role = await _unitOfWork.RoleRepository.GetByRoleName("USER");
                 var newUser = new User
                 {
                     Email = payload.Email,
                     FullName = payload.Name,
+                    UnsignName = StringUtils.ConvertToUnSign(payload.Name),
                     AvatarUrl = payload.Picture,
                     GoogleId = payload.JwtId,
+                    RoleId = role.Id,
+                    IsVerify = payload.EmailVerified
                 };
 
                 await _unitOfWork.UsersRepository.AddAsync(newUser);

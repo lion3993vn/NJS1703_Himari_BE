@@ -12,6 +12,7 @@ public partial class User : BaseEntity
     public string UnsignName { get; set; }
 
     public string Email { get; set; }
+    public bool IsVerify { get; set; }
 
     public string GoogleId { get; set; }
 
