@@ -40,6 +40,9 @@ namespace HimariServer.API
             // config brand service
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IBrandService, BrandService>();
+
+            // config mail service
+            services.AddScoped<IMailService, MailService>();
             return services;
         }
     }
