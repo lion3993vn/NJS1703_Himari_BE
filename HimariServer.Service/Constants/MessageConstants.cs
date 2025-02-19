@@ -41,9 +41,10 @@ namespace HimariServer.Service.Constants
         public const string BLOG_REQUIRE_DATA = "Blog is require data";
 
 
-        public const string TOKEN_NOT_VALID = "TokenNotValid";
+        public const string TOKEN_NOT_VALID = "Token not valid";
         public const string LOGIN_SUCCESS_MESSAGE = "Login successfully";
         public const string LOGIN_GOOGLE_SUCCESS_MESSAGE = "Login with google successfully";
         public const string TOKEN_REFRESH_SUCCESS_MESSAGE = "Token refresh successfully";
+        public const string USER_HAS_BEEN_DELETE = "User has been deleted";
     }
 }
