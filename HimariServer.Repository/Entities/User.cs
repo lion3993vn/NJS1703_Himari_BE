@@ -32,4 +32,6 @@ public partial class User : BaseEntity
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     public virtual Role Role { get; set; }
+
+    public virtual ICollection<UserDevice> UserDevices { get; set; } = new List<UserDevice>();
 }
