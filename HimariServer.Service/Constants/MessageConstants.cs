@@ -33,6 +33,14 @@ namespace HimariServer.Service.Constants
         public const string BRAND_UPDATE_SUCCESS = "Brand updated successfully";
         public const string BRAND_CREATE_SUCCESS = "Brand created successfully";
 
+
+        public const string GET_LIST_SYMPTOM_SUCCESS = "Get list symptom successfully";
+        public const string SYMPTOM_FOUND = "Symptom founds";
+        public const string SYMPTOM_NOT_FOUND = "Symptom not found";
+        public const string SYMPTOM_DELETE_SUCCESS = "Symptom deleted successfully";
+        public const string SYMPTOM_UPDATE_SUCCESS = "Symptom updated successfully";
+        public const string SYMPTOM_CREATE_SUCCESS = "Symptom created successfully";
+
         public const string GET_LIST_BODY_PART_SUCCESS = "Get list body part successfully";
         public const string BODY_PART_NOT_FOUND = "Body Part not found";
         public const string GET_BODY_PART_SUCCESS = "Get body part successfully";
