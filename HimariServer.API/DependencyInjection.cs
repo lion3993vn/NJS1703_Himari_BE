@@ -46,6 +46,9 @@ namespace HimariServer.API
             services.AddScoped<ISymptomService, SymptomService>();
 
             services.AddScoped<IRoleRepository, RoleRepository>();
+
+            // config mail service
+            services.AddScoped<IMailService, MailService>();
             return services;
         }
     }
