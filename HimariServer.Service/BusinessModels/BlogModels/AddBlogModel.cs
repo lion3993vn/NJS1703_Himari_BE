@@ -9,6 +9,7 @@ namespace HimariServer.Service.BusinessModels.BlogModels
     public class AddBlogModel
     {
         public string? Title { get; set; }
+        public string Image { get; set; }
 
         public string? Content { get; set; }
 
