@@ -4,6 +4,7 @@ using HimariServer.Repository.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HimariServer.Repository.Migrations
 {
     [DbContext(typeof(HimariServerContext))]
-    partial class HimariServerContextModelSnapshot : ModelSnapshot
+    [Migration("20250219022833_AddIsverifyUser")]
+    partial class AddIsverifyUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,9 +108,6 @@ namespace HimariServer.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Image")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")

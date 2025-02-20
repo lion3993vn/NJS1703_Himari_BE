@@ -22,6 +22,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IBodyPartRepository _bodyPartRepository;
         private IBrandRepository _brandRepository;
         private ISymptomRepository _symptomRepository;
+        private IRoleRepository _roleRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -87,6 +88,15 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _symptomRepository ??= new SymptomRepository(_context);
+
+            }
+        }
+
+        public IRoleRepository RoleRepository
+        {
+            get
+            {
+                return _roleRepository ??= new RoleRepository(_context);
 
             }
         }
