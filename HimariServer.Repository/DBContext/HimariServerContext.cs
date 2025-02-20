@@ -239,6 +239,7 @@ public partial class HimariServerContext : DbContext
             entity.Property(e => e.AvatarUrl).IsUnicode(false);
             entity.Property(e => e.PhoneNumber).IsUnicode(false);
             entity.Property(e => e.UnsignName).IsUnicode(false);
+            entity.Property(e => e.IsVerify);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
