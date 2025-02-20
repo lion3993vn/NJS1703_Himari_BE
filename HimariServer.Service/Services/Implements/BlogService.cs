@@ -23,13 +23,11 @@ namespace HimariServer.Service.Services.Implements
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
 
-        public BlogService(IUnitOfWork unitOfWork, IMapper mapper,IUserRepository userRepository)
+        public BlogService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _userRepository = userRepository;
         }
         public async Task<BaseResponseModel> AddBlog(AddBlogModel blogModel)
         {
