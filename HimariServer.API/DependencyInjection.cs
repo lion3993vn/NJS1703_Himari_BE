@@ -44,7 +44,6 @@ namespace HimariServer.API
             // config symptom service
             services.AddScoped<ISymptomRepository, SymptomRepository>();
             services.AddScoped<ISymptomService, SymptomService>();
-            services.AddScoped<IBodyPartService, BodyPartService>();
 
             services.AddScoped<IRoleRepository, RoleRepository>();
             return services;
