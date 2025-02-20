@@ -7,6 +7,7 @@ using HimariServer.Service.BusinessModels.BrandModels;
 using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.SymptomModels;
+using HimariServer.Service.BusinessModels.UserDeviceModels;
 using HimariServer.Service.BusinessModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -48,19 +49,25 @@ namespace HimariServer.Service.Mappers
             CreateMap<AddBodyPartModel, BodyPart>().ReverseMap();
             CreateMap<UpdateBodyPartModel, BodyPart>().ReverseMap();
 
+            // product
             CreateMap<Product, ProductModels>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName: null));
             CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
             CreateMap<UpdateProductModel, Product>().ReverseMap();
             CreateMap<CreateProductModel, Product>().ReverseMap();
             
-
+            //brand
             CreateMap<Brand, BrandModel>().ReverseMap();
             CreateMap<Pagination<Brand>, Pagination<BrandModel>>().ConvertUsing<PaginationConverter<Brand, BrandModel>>();
             CreateMap<CreateBrandModel, Brand>().ReverseMap();
 
+            // PartSymptom
             CreateMap<PartSymptom, SymptomModel>().ReverseMap();
             CreateMap<Pagination<PartSymptom>, Pagination<SymptomModel>>().ConvertUsing<PaginationConverter<PartSymptom, SymptomModel>>();
             CreateMap<CreateSymptomModel, PartSymptom>().ReverseMap();
+
+            // UserDevice
+            CreateMap<CreateUserDeviceModel, UserDevice>().ReverseMap();
+            CreateMap<UserDevice, UserDeviceModel>().ReverseMap();
         }
     }
 
