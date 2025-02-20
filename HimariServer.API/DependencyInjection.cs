@@ -45,10 +45,15 @@ namespace HimariServer.API
             services.AddScoped<ISymptomRepository, SymptomRepository>();
             services.AddScoped<ISymptomService, SymptomService>();
 
+            // config role service
             services.AddScoped<IRoleRepository, RoleRepository>();
 
+            // config claim service
+            //services.AddScoped<IClaimsService, ClaimsService>();
+  
             // config mail service
             services.AddScoped<IMailService, MailService>();
+          
             return services;
         }
     }
