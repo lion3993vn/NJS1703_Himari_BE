@@ -4,6 +4,7 @@ using HimariServer.Repository.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HimariServer.Repository.Migrations
 {
     [DbContext(typeof(HimariServerContext))]
-    partial class HimariServerContextModelSnapshot : ModelSnapshot
+    [Migration("20250219022833_AddIsverifyUser")]
+    partial class AddIsverifyUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,9 +108,6 @@ namespace HimariServer.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Image")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
@@ -547,38 +547,6 @@ namespace HimariServer.Repository.Migrations
                     b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("HimariServer.Repository.Entities.UserDevice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeviceToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id")
-                        .HasName("PK__UserDevice_");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserDevices");
-                });
-
             modelBuilder.Entity("HimariServer.Repository.Entities.Blog", b =>
                 {
                     b.HasOne("HimariServer.Repository.Entities.User", "User")
@@ -724,17 +692,6 @@ namespace HimariServer.Repository.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("HimariServer.Repository.Entities.UserDevice", b =>
-                {
-                    b.HasOne("HimariServer.Repository.Entities.User", "User")
-                        .WithMany("UserDevices")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("HimariServer.Repository.Entities.BodyPart", b =>
                 {
                     b.Navigation("CustomerConsultings");
@@ -792,8 +749,6 @@ namespace HimariServer.Repository.Migrations
                     b.Navigation("CustomerConsultings");
 
                     b.Navigation("Orders");
-
-                    b.Navigation("UserDevices");
                 });
 #pragma warning restore 612, 618
         }

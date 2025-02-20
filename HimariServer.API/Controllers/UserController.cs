@@ -14,10 +14,5 @@ namespace HimariServer.API.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public Task<IActionResult> GetUserByEmail([FromQuery]string email)
-        {
-            return ValidateAndExecute(async () => await _userService.GetUserByEmailAsync(email));
-        }
     }
 }
