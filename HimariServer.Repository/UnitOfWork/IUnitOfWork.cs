@@ -9,6 +9,7 @@ namespace HimariServer.Repository.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
+        IBlogCategoryRepository  BlogCategoryRepository{get;}
         IBlogRepository BlogRepository {get;}
         IUserRepository UsersRepository { get; }
         ICategoryRepository CategoryRepository { get; }
