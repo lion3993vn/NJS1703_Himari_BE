@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HimariServer.Service.EmailModels
+namespace HimariServer.Service.BusinessModels.EmailModels
 {
     public class MailRequest
     {

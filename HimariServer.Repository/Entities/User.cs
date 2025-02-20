@@ -12,6 +12,7 @@ public partial class User : BaseEntity
     public string UnsignName { get; set; }
 
     public string Email { get; set; }
+    public bool IsVerify { get; set; }
 
     public string GoogleId { get; set; }
 
@@ -32,4 +33,6 @@ public partial class User : BaseEntity
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     public virtual Role Role { get; set; }
+
+    public virtual ICollection<UserDevice> UserDevices { get; set; } = new List<UserDevice>();
 }
