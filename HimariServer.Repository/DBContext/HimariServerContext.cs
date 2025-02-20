@@ -45,6 +45,7 @@ public partial class HimariServerContext : DbContext
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<UserDevice> UserDevices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,6 +81,7 @@ public partial class HimariServerContext : DbContext
 
             entity.Property(e => e.BrandName).IsUnicode(false);
             entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Image).HasColumnType("text");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -238,10 +240,18 @@ public partial class HimariServerContext : DbContext
             entity.Property(e => e.AvatarUrl).IsUnicode(false);
             entity.Property(e => e.PhoneNumber).IsUnicode(false);
             entity.Property(e => e.UnsignName).IsUnicode(false);
+            entity.Property(e => e.IsVerify);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK__User__RoleId__4BAC3F29");
+        });
+
+        modelBuilder.Entity<UserDevice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__UserDevice_");
+            entity.Property(e => e.DeviceToken).IsRequired();
+            entity.Property(e => e.UserId).IsRequired();
         });
 
         OnModelCreatingPartial(modelBuilder);

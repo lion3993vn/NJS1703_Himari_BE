@@ -10,6 +10,6 @@ namespace HimariServer.Service.Services.Interfaces
 {
     public interface IUserService
     {
-        public Task<BaseResponseModel> GetUserByEmailAsync(string email);
+        public Task<BaseResponseModel> LoginWithGoogleOAuth(string credential);
     }
 }
