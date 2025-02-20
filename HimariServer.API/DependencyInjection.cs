@@ -35,6 +35,15 @@ namespace HimariServer.API
 
             // config bodypart service
             services.AddScoped<IBodyPartRepository, BodyPartRepository>();
+            services.AddScoped<IBodyPartService, BodyPartService>();            
+            
+            // config brand service
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IBrandService, BrandService>();
+
+            // config symptom service
+            services.AddScoped<ISymptomRepository, SymptomRepository>();
+            services.AddScoped<ISymptomService, SymptomService>();
             services.AddScoped<IBodyPartService, BodyPartService>();
 
             services.AddScoped<IRoleRepository, RoleRepository>();

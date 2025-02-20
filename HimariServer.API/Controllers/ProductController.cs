@@ -38,6 +38,10 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _productService.UpdateProduct(product));
         }
-
+        [HttpPost]
+        public Task<IActionResult> CreateProduct([FromBody] CreateProductModel product)
+        {
+            return ValidateAndExecute(async () => await _productService.CreateProduct(product));
+        }
     }
 }

@@ -29,6 +29,36 @@ namespace HimariServer.Service.Services.Implements
             _mapper = mapper;
         }
 
+        public async Task<BaseResponseModel> CreateProduct(CreateProductModel product)
+        {
+            if (product.CategoryId != null)
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync((int)product.CategoryId);
+
+                if (category == null || category.IsDeleted)
+                {
+                    throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
+                }
+            }
+
+            var newProduct = _mapper.Map<Product>(product);
+            //TODO add check brand
+            // xoa cai ben duoi 
+            newProduct.BrandId = null;
+
+
+
+            _unitOfWork.ProductRepository.UpdateAsync(newProduct);
+            _unitOfWork.Save();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.PRODUCT_CREATE_SUCCESS,
+                Data = _mapper.Map<ProductModels>(newProduct)
+            };
+        }
+
         public async Task<BaseResponseModel> DeleteProductById(int id)
         {
             var product = await _unitOfWork.ProductRepository.GetByIdIncludeAsync(id,
@@ -102,15 +132,17 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> UpdateProduct(UpdateProductModel newProduct)
         {
             var eProduct = await _unitOfWork.ProductRepository.GetByIdAsync(newProduct.Id);
-            var category = await _unitOfWork.CategoryRepository.GetByIdAsync((int) newProduct.CategoryId);
             if (eProduct == null || eProduct.IsDeleted)
             {
                 throw new NotExistException(MessageConstants.PRODUCT_NOT_FOUND);
             }
-            
-            if (category == null || category.IsDeleted)
+            if (newProduct.CategoryId != null)
             {
-                throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync((int)newProduct.CategoryId);
+                if (category == null || category.IsDeleted)
+                {
+                    throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
+                }
             }
             _mapper.Map(newProduct, eProduct);
             //TODO add check brand
