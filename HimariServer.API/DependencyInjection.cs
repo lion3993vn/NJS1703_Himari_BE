@@ -50,6 +50,10 @@ namespace HimariServer.API
 
             // config claim service
             //services.AddScoped<IClaimsService, ClaimsService>();
+  
+            // config mail service
+            services.AddScoped<IMailService, MailService>();
+          
             return services;
         }
     }
