@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HimariServer.Repository.Entities;
 
@@ -9,9 +10,14 @@ public partial class Blog : BaseEntity
 {
     public string Title { get; set; }
 
+    public string Image {  get; set; }
     public string Content { get; set; }
 
     public int? UserId { get; set; }
 
     public virtual User User { get; set; }
+
+    [ForeignKey("Category")]
+    public int BlogCategoryId { get; set; }
+    public virtual BlogCategory Category { get; set; }
 }

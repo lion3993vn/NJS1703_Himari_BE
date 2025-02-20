@@ -56,6 +56,13 @@ namespace HimariServer.Service.Constants
         public const string BLOG_CREATE_SUCCESS = "Blog create successfully";
         public const string BLOG_REQUIRE_DATA = "Blog is require data";
 
+        public const string GET_LIST_BLOG_CATEGORY_SUCCESS = "Get list blog category successfully";
+        public const string BLOG_CATEGORY_FOUND = "Blog category not founds";
+        public const string BLOG_CATEGORY_NOT_FOUND = "Blog category not found";
+        public const string BLOG_CATEGORY_DELETE_SUCCESS = "Blog category deleted successfully";
+        public const string BLOG_CATEGORY_UPDATE_SUCCESS = "Blog category updated successfully";
+        public const string BLOG_CATEGORY_CREATE_SUCCESS = "Blog category create successfully";
+        public const string BLOG_CATEROGY_REQUIRE_DATA = "Blog category is require data";
 
         public const string TOKEN_NOT_VALID = "Token not valid";
         public const string LOGIN_SUCCESS_MESSAGE = "Login successfully";
