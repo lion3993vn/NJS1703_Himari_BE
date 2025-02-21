@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HimariServer.Service.Utils
 {
-    internal class FirebaseLibrary
+    public class FirebaseLibrary
     {
         public static async Task<string> SendMessageFireBase(string title, string body, string token)
         {

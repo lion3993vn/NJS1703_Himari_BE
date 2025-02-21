@@ -11,5 +11,6 @@ namespace HimariServer.Service.Services.Interfaces
     public interface IUserDeviceService
     {
         Task<BaseResponseModel> AddDeviceTokenByUserId(CreateUserDeviceModel model);
+        Task<BaseResponseModel> DeleteDeviceToken(string token);
     }
 }

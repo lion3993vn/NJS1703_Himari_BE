@@ -22,5 +22,11 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(() => _userDeviceService.AddDeviceTokenByUserId(model));
         }
+
+        [HttpDelete("{deviceToken}")]
+        public Task<IActionResult> DeleteDeviceToken(string deviceToken)
+        {
+            return ValidateAndExecute(() => _userDeviceService.DeleteDeviceToken(deviceToken));
+        }
     }
 }
