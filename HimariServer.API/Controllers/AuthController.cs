@@ -9,12 +9,10 @@ namespace HimariServer.API.Controllers
     public class AuthController : BaseController
     {
         private readonly IUserService _userService;
-        private readonly IClaimsService _claimsService;
 
-        public AuthController(IUserService userService, IClaimsService claimsService)
+        public AuthController(IUserService userService)
         {
             _userService = userService;
-            _claimsService = claimsService;
         }
 
         [HttpPost("login/google/oauth")]
