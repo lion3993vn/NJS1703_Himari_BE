@@ -50,6 +50,10 @@ namespace HimariServer.API
             services.AddScoped<ISymptomRepository, SymptomRepository>();
             services.AddScoped<ISymptomService, SymptomService>();
 
+            // config user device service
+            services.AddScoped<IUserDeviceRepository, UserDeviceRepository>();
+            services.AddScoped<IUserDeviceService, UserDeviceService>();
+
             // config role service
             services.AddScoped<IRoleRepository, RoleRepository>();
 
