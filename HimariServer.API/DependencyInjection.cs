@@ -37,6 +37,11 @@ namespace HimariServer.API
             services.AddScoped<IBodyPartRepository, BodyPartRepository>();
             services.AddScoped<IBodyPartService, BodyPartService>();            
             
+            //config blogCategory services
+
+            services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
+            services.AddScoped<IBlogCategoryService,BlogCategoryService>();
+
             // config brand service
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IBrandService, BrandService>();
@@ -44,6 +49,10 @@ namespace HimariServer.API
             // config symptom service
             services.AddScoped<ISymptomRepository, SymptomRepository>();
             services.AddScoped<ISymptomService, SymptomService>();
+
+            // config user device service
+            services.AddScoped<IUserDeviceRepository, UserDeviceRepository>();
+            services.AddScoped<IUserDeviceService, UserDeviceService>();
 
             // config role service
             services.AddScoped<IRoleRepository, RoleRepository>();

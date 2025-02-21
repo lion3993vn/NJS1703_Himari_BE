@@ -23,6 +23,8 @@ namespace HimariServer.Repository.UnitOfWork
         private IBrandRepository _brandRepository;
         private ISymptomRepository _symptomRepository;
         private IRoleRepository _roleRepository;
+        private IBlogCategoryRepository _blogCategoryRepository;
+        private IUserDeviceRepository _userDeviceRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -98,6 +100,23 @@ namespace HimariServer.Repository.UnitOfWork
             {
                 return _roleRepository ??= new RoleRepository(_context);
 
+            }
+        }
+
+        public IUserDeviceRepository UserDeviceRepository
+        {
+            get
+            {
+                return _userDeviceRepository ??= new UserDeviceRepository(_context);
+
+            }
+        }
+
+        public IBlogCategoryRepository BlogCategoryRepository
+        {
+            get
+            {
+                return _blogCategoryRepository ??= new BlogCategoryRepository(_context);
             }
         }
 

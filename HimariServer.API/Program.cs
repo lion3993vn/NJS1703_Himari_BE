@@ -1,3 +1,5 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using HimariServer.API;
 using HimariServer.API.Middlewares;
 using HimariServer.Repository.DBContext;
@@ -135,6 +137,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
+});
 
 var app = builder.Build();
 
