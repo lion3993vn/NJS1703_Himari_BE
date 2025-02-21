@@ -19,7 +19,7 @@ public partial class HimariServerContext : DbContext
     }
 
     public virtual DbSet<Blog> Blogs { get; set; }
-
+    public virtual DbSet<BlogCategory> BlogCategories { get; set; }
     public virtual DbSet<BodyPart> BodyParts { get; set; }
 
     public virtual DbSet<Brand> Brands { get; set; }
@@ -45,10 +45,39 @@ public partial class HimariServerContext : DbContext
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
     public virtual DbSet<UserDevice> UserDevices { get; set; }
+    public virtual DbSet<Notification> Notifications { get; set; }
+    public virtual DbSet<UserNotification> UserNotifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Notification__3214EC0751765E13");
+
+            entity.ToTable("Notification");
+
+            entity.Property(e => e.Title);
+            entity.Property(e => e.TitleUnsign).IsUnicode(false);
+
+            entity.Property(n => n.Href)
+            .HasMaxLength(500)
+            .IsRequired(false);
+            entity.Property(n => n.Type)
+            .HasConversion<int>()
+            .IsRequired(false);
+            entity.Property(n => n.Message)
+            .IsRequired(false);
+        });
+
+        modelBuilder.Entity<BlogCategory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__BlogCategory_");
+            entity.ToTable("BlogCategory");
+            entity.Property(e => e.Name).IsRequired();
+        });
+
         modelBuilder.Entity<Blog>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Blog__3214EC0751765E13");
@@ -61,6 +90,9 @@ public partial class HimariServerContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Blog__UserId__4E88ABD4");
+            entity.HasOne(d => d.Category).WithMany(p => p.Blogs)
+                .HasForeignKey(d => d.BlogCategoryId)
+                .HasConstraintName("FK__Blog__BlogCategory__4E88ABD4");
         });
 
         modelBuilder.Entity<BodyPart>(entity =>
@@ -252,6 +284,23 @@ public partial class HimariServerContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__UserDevice_");
             entity.Property(e => e.DeviceToken).IsRequired();
             entity.Property(e => e.UserId).IsRequired();
+        });
+
+        modelBuilder.Entity<UserNotification>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__UserNotification_");
+            entity.ToTable("UserNotification");
+            entity.Property(un => un.IsRead)
+           .HasDefaultValue(false);
+
+            entity.HasOne(un => un.Notification) // Quan hệ với Notification
+            .WithMany()
+            .HasForeignKey(un => un.NotificationId);
+
+            entity.HasOne(un => un.User) // Quan hệ với User
+            .WithMany()
+            .HasForeignKey(un => un.UserId);
+            
         });
 
         OnModelCreatingPartial(modelBuilder);

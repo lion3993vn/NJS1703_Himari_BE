@@ -4,6 +4,7 @@ using HimariServer.Repository.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HimariServer.Repository.Migrations
 {
     [DbContext(typeof(HimariServerContext))]
-    partial class HimariServerContextModelSnapshot : ModelSnapshot
+    [Migration("20250221091235_AddNotification")]
+    partial class AddNotification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,18 +33,12 @@ namespace HimariServer.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BlogCategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -59,38 +56,9 @@ namespace HimariServer.Repository.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Blog__3214EC0751765E13");
 
-                    b.HasIndex("BlogCategoryId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Blog", (string)null);
-                });
-
-            modelBuilder.Entity("HimariServer.Repository.Entities.BlogCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id")
-                        .HasName("PK__BlogCategory_");
-
-                    b.ToTable("BlogCategory", (string)null);
                 });
 
             modelBuilder.Entity("HimariServer.Repository.Entities.BodyPart", b =>
@@ -694,19 +662,10 @@ namespace HimariServer.Repository.Migrations
 
             modelBuilder.Entity("HimariServer.Repository.Entities.Blog", b =>
                 {
-                    b.HasOne("HimariServer.Repository.Entities.BlogCategory", "Category")
-                        .WithMany("Blogs")
-                        .HasForeignKey("BlogCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__Blog__BlogCategory__4E88ABD4");
-
                     b.HasOne("HimariServer.Repository.Entities.User", "User")
                         .WithMany("Blogs")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK__Blog__UserId__4E88ABD4");
-
-                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });
@@ -874,11 +833,6 @@ namespace HimariServer.Repository.Migrations
                     b.Navigation("Notification");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("HimariServer.Repository.Entities.BlogCategory", b =>
-                {
-                    b.Navigation("Blogs");
                 });
 
             modelBuilder.Entity("HimariServer.Repository.Entities.BodyPart", b =>
