@@ -57,6 +57,28 @@ namespace HimariServer.Service.Services.Implements
                 Data = _mapper.Map<UserDeviceModel>(newUserDevice)
             };
         }
+
+        public async Task<BaseResponseModel> DeleteDeviceToken(string token)
+        {
+            var userDevice = await _unitOfWork.UserDeviceRepository.GetByTokenDevice(token);
+            if(userDevice == null)
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = MessageConstants.DEVICE_TOKEN_NOT_EXIST,
+                };
+            }
+
+            _unitOfWork.UserDeviceRepository.SoftDeleteAsync(userDevice);
+            _unitOfWork.Save();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.DEVICE_TOKEN_DELETE_SUCCESS,
+            };
+        }
     }
 }
 
