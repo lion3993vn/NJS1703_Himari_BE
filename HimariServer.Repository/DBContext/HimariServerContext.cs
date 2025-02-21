@@ -19,7 +19,7 @@ public partial class HimariServerContext : DbContext
     }
 
     public virtual DbSet<Blog> Blogs { get; set; }
-
+    public virtual DbSet<BlogCategory> BlogCategories { get; set; }
     public virtual DbSet<BodyPart> BodyParts { get; set; }
 
     public virtual DbSet<Brand> Brands { get; set; }
@@ -71,6 +71,13 @@ public partial class HimariServerContext : DbContext
             .IsRequired(false);
         });
 
+        modelBuilder.Entity<BlogCategory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__BlogCategory_");
+            entity.ToTable("BlogCategory");
+            entity.Property(e => e.Name).IsRequired();
+        });
+
         modelBuilder.Entity<Blog>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Blog__3214EC0751765E13");
@@ -83,6 +90,9 @@ public partial class HimariServerContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Blog__UserId__4E88ABD4");
+            entity.HasOne(d => d.Category).WithMany(p => p.Blogs)
+                .HasForeignKey(d => d.BlogCategoryId)
+                .HasConstraintName("FK__Blog__BlogCategory__4E88ABD4");
         });
 
         modelBuilder.Entity<BodyPart>(entity =>
