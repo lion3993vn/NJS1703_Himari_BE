@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HimariServer.Service.Constants
-{ 
+{
     public class MessageConstants
     {
         public const string GET_USER_BY_EMAIL_SUCCESS = "Get user by email successfully";
@@ -69,5 +69,12 @@ namespace HimariServer.Service.Constants
         public const string LOGIN_GOOGLE_SUCCESS_MESSAGE = "Login with google successfully";
         public const string TOKEN_REFRESH_SUCCESS_MESSAGE = "Token refresh successfully";
         public const string USER_HAS_BEEN_DELETE = "User has been deleted";
+
+        public const string DEVICE_TOKEN_EXIST = "Device token exist";
+        public const string DEVICE_TOKEN_NOT_EXIST = "Device token not exist";
+        public const string DEVICE_TOKEN_ADD_SUCCESS = "Add device token for user successfully";
+        public const string DEVICE_TOKEN_DELETE_SUCCESS = "Device token delete successfully";
+
+
     }
 }
