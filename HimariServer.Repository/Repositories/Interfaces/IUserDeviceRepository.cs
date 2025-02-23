@@ -11,5 +11,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
     public interface IUserDeviceRepository : IGenericRepository<UserDevice>
     {
         Task<UserDevice> GetByTokenDevice(string token);
+        Task<List<UserDevice>> GetUserDeviceByUserId(int userId);
     }
 }

@@ -41,7 +41,7 @@ namespace HimariServer.Service.Services.Implements
             var user = await _unitOfWork.UsersRepository.GetByIdAsync((int)blogModel.UserId);
             if (user == null)
             {
-                throw new NotExistException(MessageConstants.ACCOUNT_NOT_EXIST);
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
             }
 
             var blogEntity = _mapper.Map<Blog>(blogModel);
