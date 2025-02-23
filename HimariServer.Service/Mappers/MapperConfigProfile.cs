@@ -11,6 +11,7 @@ using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.SymptomModels;
 using HimariServer.Service.BusinessModels.UserDeviceModels;
 using HimariServer.Service.BusinessModels.UserModels;
+using HimariServer.Service.BusinessModels.PartSymptomModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,11 @@ namespace HimariServer.Service.Mappers
             CreateMap<PartSymptom, SymptomModel>().ReverseMap();
             CreateMap<Pagination<PartSymptom>, Pagination<SymptomModel>>().ConvertUsing<PaginationConverter<PartSymptom, SymptomModel>>();
             CreateMap<CreateSymptomModel, PartSymptom>().ReverseMap();
+
+            // PartSymptom
+            CreateMap<PartSymptom, PartSymptomModel>().ReverseMap();
+            CreateMap<Pagination<PartSymptom>, Pagination<PartSymptomModel>>().ConvertUsing<PaginationConverter<PartSymptom, PartSymptomModel>>();
+            CreateMap<CreatePartSymptomModel, PartSymptom>().ReverseMap();
 
             // UserDevice
             CreateMap<CreateUserDeviceModel, UserDevice>().ReverseMap();

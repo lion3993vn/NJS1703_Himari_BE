@@ -79,5 +79,12 @@ namespace HimariServer.Service.Constants
         public const string NOTI_NOT_EXIST = "Notification not exist";
         public const string GET_NOTI_SUCCESS = "Get notification successfully";
         public const string PUSH_NOTI_USER_SUCCESS = "Push notification to user successfully";
+
+        public const string PART_SYMPTOM_CREATE_SUCCESS = "Part symptom create successfully";
+        public const string PART_SYMPTOM_NOT_FOUND = "Part symptom not exist";
+        public const string PART_SYMPTOM_FOUND = "Get part symptom successfully";
+        public const string PART_SYMPTOM_UPDATE_SUCCESS = "Update part symptom successfully";
+        public const string PART_SYMPTOM_DELETE_SUCCESS = "Delete part symptom successfully";
+
     }
 }
