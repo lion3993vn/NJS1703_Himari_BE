@@ -20,6 +20,7 @@ namespace HimariServer.Repository.UnitOfWork
         IRoleRepository RoleRepository { get; }
         IUserDeviceRepository UserDeviceRepository { get; }
         INotificationRepository NotificationRepository { get; }
+        IUserNotificationRepository UserNotificationRepository { get; }
         int Save();
         void Commit();
         void Rollback();

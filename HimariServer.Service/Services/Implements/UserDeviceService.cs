@@ -32,7 +32,7 @@ namespace HimariServer.Service.Services.Implements
                 return new BaseResponseModel
                 {
                     StatusCode = StatusCodes.Status404NotFound,
-                    Message = MessageConstants.ACCOUNT_NOT_EXIST,
+                    Message = MessageConstants.USER_NOT_EXIST,
                 };
             }
 
