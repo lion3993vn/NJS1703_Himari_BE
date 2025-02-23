@@ -9,7 +9,7 @@ namespace HimariServer.Service.Constants
     public class MessageConstants
     {
         public const string GET_USER_BY_EMAIL_SUCCESS = "Get user by email successfully";
-        public const string ACCOUNT_NOT_EXIST = "Account is not exist";
+        public const string USER_NOT_EXIST = "User is not exist";
 
         public const string GET_LIST_CATEGORY_SUCCESS = "Get list category successfully";
         public const string GET_CATEGORY_SUCCESS = "Get category successfully";
@@ -74,10 +74,10 @@ namespace HimariServer.Service.Constants
         public const string DEVICE_TOKEN_NOT_EXIST = "Device token not exist";
         public const string DEVICE_TOKEN_ADD_SUCCESS = "Add device token for user successfully";
         public const string DEVICE_TOKEN_DELETE_SUCCESS = "Device token delete successfully";
+        public const string USER_DEVICE_NOT_FOUND = "User device not found";
 
         public const string NOTI_NOT_EXIST = "Notification not exist";
         public const string GET_NOTI_SUCCESS = "Get notification successfully";
-
-
+        public const string PUSH_NOTI_USER_SUCCESS = "Push notification to user successfully";
     }
 }
