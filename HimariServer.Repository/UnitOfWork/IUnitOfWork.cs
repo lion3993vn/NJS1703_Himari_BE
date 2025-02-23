@@ -19,6 +19,7 @@ namespace HimariServer.Repository.UnitOfWork
         ISymptomRepository SymptomRepository { get; }
         IRoleRepository RoleRepository { get; }
         IUserDeviceRepository UserDeviceRepository { get; }
+        INotificationRepository NotificationRepository { get; }
         int Save();
         void Commit();
         void Rollback();
