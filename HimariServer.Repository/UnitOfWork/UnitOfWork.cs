@@ -25,6 +25,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IRoleRepository _roleRepository;
         private IBlogCategoryRepository _blogCategoryRepository;
         private IUserDeviceRepository _userDeviceRepository;
+        private INotificationRepository _notificationRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -117,6 +118,14 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _blogCategoryRepository ??= new BlogCategoryRepository(_context);
+            }
+        }
+
+        public INotificationRepository NotificationRepository
+        {
+            get
+            {
+                return _notificationRepository ??= new NotificationRepository(_context);
             }
         }
 
