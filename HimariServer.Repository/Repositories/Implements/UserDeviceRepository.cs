@@ -24,5 +24,10 @@ namespace HimariServer.Repository.Repositories.Implements
         {
             return await _context.UserDevices.Where(x => x.DeviceToken == token && !x.IsDeleted).FirstOrDefaultAsync();
         }
+
+        public async Task<List<UserDevice>> GetUserDeviceByUserId(int userId)
+        {
+            return await _context.UserDevices.Where(x => x.UserId == userId && !x.IsDeleted).ToListAsync();
+        }
     }
 }
