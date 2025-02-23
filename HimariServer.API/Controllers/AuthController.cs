@@ -20,5 +20,11 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(() => _userService.LoginWithGoogleOAuth(credential));
         }
+
+        [HttpPost("refresh-token")]
+        public Task<IActionResult> RefreshToken([FromBody] string token)
+        {
+            return ValidateAndExecute(() => _userService.RefreshToken(token));
+        }
     }
 }
