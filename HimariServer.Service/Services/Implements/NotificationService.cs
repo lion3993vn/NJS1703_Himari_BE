@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using HimariServer.Repository.UnitOfWork;
+using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +24,20 @@ namespace HimariServer.Service.Services.Implements
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public Task<BaseResponseModel> GetNotificationById(int id)
+        public async Task<BaseResponseModel> GetNotificationById(int id)
         {
             var noti = await _unitOfWork.NotificationRepository.GetByIdAsync(id);
             if (noti == null)
             {
                 throw new NotExistException("", MessageConstants.NOTI_NOT_EXIST);
             }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Data = _mapper.Map<NotificationModel>(noti),
+                Message = MessageConstants.GET_NOTI_SUCCESS
+            };
         }
 
         public Task<bool> PushListMessageFirebase(string title, string body, List<string> fcmTokens)
