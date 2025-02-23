@@ -12,9 +12,8 @@ namespace HimariServer.Service.Utils
 {
     public static class AuthenTokenUtils
     {
-        public static string GenerateAccessToken(string email, User user, IConfiguration configuration)
+        public static string GenerateAccessToken(string email, User user, string role, IConfiguration configuration)
         {
-            var role = user.Role.ToString();
 
             var authClaims = new List<Claim>();
 
