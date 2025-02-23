@@ -26,6 +26,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IBlogCategoryRepository _blogCategoryRepository;
         private IUserDeviceRepository _userDeviceRepository;
         private INotificationRepository _notificationRepository;
+        private IUserNotificationRepository _userNotificationRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -126,6 +127,14 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _notificationRepository ??= new NotificationRepository(_context);
+            }
+        }
+
+        public IUserNotificationRepository UserNotificationRepository
+        {
+            get
+            {
+                return _userNotificationRepository ??= new UserNotificationRepository(_context);
             }
         }
 

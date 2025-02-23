@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using HimariServer.Repository.Entities;
 using HimariServer.Repository.UnitOfWork;
 using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -40,14 +42,54 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public Task<bool> PushListMessageFirebase(string title, string body, List<string> fcmTokens)
+        public async Task<BaseResponseModel> PushNotificationByUserId(NotificationRequestModel model)
         {
-            throw new NotImplementedException();
-        }
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return new BaseResponseModel
+                {
+                    Message = MessageConstants.USER_NOT_EXIST,
+                    StatusCode = StatusCodes.Status404NotFound
+                };
+            }
 
-        public Task<bool> PushMessageFirebase(string title, string body, int userId)
-        {
-            throw new NotImplementedException();
+            var noti = _mapper.Map<Notification>(model);
+            noti.TitleUnsign = StringUtils.ConvertToUnSign(model.Title);
+
+            await _unitOfWork.NotificationRepository.AddAsync(noti);
+            await _unitOfWork.SaveAsync(); // Ensure the notification is saved and has an ID
+
+            var userNoti = new UserNotification
+            {
+                NotificationId = noti.Id,
+                UserId = model.UserId,
+                IsRead = false
+            };
+            await _unitOfWork.UserNotificationRepository.AddAsync(userNoti);
+            await _unitOfWork.SaveAsync(); // Ensure the user notification is saved
+
+            var userDevice = await _unitOfWork.UserDeviceRepository.GetUserDeviceByUserId(model.UserId);
+
+            if (userDevice.Count == 0)
+            {
+                return new BaseResponseModel
+                {
+                    Message = MessageConstants.USER_DEVICE_NOT_FOUND,
+                    StatusCode = StatusCodes.Status404NotFound
+                };
+            }
+
+            foreach (var item in userDevice)
+            {
+                await FirebaseLibrary.SendMessageFireBase(model.Title, model.Message, item.DeviceToken);
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.PUSH_NOTI_USER_SUCCESS
+            };
         }
     }
 }

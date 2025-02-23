@@ -6,6 +6,7 @@ using HimariServer.Service.BusinessModels.BlogModels;
 using HimariServer.Service.BusinessModels.BodyPartModels;
 using HimariServer.Service.BusinessModels.BrandModels;
 using HimariServer.Service.BusinessModels.CategoryModels;
+using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.SymptomModels;
 using HimariServer.Service.BusinessModels.UserDeviceModels;
@@ -74,6 +75,9 @@ namespace HimariServer.Service.Mappers
             // UserDevice
             CreateMap<CreateUserDeviceModel, UserDevice>().ReverseMap();
             CreateMap<UserDevice, UserDeviceModel>().ReverseMap();
+
+            // Notification
+            CreateMap<Notification, NotificationRequestModel>().ReverseMap();
         }
     }
 
