@@ -75,6 +75,9 @@ namespace HimariServer.Service.Constants
         public const string DEVICE_TOKEN_ADD_SUCCESS = "Add device token for user successfully";
         public const string DEVICE_TOKEN_DELETE_SUCCESS = "Device token delete successfully";
 
+        public const string NOTI_NOT_EXIST = "Notification not exist";
+        public const string GET_NOTI_SUCCESS = "Get notification successfully";
+
 
     }
 }
