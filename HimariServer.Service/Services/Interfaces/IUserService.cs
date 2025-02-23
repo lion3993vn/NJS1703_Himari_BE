@@ -11,5 +11,7 @@ namespace HimariServer.Service.Services.Interfaces
     public interface IUserService
     {
         public Task<BaseResponseModel> LoginWithGoogleOAuth(string credential);
+
+        public Task<BaseResponseModel> RefreshToken(string jwtToken);
     }
 }
