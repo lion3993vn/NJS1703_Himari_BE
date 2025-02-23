@@ -66,6 +66,10 @@ namespace HimariServer.API
             // config notification service
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<INotificationService, NotificationService>();
+
+            // config part symptom service
+            services.AddScoped<IPartSymptomRepository, PartSymptomRepository>();
+            services.AddScoped<IPartSymptomService, PartSymptomService>();
           
             return services;
         }
