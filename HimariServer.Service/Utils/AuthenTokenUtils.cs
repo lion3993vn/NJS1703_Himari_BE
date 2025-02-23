@@ -23,6 +23,8 @@ namespace HimariServer.Service.Utils
                 authClaims.Add(new Claim(ClaimTypes.Email, email));
                 authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
+                authClaims.Add(new Claim("userId", user.Id.ToString()));
+                authClaims.Add(new Claim("fullName", user.FullName));
             }
             var accessToken = GenerateJsonWebToken.CreateToken(authClaims, configuration, DateTime.UtcNow);
             return new JwtSecurityTokenHandler().WriteToken(accessToken);
