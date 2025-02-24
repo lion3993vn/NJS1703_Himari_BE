@@ -32,10 +32,15 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> AddBlog(AddBlogModel blogModel)
         {
 
-
             if (blogModel == null)
             {
                 throw new IsRequireDataException(MessageConstants.BLOG_REQUIRE_DATA);
+            }
+
+            var blogCategory = await _unitOfWork.BlogCategoryRepository.GetByIdAsync((int)blogModel.BlogCategoryId);
+            if(blogCategory == null)
+            {
+                throw new NotExistException(MessageConstants.BLOG_CATEGORY_NOT_FOUND);
             }
 
             var user = await _unitOfWork.UsersRepository.GetByIdAsync((int)blogModel.UserId);
@@ -136,7 +141,12 @@ namespace HimariServer.Service.Services.Implements
                 throw new NotExistException(MessageConstants.PRODUCT_NOT_FOUND);
             }
 
-          
+            var blogCategory = await _unitOfWork.BlogCategoryRepository.GetByIdAsync(newBlog.CategoryBlogId);
+            if (blogCategory == null)
+            {
+                throw new NotExistException(MessageConstants.BLOG_CATEGORY_NOT_FOUND);
+            }
+
             _mapper.Map(newBlog, blog);
 
             _unitOfWork.BlogRepository.UpdateAsync(blog);
