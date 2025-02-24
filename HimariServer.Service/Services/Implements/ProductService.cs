@@ -77,6 +77,38 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
+        public async Task<BaseResponseModel> GetFeaturedProducts(PaginationParameter paginationParameter)
+        {
+            var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                include: query => query.Include(x => x.Category)
+                                       .Include(x => x.OrderDetails),
+                filter: query => !query.IsDeleted,
+                orderBy: query => query.OrderByDescending(p => p.OrderDetails.Sum(od => od.Quantity * od.OrderId))
+            );
+
+            var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_PRODUCT_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listProduct,
+                    MetaData = new
+                    {
+                        listProduct.TotalCount,
+                        listProduct.PageSize,
+                        listProduct.CurrentPage,
+                        listProduct.TotalPages,
+                        listProduct.HasNext,
+                        listProduct.HasPrevious
+                    }
+                }
+            };
+        }
+
         public async Task<BaseResponseModel> GetProductById(int id)
         {
             var product = await _unitOfWork.ProductRepository.GetByIdIncludeAsync(id,
@@ -98,7 +130,44 @@ namespace HimariServer.Service.Services.Implements
                 Data = _mapper.Map<ProductModels>(product)
             };
         }
-        
+
+        public async Task<BaseResponseModel> GetProductsByCategory(PaginationParameter paginationParameter, int categoryId)
+        {
+            if (categoryId != null)
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(categoryId);
+
+                if (category == null || category.IsDeleted)
+                {
+                    throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
+                }
+            }
+            var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
+               paginationParameter,
+               include: query => query.Include(x => x.Category),
+               filter: query => !query.IsDeleted && query.CategoryId == categoryId
+               );
+            var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_PRODUCT_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listProduct,
+                    MetaData = new
+                    {
+                        listProduct.TotalCount,
+                        listProduct.PageSize,
+                        listProduct.CurrentPage,
+                        listProduct.TotalPages,
+                        listProduct.HasNext,
+                        listProduct.HasPrevious
+                    }
+                }
+            };
+        }
 
         public async Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter)
         {
