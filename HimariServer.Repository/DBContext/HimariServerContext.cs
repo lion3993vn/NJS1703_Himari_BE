@@ -84,8 +84,8 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Blog");
 
-            entity.Property(e => e.Content).IsUnicode(false);
-            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.Content).IsUnicode(true);
+            entity.Property(e => e.Title).IsUnicode(true);
 
             entity.HasOne(d => d.User).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.UserId)
