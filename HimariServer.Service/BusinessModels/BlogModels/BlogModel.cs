@@ -15,6 +15,7 @@ namespace HimariServer.Service.BusinessModels.BlogModels
         public string Content { get; set; }
 
         public int? UserId { get; set; }
+        public int BlogCategoryId { get; set; }
         public string FullName { get; set; }
     }
 }
