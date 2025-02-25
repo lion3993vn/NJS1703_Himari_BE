@@ -28,6 +28,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IUserDeviceRepository _userDeviceRepository;
         private INotificationRepository _notificationRepository;
         private IUserNotificationRepository _userNotificationRepository;
+        private IPartSymptomRepository _partSymptomRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -144,6 +145,14 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _userNotificationRepository ??= new UserNotificationRepository(_context);
+            }
+        }
+
+        public IPartSymptomRepository PartSymptomRepository
+        {
+            get
+            {
+                return _partSymptomRepository ??= new PartSymptomRepository(_context);
             }
         }
 
