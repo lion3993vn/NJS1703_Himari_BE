@@ -60,8 +60,6 @@ namespace HimariServer.Service.Mappers
             CreateMap<AddBodyPartModel, BodyPart>().ReverseMap();
             CreateMap<UpdateBodyPartModel, BodyPart>().ReverseMap();
 
-            // Remove duplicate product mapping section
-            
             //brand
             CreateMap<Brand, BrandModel>().ReverseMap();
             CreateMap<Pagination<Brand>, Pagination<BrandModel>>().ConvertUsing<PaginationConverter<Brand, BrandModel>>();
@@ -82,16 +80,32 @@ namespace HimariServer.Service.Mappers
             CreateMap<UserDevice, UserDeviceModel>().ReverseMap();
 
             // Notification
-            CreateMap<Notification, NotificationRequestModel>().ReverseMap();
+            MapperNotification();
         }
-    }
 
-    public class PaginationConverter<TSource, TDestination> : ITypeConverter<Pagination<TSource>, Pagination<TDestination>>
-    {
-        public Pagination<TDestination> Convert(Pagination<TSource> source, Pagination<TDestination> destination, ResolutionContext context)
+        public void MapperNotification()
         {
-            var mappedItems = context.Mapper.Map<List<TDestination>>(source);
-            return new Pagination<TDestination>(mappedItems, source.TotalCount, source.CurrentPage, source.PageSize);
+            CreateMap<Notification, NotificationRequestModel>().ReverseMap();
+            CreateMap<Notification, NotificationModel>().ReverseMap();
+            CreateMap<UserNotification, NotificationModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Notification.Id))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Notification.Title))
+                .ForMember(dest => dest.TitleUnsign, opt => opt.MapFrom(src => src.Notification.TitleUnsign))
+                .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Notification.Message))
+                .ForMember(dest => dest.Href, opt => opt.MapFrom(src => src.Notification.Href))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Notification.Type))
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.Notification.CreatedDate))
+                .ForMember(dest => dest.IsRead, opt => opt.MapFrom(src => src.IsRead));
+            CreateMap<Pagination<UserNotification>, Pagination<NotificationModel>>().ConvertUsing<PaginationConverter<UserNotification, NotificationModel>>();
+        }
+
+        public class PaginationConverter<TSource, TDestination> : ITypeConverter<Pagination<TSource>, Pagination<TDestination>>
+        {
+            public Pagination<TDestination> Convert(Pagination<TSource> source, Pagination<TDestination> destination, ResolutionContext context)
+            {
+                var mappedItems = context.Mapper.Map<List<TDestination>>(source);
+                return new Pagination<TDestination>(mappedItems, source.TotalCount, source.CurrentPage, source.PageSize);
+            }
         }
     }
 }
