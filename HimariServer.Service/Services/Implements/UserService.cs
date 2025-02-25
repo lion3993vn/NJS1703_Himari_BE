@@ -12,9 +12,11 @@ using HimariServer.Service.Services.Interfaces;
 using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,7 +67,7 @@ namespace HimariServer.Service.Services.Implements
                         Message = MessageConstants.USER_HAS_BEEN_DELETE,
                     };
                 }
-                var accessToken = AuthenTokenUtils.GenerateAccessToken(existUser.Email, existUser, _configuration);
+                var accessToken = AuthenTokenUtils.GenerateAccessToken(existUser.Email, existUser, existUser.Role.RoleName, _configuration);
                 var refreshToken = AuthenTokenUtils.GenerateRefreshToken(existUser.Email, _configuration);
 
                 return new BaseResponseModel
@@ -96,7 +98,7 @@ namespace HimariServer.Service.Services.Implements
                 await _unitOfWork.UsersRepository.AddAsync(newUser);
                 _unitOfWork.Save();
 
-                var accessToken = AuthenTokenUtils.GenerateAccessToken(newUser.Email, newUser, _configuration);
+                var accessToken = AuthenTokenUtils.GenerateAccessToken(newUser.Email, newUser,role.RoleName, _configuration);
                 var refreshToken = AuthenTokenUtils.GenerateRefreshToken(newUser.Email, _configuration);
 
                 return new BaseResponseModel
@@ -108,6 +110,61 @@ namespace HimariServer.Service.Services.Implements
                         AccessToken = accessToken,
                         RefreshToken = refreshToken
                     },
+                };
+            }
+        }
+
+        public async Task<BaseResponseModel> RefreshToken(string jwtToken)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
+            var handler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = authSigningKey,
+                ValidateIssuer = true,
+                ValidIssuer = _configuration["JWT:ValidIssuer"],
+                ValidateAudience = true,
+                ValidAudience = _configuration["JWT:ValidAudience"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+            try
+            {
+                SecurityToken validatedToken;
+                var principal = handler.ValidateToken(jwtToken, validationParameters, out validatedToken);
+                var email = principal.Claims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value;
+                if (email != null)
+                {
+                    var existUser = await _unitOfWork.UsersRepository.GetUserByEmailAsync(email);
+                    if (existUser != null)
+                    {
+                        var accessToken = AuthenTokenUtils.GenerateAccessToken(email, existUser, existUser.Role.RoleName, _configuration);
+                        var refreshToken = AuthenTokenUtils.GenerateRefreshToken(email, _configuration);
+                        return new BaseResponseModel
+                        {
+                            StatusCode = StatusCodes.Status200OK,
+                            Data = new AuthenModel
+                            {
+                                AccessToken = accessToken,
+                                RefreshToken = refreshToken
+                            },
+                            Message = MessageConstants.TOKEN_REFRESH_SUCCESS_MESSAGE
+                        };
+                    }
+                }
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized,
+                    Message = MessageConstants.USER_NOT_EXIST
+                };
+            }
+            catch
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized,
+                    Message = MessageConstants.TOKEN_NOT_VALID
                 };
             }
         }

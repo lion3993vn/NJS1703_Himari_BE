@@ -21,7 +21,7 @@ namespace HimariServer.Repository.Repositories.Implements
         }
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+            return await _context.Users.Include(x => x.Role).Where(x => x.Email == email).FirstOrDefaultAsync();
         }
     }
 }

@@ -23,6 +23,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IBrandRepository _brandRepository;
         private ISymptomRepository _symptomRepository;
         private IRoleRepository _roleRepository;
+        private IOrderDetailRepository _orderDetailRepository;
         private IBlogCategoryRepository _blogCategoryRepository;
         private IUserDeviceRepository _userDeviceRepository;
         private INotificationRepository _notificationRepository;
@@ -84,6 +85,14 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _brandRepository ??= new BrandRepository(_context);
+
+            }
+        }        
+        public IOrderDetailRepository OrderDetailRepository
+        {
+            get
+            {
+                return _orderDetailRepository ??= new OrderDetailRepository(_context);
 
             }
         }        

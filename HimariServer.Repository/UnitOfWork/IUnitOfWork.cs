@@ -16,6 +16,7 @@ namespace HimariServer.Repository.UnitOfWork
         IProductRepository ProductRepository { get; }
         IBodyPartRepository BodyPartRepository { get; }
         IBrandRepository BrandRepository { get; }
+        IOrderDetailRepository OrderDetailRepository { get; }
         ISymptomRepository SymptomRepository { get; }
         IRoleRepository RoleRepository { get; }
         IUserDeviceRepository UserDeviceRepository { get; }
