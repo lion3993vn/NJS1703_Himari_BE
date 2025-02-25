@@ -1,4 +1,5 @@
-﻿using HimariServer.Service.BusinessModels.NotificationModels;
+﻿using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace HimariServer.Service.Services.Interfaces
     {
         public Task<BaseResponseModel> PushNotificationByUserId(NotificationRequestModel model);
         public Task<BaseResponseModel> GetNotificationById(int id);
+        public Task<BaseResponseModel> GetNotificationsByUserId(PaginationParameter paginationParameter, int userId, int type);
     }
 }

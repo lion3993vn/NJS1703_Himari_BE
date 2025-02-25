@@ -9,7 +9,6 @@ namespace HimariServer.Repository.Enums
     public enum NotificationType
     {
         SYSTEM,
-        USER,
-        GROUP
+        USER
     }
 }
