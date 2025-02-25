@@ -2,6 +2,7 @@
 using HimariServer.Repository.Entities;
 using HimariServer.Repository.Repositories.Generic;
 using HimariServer.Repository.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,16 @@ namespace HimariServer.Repository.Repositories.Implements
         public UserNotificationRepository(HimariServerContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<List<UserNotification>> GetUnreadNotificationByUserId(int userId)
+        {
+            return await _context.UserNotifications.Where(x => x.UserId == userId && !x.IsRead && !x.IsDeleted).ToListAsync();
+        }
+
+        public async Task<int> GetUnreadNotificationCount(int userId)
+        {
+            return await _context.UserNotifications.CountAsync(x => x.UserId == userId && !x.IsRead && !x.IsDeleted);
         }
     }
 }

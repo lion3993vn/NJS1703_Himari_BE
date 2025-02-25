@@ -88,7 +88,7 @@ namespace HimariServer.Service.Mappers
             CreateMap<Notification, NotificationRequestModel>().ReverseMap();
             CreateMap<Notification, NotificationModel>().ReverseMap();
             CreateMap<UserNotification, NotificationModel>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Notification.Id))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Notification.Title))
                 .ForMember(dest => dest.TitleUnsign, opt => opt.MapFrom(src => src.Notification.TitleUnsign))
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Notification.Message))
