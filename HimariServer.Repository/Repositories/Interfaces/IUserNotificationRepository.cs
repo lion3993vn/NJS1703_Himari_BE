@@ -10,5 +10,7 @@ namespace HimariServer.Repository.Repositories.Interfaces
 {
     public interface IUserNotificationRepository : IGenericRepository<UserNotification>
     {
+        public Task<int> GetUnreadNotificationCount(int userId);
+        public Task<List<UserNotification>> GetUnreadNotificationByUserId(int userId);
     }
 }
