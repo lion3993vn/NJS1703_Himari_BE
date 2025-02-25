@@ -138,5 +138,78 @@ namespace HimariServer.Service.Services.Implements
                 }
             };
         }
+
+        public async Task<BaseResponseModel> GetUnreadNotificationCount(int userId)
+        {
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+            }
+
+            var notification = await _unitOfWork.UserNotificationRepository.GetUnreadNotificationCount(userId);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.COUNT_UNREAD_NOTI_SUCCESS,
+                Data = notification
+            };
+        }
+
+        public async Task<BaseResponseModel> MarkNotificationAsRead(int notificationId)
+        {
+            var userNoti = await _unitOfWork.UserNotificationRepository.GetByIdAsync(notificationId);
+
+            if(userNoti == null)
+            {
+                throw new NotExistException(MessageConstants.USER_NOTI_NOT_EXIST);
+            }
+
+            userNoti.IsRead = true;
+            _unitOfWork.UserNotificationRepository.UpdateAsync(userNoti);
+            _unitOfWork.Save();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.MARK_NOTI_AS_READ_SUCCESS
+            };
+
+        }
+
+        public async Task<BaseResponseModel> MarkAllNotificationsAsRead(int userId)
+        {
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+            }
+
+            var userNoti = await _unitOfWork.UserNotificationRepository.GetUnreadNotificationByUserId(userId);
+
+            if (!userNoti.Any())
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = MessageConstants.NO_NOTI_MARK_AS_READ
+                };
+            }
+
+            foreach (var item in userNoti)
+            {
+                item.IsRead = true;
+                _unitOfWork.UserNotificationRepository.UpdateAsync(item);
+            }
+
+            _unitOfWork.Save();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.MARK_ALL_NOTI_AS_READ_SUCCESS
+            };
+        }
     }
 }
