@@ -1,4 +1,5 @@
-﻿using HimariServer.Service.BusinessModels.NotificationModels;
+﻿using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,13 @@ namespace HimariServer.API.Controllers
         public Task<IActionResult> PushMessageByUserId(NotificationRequestModel model)
         {
             return ValidateAndExecute(async () => await _notificationService.PushNotificationByUserId(model));
+        }
+
+        [HttpGet("user/{userId}")]
+        public Task<IActionResult> GetNotificationsByUserId(PaginationParameter paginationParameter, int userId, [FromQuery] int type)
+        {
+            return ValidateAndExecute(async () =>
+                await _notificationService.GetNotificationsByUserId(paginationParameter, userId, type));
         }
     }
 }
