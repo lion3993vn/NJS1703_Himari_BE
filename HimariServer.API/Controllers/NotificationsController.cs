@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Repository.Entities;
 using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
@@ -29,6 +30,27 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () =>
                 await _notificationService.GetNotificationsByUserId(paginationParameter, userId, type));
+        }
+
+        [HttpGet("unread/count")]
+        public Task<IActionResult> GetUnreadNotificationCount([FromQuery] int userId)
+        {
+            return ValidateAndExecute(async () =>
+                await _notificationService.GetUnreadNotificationCount(userId));
+        }
+
+        [HttpPut("{notificationId}/mark-as-read")]
+        public Task<IActionResult> MarkNotificationAsRead(int notificationId)
+        {
+            return ValidateAndExecute(async () =>
+                await _notificationService.MarkNotificationAsRead(notificationId));
+        }
+
+        [HttpPut("notifications/mark-all-as-read")]
+        public Task<IActionResult> MarkAllNotificationsAsRead([FromBody] MarkAllAsReadRequest request)
+        {
+            return ValidateAndExecute(async () =>
+                await _notificationService.MarkAllNotificationsAsRead(request.UserId));
         }
     }
 }
