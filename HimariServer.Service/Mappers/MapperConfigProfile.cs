@@ -32,9 +32,12 @@ namespace HimariServer.Service.Mappers
             CreateMap<AddCategoryModel, Category>();
 
             // product
-            CreateMap<Product, ProductModels>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : null));
+            CreateMap<Product, ProductModels>()
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : null))
+                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Brand != null ? src.Brand.BrandName : null));
             CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
             CreateMap<UpdateProductModel, Product>().ReverseMap();
+            CreateMap<CreateProductModel, Product>().ReverseMap();
 
             // blog
             CreateMap<Blog, BlogModel>()
@@ -56,11 +59,7 @@ namespace HimariServer.Service.Mappers
             CreateMap<AddBodyPartModel, BodyPart>().ReverseMap();
             CreateMap<UpdateBodyPartModel, BodyPart>().ReverseMap();
 
-            // product
-            CreateMap<Product, ProductModels>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName: null));
-            CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
-            CreateMap<UpdateProductModel, Product>().ReverseMap();
-            CreateMap<CreateProductModel, Product>().ReverseMap();
+            // Remove duplicate product mapping section
             
             //brand
             CreateMap<Brand, BrandModel>().ReverseMap();
