@@ -41,12 +41,13 @@ namespace HimariServer.Service.Services.Implements
                 }
             }
 
+            var brand = await _unitOfWork.BrandRepository.GetByIdAsync((int)product.BrandId);
+            if (brand == null)
+            {
+                throw new NotExistException(MessageConstants.BRAND_NOT_FOUND);
+            }
+
             var newProduct = _mapper.Map<Product>(product);
-            //TODO add check brand
-            // xoa cai ben duoi 
-            newProduct.BrandId = null;
-
-
 
             _unitOfWork.ProductRepository.UpdateAsync(newProduct);
             _unitOfWork.Save();
