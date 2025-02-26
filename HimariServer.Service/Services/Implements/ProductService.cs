@@ -49,14 +49,17 @@ namespace HimariServer.Service.Services.Implements
 
             var newProduct = _mapper.Map<Product>(product);
 
-            _unitOfWork.ProductRepository.UpdateAsync(newProduct);
+            await _unitOfWork.ProductRepository.AddAsync(newProduct);
             _unitOfWork.Save();
+
+            var newProductInclude = await _unitOfWork.ProductRepository.GetByIdIncludeAsync(newProduct.Id,
+                include: query => query.Include(x => x.Category).Include(x => x.Brand));
 
             return new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.PRODUCT_CREATE_SUCCESS,
-                Data = _mapper.Map<ProductModels>(newProduct)
+                Data = _mapper.Map<ProductModels>(newProductInclude)
             };
         }
 
