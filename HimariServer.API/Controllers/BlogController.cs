@@ -21,7 +21,7 @@ namespace HimariServer.API.Controllers
            _blogService = blogService;
         }
         [HttpGet]
-        public Task<IActionResult> GetBlogs(PaginationParameter paginationParameter)
+        public Task<IActionResult> GetBlogs([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _blogService.GetBlogsPaginationAsync(paginationParameter));
         }

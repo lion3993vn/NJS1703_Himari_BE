@@ -19,7 +19,7 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet]
-        public Task<IActionResult> GetBodyParts(PaginationParameter paginationParameter)
+        public Task<IActionResult> GetBodyParts([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _bodyPartService.GetBodyPartsPaginationAsync(paginationParameter));
         }
