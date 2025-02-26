@@ -15,7 +15,7 @@ namespace HimariServer.API.Controllers
             _symptomService = symptomService;
         }
         [HttpGet]
-        public Task<IActionResult> GetSymptoms(PaginationParameter paginationParameter)
+        public Task<IActionResult> GetSymptoms([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _symptomService.GetSymptomsPaginationAsync(paginationParameter));
         }

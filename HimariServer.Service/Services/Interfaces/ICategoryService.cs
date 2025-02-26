@@ -16,5 +16,7 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> DeleteCategoryByIdAsync(int id);
         Task<BaseResponseModel> UpdateCategory(CategoryUpdateModel model);
         Task<BaseResponseModel> CreateCategory(AddCategoryModel model);
+        Task<BaseResponseModel> GetParentCategoriesPaginationAsync(PaginationParameter paginationParameter);
+        Task<BaseResponseModel> GetSubCategoriesByParentIdPaginationAsync(int parentId, PaginationParameter paginationParameter);
     }
 }
