@@ -18,6 +18,9 @@ namespace HimariServer.Service.Constants
         public const string CATEGORY_UPDATE_SUCCESS = "Category updated successfully";
         public const string CATEGORY_DELETE_SUCCESS = "Category deleted successfully";
         public const string CATEGORY_CREATE_SUCCESS = "Category created successfully";
+        public const string GET_PARENT_CATEGORIES_SUCCESS = "Get parent categories successfully";
+        public const string GET_SUB_CATEGORIES_SUCCESS = "Get sub categories successfully";
+        public const string GET_SUB_CATEGORIES_BY_PARENT_SUCCESS = "Get sub categories by parent successfully";
 
         public const string GET_LIST_PRODUCT_SUCCESS = "Get list product successfully";
         public const string PRODUCT_FOUND = "Product founds";

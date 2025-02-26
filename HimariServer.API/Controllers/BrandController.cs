@@ -15,7 +15,7 @@ namespace HimariServer.API.Controllers
             _brandService = brandService;
         }
         [HttpGet]
-        public Task<IActionResult> GetBrands(PaginationParameter paginationParameter)
+        public Task<IActionResult> GetBrands([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _brandService.GetBrandsPaginationAsync(paginationParameter));
         }

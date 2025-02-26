@@ -17,17 +17,17 @@ namespace HimariServer.API.Controllers
             _productService = productService;
         }
         [HttpGet]
-        public Task<IActionResult> GetProducts(PaginationParameter paginationParameter)
+        public Task<IActionResult> GetProducts([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _productService.GetProductsPaginationAsync(paginationParameter));
         }
         [HttpGet("category/{categoryId}")]
-        public Task<IActionResult> GetProductsByCategory(PaginationParameter paginationParameter, int categoryId)
+        public Task<IActionResult> GetProductsByCategory([FromQuery] PaginationParameter paginationParameter, int categoryId)
         {
             return ValidateAndExecute(async () => await _productService.GetProductsByCategory(paginationParameter, categoryId));
         }
         [HttpGet("featured")]
-        public Task<IActionResult> GetFeaturedProducts(PaginationParameter paginationParameter)
+        public Task<IActionResult> GetFeaturedProducts([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _productService.GetFeaturedProducts(paginationParameter));
         }
@@ -38,7 +38,7 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet("brand/{brandId}")]
-        public Task<IActionResult> GetProductsByBrand(PaginationParameter paginationParameter, int brandId)
+        public Task<IActionResult> GetProductsByBrand([FromQuery] PaginationParameter paginationParameter, int brandId)
         {
             return ValidateAndExecute(async () => await _productService.GetProductsByBrand(paginationParameter, brandId));
         }
