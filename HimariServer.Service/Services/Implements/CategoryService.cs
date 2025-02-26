@@ -167,5 +167,76 @@ namespace HimariServer.Service.Services.Implements
                 Data = _mapper.Map<CategoryModel>(category)
             };
         }
+
+        public async Task<BaseResponseModel> GetParentCategoriesPaginationAsync(PaginationParameter paginationParameter)
+        {
+            var parentCategories = await _unitOfWork.CategoryRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                include: query => query.Include(c => c.ParentCategory),
+                filter: query => !query.IsDeleted && query.ParentCategoryId == null
+            );
+
+            var listParentCategories = _mapper.Map<Pagination<CategoryModel>>(parentCategories);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_PARENT_CATEGORIES_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listParentCategories,
+                    MetaData = new
+                    {
+                        listParentCategories.TotalCount,
+                        listParentCategories.PageSize,
+                        listParentCategories.CurrentPage,
+                        listParentCategories.TotalPages,
+                        listParentCategories.HasNext,
+                        listParentCategories.HasPrevious
+                    }
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel> GetSubCategoriesByParentIdPaginationAsync(int parentId, PaginationParameter paginationParameter)
+        {
+            // First check if parent category exists
+            var parentCategory = await _unitOfWork.CategoryRepository.GetByIdIncludeAsync(
+                parentId,
+                filter: query => !query.IsDeleted
+            );
+
+            if (parentCategory == null)
+            {
+                throw new NotExistException(MessageConstants.CATEGORY_PARENT_NOT_FOUND);
+            }
+
+            var subCategories = await _unitOfWork.CategoryRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                include: query => query.Include(c => c.ParentCategory),
+                filter: query => !query.IsDeleted && query.ParentCategoryId == parentId
+            );
+
+            var listSubCategories = _mapper.Map<Pagination<CategoryModel>>(subCategories);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_SUB_CATEGORIES_BY_PARENT_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listSubCategories,
+                    MetaData = new
+                    {
+                        listSubCategories.TotalCount,
+                        listSubCategories.PageSize,
+                        listSubCategories.CurrentPage,
+                        listSubCategories.TotalPages,
+                        listSubCategories.HasNext,
+                        listSubCategories.HasPrevious
+                    }
+                }
+            };
+        }
     }
 }

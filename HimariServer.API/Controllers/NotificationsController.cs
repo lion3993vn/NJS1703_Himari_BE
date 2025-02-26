@@ -26,7 +26,7 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        public Task<IActionResult> GetNotificationsByUserId(PaginationParameter paginationParameter, int userId, [FromQuery] int type)
+        public Task<IActionResult> GetNotificationsByUserId([FromQuery] PaginationParameter paginationParameter, int userId, [FromQuery] int type)
         {
             return ValidateAndExecute(async () =>
                 await _notificationService.GetNotificationsByUserId(paginationParameter, userId, type));
