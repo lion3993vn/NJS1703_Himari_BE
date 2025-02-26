@@ -59,7 +59,7 @@ public partial class HimariServerContext : DbContext
             entity.ToTable("Notification");
 
             entity.Property(e => e.Title);
-            entity.Property(e => e.TitleUnsign).IsUnicode(false);
+            entity.Property(e => e.TitleUnsign).IsUnicode(true);
 
             entity.Property(n => n.Href)
             .HasMaxLength(500)
@@ -101,8 +101,8 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("BodyPart");
 
-            entity.Property(e => e.BodyPartName).IsUnicode(false);
-            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.BodyPartName).IsUnicode(true);
+            entity.Property(e => e.Description).IsUnicode(true);
         });
 
         modelBuilder.Entity<Brand>(entity =>
@@ -111,9 +111,9 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Brand");
 
-            entity.Property(e => e.BrandName).IsUnicode(false);
-            entity.Property(e => e.Description).HasColumnType("text");
-            entity.Property(e => e.Image).HasColumnType("text");
+            entity.Property(e => e.BrandName).IsUnicode(true);
+            entity.Property(e => e.Description).IsUnicode(true);
+            entity.Property(e => e.Image).IsUnicode(true);
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -122,9 +122,8 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Category");
 
-            entity.Property(e => e.CategoryName).IsUnicode(false);
-            entity.Property(e => e.Description).HasColumnType("text");
-
+            entity.Property(e => e.CategoryName).IsUnicode(true);
+            entity.Property(e => e.Description).IsUnicode(true);
             entity.HasOne(d => d.ParentCategory).WithMany(p => p.InverseParentCategory)
                 .HasForeignKey(d => d.ParentCategoryId)
                 .HasConstraintName("FK__Category__Parent__5FB337D6");
@@ -166,7 +165,7 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Order");
 
-            entity.Property(e => e.OrderCode).IsUnicode(false);
+            entity.Property(e => e.OrderCode).IsUnicode(true);
 
             entity.HasOne(d => d.Account).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.AccountId)
@@ -194,7 +193,7 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("PartSymptom");
 
-            entity.Property(e => e.Name).IsUnicode(false);
+            entity.Property(e => e.Name).IsUnicode(true);
 
             entity.HasOne(d => d.BodyPart).WithMany(p => p.PartSymptoms)
                 .HasForeignKey(d => d.BodyPartId)
@@ -207,9 +206,9 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Payment");
 
-            entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.PaymentCode).IsUnicode(false);
-            entity.Property(e => e.Status).IsUnicode(false);
+            entity.Property(e => e.Description).IsUnicode(true);
+            entity.Property(e => e.PaymentCode).IsUnicode(true);
+            entity.Property(e => e.Status).IsUnicode(true);
 
             entity.HasOne(d => d.Order).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.OrderId)
@@ -222,9 +221,9 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Product");
 
-            entity.Property(e => e.Description).HasColumnType("text");
-            entity.Property(e => e.ImageUrl).IsUnicode(false);
-            entity.Property(e => e.ProductName).IsUnicode(false);
+            entity.Property(e => e.Description).IsUnicode(true);
+            entity.Property(e => e.ImageUrl).IsUnicode(true);
+            entity.Property(e => e.ProductName).IsUnicode(true);
 
             entity.HasOne(d => d.Brand).WithMany(p => p.Products)
                 .HasForeignKey(d => d.BrandId)
@@ -256,7 +255,7 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Role");
 
-            entity.Property(e => e.RoleName).IsUnicode(false);
+            entity.Property(e => e.RoleName).IsUnicode(true);
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -265,13 +264,13 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("User");
 
-            entity.Property(e => e.Address).IsUnicode(false);
-            entity.Property(e => e.Email).IsUnicode(false);
-            entity.Property(e => e.FullName).IsUnicode(false);
-            entity.Property(e => e.GoogleId).IsUnicode(false);
-            entity.Property(e => e.AvatarUrl).IsUnicode(false);
-            entity.Property(e => e.PhoneNumber).IsUnicode(false);
-            entity.Property(e => e.UnsignName).IsUnicode(false);
+            entity.Property(e => e.Address).IsUnicode(true);
+            entity.Property(e => e.Email).IsUnicode(true);
+            entity.Property(e => e.FullName).IsUnicode(true);
+            entity.Property(e => e.GoogleId).IsUnicode(true);
+            entity.Property(e => e.AvatarUrl).IsUnicode(true);
+            entity.Property(e => e.PhoneNumber).IsUnicode(true);
+            entity.Property(e => e.UnsignName).IsUnicode(true);
             entity.Property(e => e.IsVerify);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
