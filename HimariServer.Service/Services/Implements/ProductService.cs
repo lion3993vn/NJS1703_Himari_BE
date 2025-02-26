@@ -117,7 +117,7 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> GetProductById(int id)
         {
             var product = await _unitOfWork.ProductRepository.GetByIdIncludeAsync(id,
-               include: query => query.Include(x => x.Category));
+               include: query => query.Include(x => x.Category).Include(x => x.Brand));
 
             if (product == null || product.IsDeleted)
             {
@@ -149,7 +149,7 @@ namespace HimariServer.Service.Services.Implements
             }
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
                paginationParameter,
-               include: query => query.Include(x => x.Category),
+               include: query => query.Include(x => x.Category).Include(x => x.Brand),
                filter: query => !query.IsDeleted && query.CategoryId == categoryId
                );
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
@@ -178,7 +178,7 @@ namespace HimariServer.Service.Services.Implements
         {
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
                paginationParameter,
-               include: query => query.Include(x => x.Category),
+               include: query => query.Include(x => x.Category).Include(x => x.Brand),
                filter: query => !query.IsDeleted
                );
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
@@ -205,7 +205,8 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> UpdateProduct(UpdateProductModel newProduct)
         {
-            var eProduct = await _unitOfWork.ProductRepository.GetByIdAsync(newProduct.Id);
+            var eProduct = await _unitOfWork.ProductRepository.GetByIdIncludeAsync(newProduct.Id,
+                                    include: query => query.Include(x => x.Category).Include(x => x.Brand));
             if (eProduct == null || eProduct.IsDeleted)
             {
                 throw new NotExistException(MessageConstants.PRODUCT_NOT_FOUND);
