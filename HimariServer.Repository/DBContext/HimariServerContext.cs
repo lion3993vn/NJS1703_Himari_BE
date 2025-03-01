@@ -49,6 +49,7 @@ public partial class HimariServerContext : DbContext
     public virtual DbSet<UserDevice> UserDevices { get; set; }
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<UserNotification> UserNotifications { get; set; }
+    public virtual DbSet<ChatMessage> ChatMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -300,6 +301,22 @@ public partial class HimariServerContext : DbContext
             .WithMany()
             .HasForeignKey(un => un.UserId);
             
+        });
+
+        modelBuilder.Entity<ChatMessage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ChatMessage__3214EC07B8F96589");
+            
+            entity.ToTable("ChatMessage");
+            
+            entity.Property(e => e.Message).IsUnicode(true).IsRequired();
+            entity.Property(e => e.Type)
+                .HasConversion<int>()
+                .IsRequired();
+            
+            entity.HasOne(d => d.User).WithMany()
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__ChatMessage__UserId__78AE5A0");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HimariServer.Service.BusinessModels.ChatMessageModels;
 
 namespace HimariServer.Service.Mappers
 {
@@ -81,6 +82,9 @@ namespace HimariServer.Service.Mappers
 
             // Notification
             MapperNotification();
+
+            CreateMap<ChatMessageModel, ChatMessage>().ReverseMap();
+            CreateMap<Pagination<ChatMessage>, Pagination<ChatMessageModel>>().ConvertUsing<PaginationConverter<ChatMessage, ChatMessageModel>>();
         }
 
         public void MapperNotification()
