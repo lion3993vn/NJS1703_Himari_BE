@@ -50,6 +50,7 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Himari Server", Version = "v.1.0" });
@@ -84,10 +85,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("app-cors",
         builder =>
         {
-        builder.AllowAnyOrigin()
-        .AllowAnyHeader()
-        .WithExposedHeaders("X-Pagination")
-        .AllowAnyMethod();
+            builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .WithExposedHeaders("X-Pagination")
+            .AllowAnyMethod();
         });
 });
 
