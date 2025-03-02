@@ -17,6 +17,7 @@ namespace HimariServer.Service.Constants
         public const string CATEGORY_PARENT_NOT_FOUND = "Category parent not found";
         public const string CATEGORY_UPDATE_SUCCESS = "Category updated successfully";
         public const string CATEGORY_DELETE_SUCCESS = "Category deleted successfully";
+        public const string CATEGORY_DELETE_FAIL = "Failed to delete category";
         public const string CATEGORY_CREATE_SUCCESS = "Category created successfully";
         public const string GET_PARENT_CATEGORIES_SUCCESS = "Get parent categories successfully";
         public const string GET_SUB_CATEGORIES_SUCCESS = "Get sub categories successfully";

@@ -86,7 +86,8 @@ namespace HimariServer.Service.Services.Implements
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
                 paginationParameter,
                 include: query => query.Include(x => x.Category)
-                                       .Include(x => x.OrderDetails),
+                                       .Include(x => x.OrderDetails)
+                                       .Include(x => x.Brand),
                 filter: query => !query.IsDeleted,
                 orderBy: query => query.OrderByDescending(p =>
                                         p.OrderDetails.Sum(od => od.Quantity))
