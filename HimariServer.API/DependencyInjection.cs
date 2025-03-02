@@ -70,7 +70,9 @@ namespace HimariServer.API
             // config part symptom service
             services.AddScoped<IPartSymptomRepository, PartSymptomRepository>();
             services.AddScoped<IPartSymptomService, PartSymptomService>();
-          
+
+            services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+            services.AddScoped<IChatMessageService, ChatMessageService>();
             return services;
         }
     }

@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace HimariServer.Repository.Repositories.Interfaces
 {
-    public interface ICategoryRepository : IGenericRepository<Category>
+    public interface IChatMessageRepository : IGenericRepository<ChatMessage>
     {
-        Task<List<Category>> GetSubCategories(int parentCategoryId);
     }
 }
