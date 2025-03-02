@@ -13,9 +13,9 @@ public partial class Order : BaseEntity
 
     public double? OrderPrice { get; set; }
 
-    public int? AccountId { get; set; }
+    public int? UserId { get; set; }
 
-    public virtual User Account { get; set; }
+    public virtual User User { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 

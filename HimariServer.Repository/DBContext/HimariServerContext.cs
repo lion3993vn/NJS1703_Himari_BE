@@ -168,8 +168,8 @@ public partial class HimariServerContext : DbContext
 
             entity.Property(e => e.OrderCode).IsUnicode(true);
 
-            entity.HasOne(d => d.Account).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.AccountId)
+            entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Order__AccountId__5165187F");
         });
 

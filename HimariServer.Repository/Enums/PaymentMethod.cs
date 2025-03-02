@@ -9,5 +9,6 @@ namespace HimariServer.Repository.Enums
     public enum PaymentMethod
     {
         Momo,
+        PayOS
     }
 }

@@ -73,6 +73,9 @@ namespace HimariServer.API
 
             services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
             services.AddScoped<IChatMessageService, ChatMessageService>();
+
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
     }
