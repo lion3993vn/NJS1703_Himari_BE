@@ -11,5 +11,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
     public interface IProductRepository : IGenericRepository<Product>
     {
         Task<bool> IsContainProduct(int categoryId);
+        Task<List<int>> GetProductIdsByPartSymptomAsync(string partSymptomName);
     }
 }

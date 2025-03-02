@@ -13,5 +13,14 @@ namespace HimariServer.Repository.Repositories.Implements
         {
             _context = context;
         }
+        public List<KeyValuePair<string, string>> GetBodyPartSymptomPairs()
+        {
+            var result = _context.PartSymptoms
+                .Where(ps => ps.BodyPart != null) 
+                .Select(ps => new KeyValuePair<string, string>(ps.BodyPart.BodyPartName, ps.Name))
+                .ToList();
+
+            return result;
+        }
     }
 }

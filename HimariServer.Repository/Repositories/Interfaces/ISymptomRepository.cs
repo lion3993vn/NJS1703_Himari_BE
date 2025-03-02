@@ -1,5 +1,6 @@
 ﻿using HimariServer.Repository.Entities;
 using HimariServer.Repository.Repositories.Generic;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
 {
     public interface ISymptomRepository : IGenericRepository<PartSymptom>
     {
+        List<KeyValuePair<string, string>> GetBodyPartSymptomPairs();
     }
 }

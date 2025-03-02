@@ -1,10 +1,10 @@
-﻿using HimariServer.Service.Services.Implements;
+﻿
 using HimariServer.Service.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using HimariServer.Repository.Commons;
-
+using HimariServer.Service.BusinessModels.ResultModels;
+using HimariServer.Service.BusinessModels.ChatMessageModels;
+using HimariServer.Repository.Entities;
 namespace HimariServer.API.Controllers
 {
     [Route("api/v1/chat-messages")]
@@ -23,6 +23,10 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () =>
                 await _chatMessageService.GetMessageChatByUserIdPaginated(userId, paginationParameter));
+        }
+        [HttpPost]
+        public Task<IActionResult> GetProductRecommendationAsync([FromBody] ChatRequestModel chatRequest) {
+            return ValidateAndExecute(async () => await _chatMessageService.GetProductRecommendationAsync(chatRequest));
         }
     }
 }

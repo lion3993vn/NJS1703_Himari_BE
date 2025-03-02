@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ater.DeepSeek.AspNetCore" Version="1.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HimariServer.Repository\HimariServer.Repository.csproj" />
   </ItemGroup>
 

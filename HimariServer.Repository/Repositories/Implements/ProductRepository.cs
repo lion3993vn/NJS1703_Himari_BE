@@ -19,5 +19,12 @@ namespace HimariServer.Repository.Repositories.Implements
         {
             return await _context.Products.AnyAsync(x => x.CategoryId == categoryId && !x.IsDeleted);
         }
+        public async Task<List<int>> GetProductIdsByPartSymptomAsync(string partSymptomName)
+        {
+            return await _context.ProductSymptoms
+                .Where(ps => ps.PartSymptom.Name == partSymptomName && !ps.IsDeleted)
+                .Select(ps => ps.ProductId.Value)
+                .ToListAsync();
+        }
     }
 }

@@ -139,6 +139,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<OpenAISettings>(builder.Configuration.GetSection("OpenAI"));
 
 FirebaseApp.Create(new AppOptions()
 {

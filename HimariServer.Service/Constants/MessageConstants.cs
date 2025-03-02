@@ -97,5 +97,6 @@ namespace HimariServer.Service.Constants
         public const string PART_SYMPTOM_DELETE_SUCCESS = "Delete part symptom successfully";
 
         public const string GET_CHAT_MESSAGES_SUCCESS = "Get chat messages successfully";
+        public const string GET_CHAT_MESSAGES_FAILED = "Get chat messages failed";
     }
 }
