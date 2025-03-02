@@ -1,4 +1,4 @@
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using HimariServer.API;
 using HimariServer.API.Middlewares;
@@ -84,10 +84,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("app-cors",
         builder =>
         {
-            builder.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .WithExposedHeaders("X-Pagination")
-            .AllowAnyMethod();
+        builder.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .WithExposedHeaders("X-Pagination")
+        .AllowAnyMethod();
         });
 });
 
@@ -116,7 +116,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddDbContext<HimariServerContext>(options =>
 {
-options.UseSqlServer(builder.Configuration.GetConnectionString("HimariServerLocal"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HimariServerLocal"));
 });
 
 // ==========================================================
@@ -168,6 +168,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseWebSockets();
 
 app.MapHub<ChatHub>("/chatHub");
 
