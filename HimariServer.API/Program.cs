@@ -4,6 +4,7 @@ using HimariServer.API;
 using HimariServer.API.Middlewares;
 using HimariServer.Repository.DBContext;
 using HimariServer.Service.BusinessModels.ResultModels;
+using HimariServer.Service.Hubs;
 using HimariServer.Service.Mappers;
 using HimariServer.Service.SettingModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -143,6 +144,12 @@ FirebaseApp.Create(new AppOptions()
     Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
 });
 
+builder.Services.AddSignalR(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromSeconds(30);
+    options.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -161,6 +168,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
