@@ -29,6 +29,7 @@ namespace HimariServer.Repository.UnitOfWork
         private INotificationRepository _notificationRepository;
         private IUserNotificationRepository _userNotificationRepository;
         private IPartSymptomRepository _partSymptomRepository;
+        private IChatMessageRepository _chatMessageRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -153,6 +154,14 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _partSymptomRepository ??= new PartSymptomRepository(_context);
+            }
+        }
+
+        public IChatMessageRepository ChatMessageRepository
+        {
+            get
+            {
+                return _chatMessageRepository ??= new ChatMessageRepository(_context);
             }
         }
 

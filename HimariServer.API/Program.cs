@@ -1,9 +1,10 @@
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using HimariServer.API;
 using HimariServer.API.Middlewares;
 using HimariServer.Repository.DBContext;
 using HimariServer.Service.BusinessModels.ResultModels;
+using HimariServer.Service.Hubs;
 using HimariServer.Service.Mappers;
 using HimariServer.Service.SettingModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,6 +50,7 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Himari Server", Version = "v.1.0" });
@@ -115,7 +117,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddDbContext<HimariServerContext>(options =>
 {
-options.UseSqlServer(builder.Configuration.GetConnectionString("HimariServerLocal"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HimariServerLocal"));
 });
 
 // ==========================================================
@@ -143,6 +145,12 @@ FirebaseApp.Create(new AppOptions()
     Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
 });
 
+builder.Services.AddSignalR(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromSeconds(30);
+    options.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -161,6 +169,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseWebSockets();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
