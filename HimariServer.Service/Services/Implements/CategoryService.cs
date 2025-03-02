@@ -31,7 +31,7 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> CreateCategory(AddCategoryModel model)
         {
-            if(model.ParentCategoryId != null)
+            if (model.ParentCategoryId != null)
             {
                 var parentCategory = await _unitOfWork.CategoryRepository.GetByIdIncludeAsync(
                                                         (int)model.ParentCategoryId,
@@ -63,9 +63,34 @@ namespace HimariServer.Service.Services.Implements
                 filter: query => !query.IsDeleted
                 );
 
+
             if (category == null)
             {
                 throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
+            }
+            var subCategories = await _unitOfWork.CategoryRepository.GetSubCategories(category.Id);
+            if (subCategories != null)
+            {
+                foreach (var subCategory in subCategories)
+                {
+                    if (await _unitOfWork.ProductRepository.IsContainProduct(subCategory.Id))
+                    {
+
+                        return new BaseResponseModel
+                        {
+                            StatusCode = StatusCodes.Status400BadRequest,
+                            Message = MessageConstants.CATEGORY_DELETE_FAIL
+                        };
+                    }
+                }
+            }
+
+            if (subCategories != null)
+            {
+                foreach (var subCategory in subCategories)
+                {
+                    _unitOfWork.CategoryRepository.SoftDeleteAsync(subCategory);
+                }
             }
 
             _unitOfWork.CategoryRepository.SoftDeleteAsync(category);
@@ -142,7 +167,7 @@ namespace HimariServer.Service.Services.Implements
                 throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
             }
 
-            if(model.ParentCategoryId != null)
+            if (model.ParentCategoryId != null)
             {
                 var parentCategory = await _unitOfWork.CategoryRepository.GetByIdIncludeAsync(
                 (int)model.ParentCategoryId,
