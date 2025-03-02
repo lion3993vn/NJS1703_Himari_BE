@@ -24,6 +24,7 @@ namespace HimariServer.Repository.UnitOfWork
         IUserNotificationRepository UserNotificationRepository { get; }
         IPartSymptomRepository PartSymptomRepository { get; }
         IChatMessageRepository ChatMessageRepository { get; }
+        IOrderRepository OrderRepository { get; }
         int Save();
         void Commit();
         void Rollback();
