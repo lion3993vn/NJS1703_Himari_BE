@@ -139,6 +139,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOS"));
 
 FirebaseApp.Create(new AppOptions()
 {

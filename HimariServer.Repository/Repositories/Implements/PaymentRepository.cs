@@ -2,7 +2,6 @@
 using HimariServer.Repository.Entities;
 using HimariServer.Repository.Repositories.Generic;
 using HimariServer.Repository.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +10,13 @@ using System.Threading.Tasks;
 
 namespace HimariServer.Repository.Repositories.Implements
 {
-    public class OrderRepository : GenericRepository<Order>, IOrderRepository
+    public class PaymentRepository : GenericRepository<Payment>, IPaymentRepository
     {
         private readonly HimariServerContext _context;
-        public OrderRepository(HimariServerContext context) : base(context)
+
+        public PaymentRepository(HimariServerContext context) : base(context)
         {
             _context = context;
-        }
-
-        public async Task<Order?> GetOrderByCodeAsync(string orderCode)
-        {
-            return await _context.Orders.Where(x => x.OrderCode == orderCode && !x.IsDeleted).FirstOrDefaultAsync();
         }
     }
 }

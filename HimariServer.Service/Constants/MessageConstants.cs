@@ -101,5 +101,7 @@ namespace HimariServer.Service.Constants
         public static string ORDER_ITEM_NOT_HAVE = "Order item must be at least 1 item";
         public static string ORDER_ITEM_NOT_FOUND = "Item id {id} not found";
         public static string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
+        public static string PAYMENT_DESCRIPTION = "Đơn hàng ";
+        public static string ORDER_CREATE_SUCCESS = "Create order successfully";
     }
 }

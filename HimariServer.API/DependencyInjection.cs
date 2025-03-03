@@ -63,6 +63,9 @@ namespace HimariServer.API
             // config mail service
             services.AddScoped<IMailService, MailService>();
 
+            // config payos service
+            services.AddScoped<IPayOSService, PayOSService>();
+
             // config notification service
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<INotificationService, NotificationService>();

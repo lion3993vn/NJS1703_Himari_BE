@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace HimariServer.Repository.Repositories.Interfaces
 {
-    public interface IOrderRepository : IGenericRepository<Order>
+    public interface IPaymentRepository : IGenericRepository<Payment>
     {
-        Task<Order?> GetOrderByCodeAsync(string orderCode);
     }
 }
