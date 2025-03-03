@@ -1,5 +1,4 @@
-﻿using Net.payOS.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace HimariServer.Service.Services.Interfaces
 {
-    public interface IPayOSService
+    public interface IMomoService
     {
-        Task<string> CreatePaymentUrl(int orderId);
     }
 }

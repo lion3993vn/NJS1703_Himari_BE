@@ -3,7 +3,6 @@ using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
 using HimariServer.Repository.UnitOfWork;
 using HimariServer.Service.BusinessModels.OrderModels;
-using HimariServer.Service.BusinessModels.PayOSModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
@@ -62,8 +61,6 @@ namespace HimariServer.Service.Services.Implements
             // Calculate total amount and create order details
             int totalAmount = 0;
 
-            List<ItemData> items = new List<ItemData>();
-
             foreach (var item in model.Items)
             {
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
@@ -95,7 +92,6 @@ namespace HimariServer.Service.Services.Implements
                 _unitOfWork.ProductRepository.UpdateAsync(product);
 
                 ItemData itemPayment = new ItemData(product.ProductName, item.Quantity, (int)itemPrice);
-                items.Add(itemPayment);
             }
 
             order.OrderPrice = totalAmount;
@@ -120,13 +116,7 @@ namespace HimariServer.Service.Services.Implements
             #region handle payment payos
             if (model.PaymentMethod == PaymentMethod.PayOS)
             {
-                var paymenturl = await _payOSService.CreatePaymentUrl(new PayOSRequest
-                {
-                    Amount = totalAmount,
-                    Description = payment.Description,
-                    Items = items,
-                    ExpiredAt = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 600
-                });
+                var paymenturl = await _payOSService.CreatePaymentUrl(order.Id);
 
                 return new BaseResponseModel
                 {
