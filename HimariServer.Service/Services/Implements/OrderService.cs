@@ -3,11 +3,14 @@ using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
 using HimariServer.Repository.UnitOfWork;
 using HimariServer.Service.BusinessModels.OrderModels;
+using HimariServer.Service.BusinessModels.PayOSModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
 using HimariServer.Service.Utils;
+using Microsoft.AspNetCore.Http;
+using Net.payOS.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,38 +23,36 @@ namespace HimariServer.Service.Services.Implements
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IPayOSService _payOSService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IPayOSService payOSService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _payOSService = payOSService;
         }
 
         public async Task<BaseResponseModel> CreateOrder(OrderResquestModel model)
         {
-            // Check if user exists
+            #region create order
             var user = await _unitOfWork.UsersRepository.GetByIdAsync(model.UserId);
             if (user == null)
             {
                 throw new NotExistException(MessageConstants.USER_NOT_EXIST);
             }
 
-            // Validate order items
             if (model.Items == null || !model.Items.Any())
             {
                 throw new DefaultException(MessageConstants.ORDER_ITEM_NOT_HAVE);
             }
 
-            string orderCode = StringUtils.GenerateOrderCode(5);
+            string orderCode = await ValidateOrderCode();
 
-            // Create order entity
             var order = new Order
             {
                 UserId = model.UserId,
                 OrderCode = orderCode,
                 OrderPrice = 0,
-                CreatedDate = DateTime.Now,
-                IsDeleted = false
             };
 
             // Add order to database
@@ -59,11 +60,12 @@ namespace HimariServer.Service.Services.Implements
             await _unitOfWork.SaveAsync();
 
             // Calculate total amount and create order details
-            double totalAmount = 0;
+            int totalAmount = 0;
+
+            List<ItemData> items = new List<ItemData>();
 
             foreach (var item in model.Items)
             {
-                // Get product from database
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
                 if (product == null)
                 {
@@ -75,11 +77,9 @@ namespace HimariServer.Service.Services.Implements
                     throw new DefaultException(MessageConstants.INSUFFICIENT_STOCK_QUANTITY.Replace("{name}", product.ProductName));
                 }
 
-                // Calculate item price
                 var itemPrice = product.Price * item.Quantity;
                 totalAmount += itemPrice ?? 0;
 
-                // Create order detail
                 var orderDetail = new OrderDetail
                 {
                     OrderId = order.Id,
@@ -93,15 +93,81 @@ namespace HimariServer.Service.Services.Implements
                 // Update product quantity
                 product.Quantity -= item.Quantity;
                 _unitOfWork.ProductRepository.UpdateAsync(product);
+
+                ItemData itemPayment = new ItemData(product.ProductName, item.Quantity, (int)itemPrice);
+                items.Add(itemPayment);
             }
 
             order.OrderPrice = totalAmount;
             _unitOfWork.OrderRepository.UpdateAsync(order);
+            #endregion
+
+            #region create payment
+            var payment = new Payment
+            {
+                OrderId = order.Id,
+                Amount = totalAmount,
+                Description = MessageConstants.PAYMENT_DESCRIPTION + order.OrderCode,
+                PaymentMethod = model.PaymentMethod,
+                Status = PaymentStatus.Pending,
+            };
+
+            await _unitOfWork.PaymentRepository.AddAsync(payment);
 
             await _unitOfWork.SaveAsync();
+            #endregion
 
-            // Return response
-            return null;
+            #region handle payment payos
+            if (model.PaymentMethod == PaymentMethod.PayOS)
+            {
+                var paymenturl = await _payOSService.CreatePaymentUrl(new PayOSRequest
+                {
+                    Amount = totalAmount,
+                    Description = payment.Description,
+                    Items = items,
+                    ExpiredAt = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 600
+                });
+
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = MessageConstants.ORDER_CREATE_SUCCESS,
+                    Data = new
+                    {
+                        OrderCode = order.OrderCode,
+                        PaymentUrl = paymenturl
+                    }
+                };
+            }
+            #endregion
+
+            #region handle payment momo
+            else
+            {
+                //TODO MOMO
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = MessageConstants.ORDER_CREATE_SUCCESS,
+                    Data = new
+                    {
+                        OrderCode = order.OrderCode
+                    }
+                };
+            }
+            #endregion
+        }
+
+        private async Task<string> ValidateOrderCode()
+        {
+            while (true)
+            {
+                var orderCode = StringUtils.GenerateOrderCode(5);
+                if (await _unitOfWork.OrderRepository.GetOrderByCodeAsync(orderCode) == null)
+                {
+                    return orderCode;
+                }
+            }
         }
     }
 }

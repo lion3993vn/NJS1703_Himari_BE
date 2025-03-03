@@ -11,7 +11,7 @@ public partial class Order : BaseEntity
 
     public string OrderCode { get; set; }
 
-    public double? OrderPrice { get; set; }
+    public int? OrderPrice { get; set; }
 
     public int? UserId { get; set; }
 

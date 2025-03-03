@@ -11,4 +11,11 @@ namespace HimariServer.Repository.Enums
         Momo,
         PayOS
     }
+
+    public enum PaymentStatus
+    {
+        Pending,
+        Success,
+        Failed
+    }
 }
