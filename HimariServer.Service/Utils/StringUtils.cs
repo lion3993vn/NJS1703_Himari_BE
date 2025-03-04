@@ -25,19 +25,5 @@ namespace HimariServer.Service.Utils
             }
             return str2;
         }
-
-        public static string GenerateOrderCode(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Chữ cái và số
-            Random random = new Random();
-            StringBuilder result = new StringBuilder("ORD");
-
-            for (int i = 0; i < length; i++)
-            {
-                result.Append(chars[random.Next(chars.Length)]);
-            }
-
-            return result.ToString();
-        }
     }
 }

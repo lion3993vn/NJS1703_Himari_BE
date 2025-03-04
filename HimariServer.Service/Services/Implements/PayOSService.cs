@@ -28,8 +28,6 @@ namespace HimariServer.Service.Services.Implements
         {
             PayOS payOS = new PayOS(_payOSSettings.ClientID, _payOSSettings.ApiKey, _payOSSettings.ChecksumKey);
 
-            long orderCode = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
             var order = await _unitOfWork.OrderRepository.GetByIdIncludeAsync(
                 orderId,
                 include: query => query.Include(o => o.OrderDetails).ThenInclude(od => od.Product)
@@ -50,7 +48,7 @@ namespace HimariServer.Service.Services.Implements
             long expiredAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 60; //hết hạn sau 10 phút, fix đưa vô config sau
 
             var paymentData = new PaymentData(
-                orderCode,
+                order.OrderCode,
                 (int)payment.Amount,
                 MessageConstants.PAYMENT_DESCRIPTION + order.OrderCode,
                 items,
@@ -61,6 +59,13 @@ namespace HimariServer.Service.Services.Implements
 
             CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
             return createPayment.checkoutUrl;
+        }
+
+        public WebhookData VerifyWebhook(WebhookType webhook)
+        {
+            PayOS payOS = new PayOS(_payOSSettings.ClientID, _payOSSettings.ApiKey, _payOSSettings.ChecksumKey);
+
+            return payOS.verifyPaymentWebhookData(webhook);
         }
     }
 }

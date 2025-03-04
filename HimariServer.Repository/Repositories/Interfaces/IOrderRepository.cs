@@ -10,6 +10,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
 {
     public interface IOrderRepository : IGenericRepository<Order>
     {
-        Task<Order?> GetOrderByCodeAsync(string orderCode);
+        Task<Order?> GetOrderByCodeAsync(int orderCode);
     }
 }

@@ -10,5 +10,7 @@ namespace HimariServer.Service.Services.Interfaces
     public interface IPayOSService
     {
         Task<string> CreatePaymentUrl(int orderId);
+
+        WebhookData VerifyWebhook(WebhookType webhook);
     }
 }

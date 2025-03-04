@@ -166,7 +166,7 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Order");
 
-            entity.Property(e => e.OrderCode).IsUnicode(true);
+            entity.Property(e => e.OrderCode);
 
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
@@ -208,7 +208,6 @@ public partial class HimariServerContext : DbContext
             entity.ToTable("Payment");
 
             entity.Property(e => e.Description).IsUnicode(true);
-            entity.Property(e => e.PaymentCode).IsUnicode(true);
             
             // Replace the Status string property with enum configuration
             entity.Property(e => e.Status)
