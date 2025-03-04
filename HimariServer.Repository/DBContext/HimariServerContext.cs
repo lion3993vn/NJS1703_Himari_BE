@@ -166,10 +166,10 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("Order");
 
-            entity.Property(e => e.OrderCode).IsUnicode(true);
+            entity.Property(e => e.OrderCode);
 
-            entity.HasOne(d => d.Account).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.AccountId)
+            entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Order__AccountId__5165187F");
         });
 
@@ -208,8 +208,16 @@ public partial class HimariServerContext : DbContext
             entity.ToTable("Payment");
 
             entity.Property(e => e.Description).IsUnicode(true);
-            entity.Property(e => e.PaymentCode).IsUnicode(true);
-            entity.Property(e => e.Status).IsUnicode(true);
+            
+            // Replace the Status string property with enum configuration
+            entity.Property(e => e.Status)
+                .HasConversion<int>()
+                .IsRequired();
+            
+            // Add configuration for PaymentMethod enum
+            entity.Property(e => e.PaymentMethod)
+                .HasConversion<int>()
+                .IsRequired();
 
             entity.HasOne(d => d.Order).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.OrderId)
