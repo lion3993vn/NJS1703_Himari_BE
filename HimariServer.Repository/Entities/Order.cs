@@ -9,7 +9,7 @@ public partial class Order : BaseEntity
 {
     public int Id { get; set; }
 
-    public string OrderCode { get; set; }
+    public int OrderCode { get; set; }
 
     public int? OrderPrice { get; set; }
 

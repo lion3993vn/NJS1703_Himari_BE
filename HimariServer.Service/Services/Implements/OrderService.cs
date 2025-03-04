@@ -45,7 +45,7 @@ namespace HimariServer.Service.Services.Implements
                 throw new DefaultException(MessageConstants.ORDER_ITEM_NOT_HAVE);
             }
 
-            string orderCode = await ValidateOrderCode();
+            int orderCode = await ValidateOrderCode();
 
             var order = new Order
             {
@@ -134,7 +134,6 @@ namespace HimariServer.Service.Services.Implements
             #region handle payment momo
             else
             {
-                //TODO MOMO
                 return new BaseResponseModel
                 {
                     StatusCode = StatusCodes.Status200OK,
@@ -148,16 +147,46 @@ namespace HimariServer.Service.Services.Implements
             #endregion
         }
 
-        private async Task<string> ValidateOrderCode()
+        private async Task<int> ValidateOrderCode()
         {
             while (true)
             {
-                var orderCode = StringUtils.GenerateOrderCode(5);
+                var orderCode = GenerateOrderCode();
                 if (await _unitOfWork.OrderRepository.GetOrderByCodeAsync(orderCode) == null)
                 {
                     return orderCode;
                 }
             }
+        }
+
+        private int GenerateOrderCode()
+        {
+            Random random = new Random();
+            return random.Next(100000, 1000000);
+        }
+
+        public async Task ConfirmOrderPayment(WebhookType webhook)
+        {
+            var data = _payOSService.VerifyWebhook(webhook);
+
+            var order = await _unitOfWork.OrderRepository.GetOrderByCodeAsync((int)data.orderCode);
+
+            var payment = await _unitOfWork.PaymentRepository.GetByOrderIdAsync(order.Id);
+
+            if (data.code == "00")
+            {
+                payment.Status = PaymentStatus.Success;
+
+                _unitOfWork.PaymentRepository.UpdateAsync(payment);
+            }
+            else
+            {
+                payment.Status = PaymentStatus.Failed;
+
+                _unitOfWork.PaymentRepository.UpdateAsync(payment);
+            }
+
+            await _unitOfWork.SaveAsync();
         }
     }
 }
