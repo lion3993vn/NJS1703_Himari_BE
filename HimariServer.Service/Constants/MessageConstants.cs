@@ -98,18 +98,22 @@ namespace HimariServer.Service.Constants
 
         public const string GET_CHAT_MESSAGES_SUCCESS = "Get chat messages successfully";
 
-        public static string ORDER_ITEM_NOT_HAVE = "Order item must be at least 1 item";
-        public static string ORDER_ITEM_NOT_FOUND = "Item id {id} not found";
-        public static string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
-        public static string PAYMENT_DESCRIPTION = "Đơn hàng ";
-        public static string ORDER_CREATE_SUCCESS = "Create order successfully";
-        
+        public const string ORDER_ITEM_NOT_HAVE = "Order item must be at least 1 item";
+        public const string ORDER_ITEM_NOT_FOUND = "Item id {id} not found";
+        public const string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
+        public const string PAYMENT_DESCRIPTION = "Đơn hàng ";
+        public const string ORDER_CREATE_SUCCESS = "Create order successfully";
+
+        public const string UPLOAD_FILE_SUCCESS = "Upload file to firebase successfully";
+        public const string NO_FILE_UPLOAD = "No file to upload firebase";
+        public const string IMAGE_EXTENSION_NOT_SUPPORT = "Image extension not support";
 
         public const string PRODUCT_SYMPTOM_NOT_FOUND = "Product symptom not found";
         public const string PRODUCT_SYMPTOM_FOUND = "Product symptom found successfully";
         public const string PRODUCT_SYMPTOM_CREATE_SUCCESS = "Product symptom created successfully";
-        public static string PRODUCT_SYMPTOM_DELETE_SUCCESS = "Product symptom delete successfully";
-        public static string GET_LIST_PRODUCT_SYMPTOM_SUCCESS = "Get list product symptom successfully";
-        public static string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
+        public const string PRODUCT_SYMPTOM_DELETE_SUCCESS = "Product symptom delete successfully";
+        public const string GET_LIST_PRODUCT_SYMPTOM_SUCCESS = "Get list product symptom successfully";
+        public const string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
+
     }
 }
