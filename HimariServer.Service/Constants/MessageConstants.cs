@@ -103,5 +103,13 @@ namespace HimariServer.Service.Constants
         public static string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
         public static string PAYMENT_DESCRIPTION = "Đơn hàng ";
         public static string ORDER_CREATE_SUCCESS = "Create order successfully";
+        
+
+        public const string PRODUCT_SYMPTOM_NOT_FOUND = "Product symptom not found";
+        public const string PRODUCT_SYMPTOM_FOUND = "Product symptom found successfully";
+        public const string PRODUCT_SYMPTOM_CREATE_SUCCESS = "Product symptom created successfully";
+        public static string PRODUCT_SYMPTOM_DELETE_SUCCESS = "Product symptom delete successfully";
+        public static string GET_LIST_PRODUCT_SYMPTOM_SUCCESS = "Get list product symptom successfully";
+        public static string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
     }
 }
