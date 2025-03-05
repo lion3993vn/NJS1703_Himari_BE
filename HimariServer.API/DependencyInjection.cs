@@ -79,6 +79,13 @@ namespace HimariServer.API
 
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
+
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+            services.AddScoped<IProductSymptomRepository, ProductSymptomRepository>();
+            services.AddScoped<IProductSymptomService, ProductSymptomService>();
             return services;
         }
     }

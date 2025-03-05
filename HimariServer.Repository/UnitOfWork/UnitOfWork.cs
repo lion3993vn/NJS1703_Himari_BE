@@ -32,6 +32,7 @@ namespace HimariServer.Repository.UnitOfWork
         private IChatMessageRepository _chatMessageRepository;
         private IOrderRepository _orderRepository;
         private IPaymentRepository _paymentRepository;
+        private IProductSymptomRepository _productSymptomRepository;
 
         public UnitOfWork(HimariServerContext context) 
         {
@@ -180,6 +181,14 @@ namespace HimariServer.Repository.UnitOfWork
             get
             {
                 return _paymentRepository ??= new PaymentRepository(_context);
+            }
+        }
+
+        public IProductSymptomRepository ProductSymptomRepository
+        {
+            get
+            {
+                return _productSymptomRepository ??= new ProductSymptomRepository(_context);
             }
         }
 
