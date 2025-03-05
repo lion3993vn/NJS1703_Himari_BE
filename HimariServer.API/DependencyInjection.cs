@@ -66,6 +66,9 @@ namespace HimariServer.API
             // config payos service
             services.AddScoped<IPayOSService, PayOSService>();
 
+            // config payos service
+            services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
+
             // config notification service
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<INotificationService, NotificationService>();
