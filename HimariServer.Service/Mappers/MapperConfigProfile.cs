@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HimariServer.Service.BusinessModels.ChatMessageModels;
+using HimariServer.Service.BusinessModels.ProductSymptomModels;
 
 namespace HimariServer.Service.Mappers
 {
@@ -85,6 +86,14 @@ namespace HimariServer.Service.Mappers
 
             CreateMap<ChatMessageModel, ChatMessage>().ReverseMap();
             CreateMap<Pagination<ChatMessage>, Pagination<ChatMessageModel>>().ConvertUsing<PaginationConverter<ChatMessage, ChatMessageModel>>();
+
+            // ProductSymptom
+            CreateMap<ProductSymptom, ProductSymptomModel>()
+                .ForMember(dest => dest.PartSymptomName, opt => opt.MapFrom(src => src.PartSymptom != null ? src.PartSymptom.Name : null))
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : null));
+            CreateMap<Pagination<ProductSymptom>, Pagination<ProductSymptomModel>>().ConvertUsing<PaginationConverter<ProductSymptom, ProductSymptomModel>>();
+            CreateMap<CreateProductSymptomModel, ProductSymptom>().ReverseMap();
+            CreateMap<UpdateProductSymptomModel, ProductSymptom>().ReverseMap();
         }
 
         public void MapperNotification()
