@@ -45,7 +45,7 @@ namespace HimariServer.Service.Services.Implements
 
             var payment = await _unitOfWork.PaymentRepository.GetByOrderIdAsync(orderId);
             
-            long expiredAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 60; //hết hạn sau 10 phút, fix đưa vô config sau
+            long expiredAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 600;
 
             var paymentData = new PaymentData(
                 order.OrderCode,
