@@ -103,5 +103,9 @@ namespace HimariServer.Service.Constants
         public static string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
         public static string PAYMENT_DESCRIPTION = "Đơn hàng ";
         public static string ORDER_CREATE_SUCCESS = "Create order successfully";
+
+        public static string UPLOAD_FILE_SUCCESS = "Upload file to firebase successfully";
+        public static string NO_FILE_UPLOAD = "No file to upload firebase";
+        public static string IMAGE_EXTENSION_NOT_SUPPORT = "Image extension not support";
     }
 }
