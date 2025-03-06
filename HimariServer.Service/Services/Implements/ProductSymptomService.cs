@@ -41,7 +41,7 @@ namespace HimariServer.Service.Services.Implements
 
             if (productSymptom.PartSymptomId != null)
             {
-                var partSymptom = await _unitOfWork.SymptomRepository.GetByIdAsync((int)productSymptom.PartSymptomId);
+                var partSymptom = await _unitOfWork.PartSymptomRepository.GetByIdAsync((int)productSymptom.PartSymptomId);
                 if (partSymptom == null || partSymptom.IsDeleted)
                 {
                     return new BaseResponseModel
@@ -110,7 +110,7 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> GetProductSymptomsByPartSymptomId(PaginationParameter paginationParameter, int partSymptomId)
         {
-            var partSymptom = await _unitOfWork.SymptomRepository.GetByIdAsync(partSymptomId);
+            var partSymptom = await _unitOfWork.PartSymptomRepository.GetByIdAsync(partSymptomId);
             if (partSymptom == null || partSymptom.IsDeleted)
             {
                 return new BaseResponseModel
@@ -241,7 +241,7 @@ namespace HimariServer.Service.Services.Implements
 
             if (productSymptom.PartSymptomId != null)
             {
-                var partSymptom = await _unitOfWork.SymptomRepository.GetByIdAsync((int)productSymptom.PartSymptomId);
+                var partSymptom = await _unitOfWork.PartSymptomRepository.GetByIdAsync((int)productSymptom.PartSymptomId);
                 if (partSymptom == null || partSymptom.IsDeleted)
                 {
                     return new BaseResponseModel

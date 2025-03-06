@@ -1,6 +1,7 @@
 using HimariServer.Service.BusinessModels.PartSymptomModels;
 using HimariServer.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using HimariServer.Repository.Commons;
 
 namespace HimariServer.API.Controllers
 {
@@ -25,6 +26,12 @@ namespace HimariServer.API.Controllers
         public Task<IActionResult> GetPartSymptomById(int id)
         {
             return ValidateAndExecute(async () => await _partSymptomService.GetPartSymptomById(id));
+        }
+
+        [HttpGet]
+        public Task<IActionResult> GetPartSymptoms([FromQuery] PaginationParameter paginationParameter)
+        {
+            return ValidateAndExecute(async () => await _partSymptomService.GetPartSymptomsPaginationAsync(paginationParameter));
         }
 
         [HttpPut]

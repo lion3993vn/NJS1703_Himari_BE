@@ -21,7 +21,6 @@ namespace HimariServer.Repository.UnitOfWork
         private ICategoryRepository _categoryRepository;
         private IBodyPartRepository _bodyPartRepository;
         private IBrandRepository _brandRepository;
-        private ISymptomRepository _symptomRepository;
         private IRoleRepository _roleRepository;
         private IOrderDetailRepository _orderDetailRepository;
         private IBlogCategoryRepository _blogCategoryRepository;
@@ -100,15 +99,6 @@ namespace HimariServer.Repository.UnitOfWork
 
             }
         }        
-        
-        public ISymptomRepository SymptomRepository
-        {
-            get
-            {
-                return _symptomRepository ??= new SymptomRepository(_context);
-
-            }
-        }
 
         public IRoleRepository RoleRepository
         {
