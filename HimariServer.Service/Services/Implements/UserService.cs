@@ -20,6 +20,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using HimariServer.Repository.Commons;
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -34,6 +36,26 @@ namespace HimariServer.Service.Services.Implements
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _configuration = configuration;
+        }
+
+        public async Task<BaseResponseModel> GetUserById(int id)
+        {
+            var existingUser = await _unitOfWork.UsersRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = MessageConstants.USER_NOT_EXIST
+                };
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_USER_BY_EMAIL_SUCCESS,
+                Data = _mapper.Map<UserModel>(existingUser)
+            };
         }
 
         public async Task<BaseResponseModel> LoginWithGoogleOAuth(string credential)
@@ -98,7 +120,7 @@ namespace HimariServer.Service.Services.Implements
                 await _unitOfWork.UsersRepository.AddAsync(newUser);
                 _unitOfWork.Save();
 
-                var accessToken = AuthenTokenUtils.GenerateAccessToken(newUser.Email, newUser,role.RoleName, _configuration);
+                var accessToken = AuthenTokenUtils.GenerateAccessToken(newUser.Email, newUser, role.RoleName, _configuration);
                 var refreshToken = AuthenTokenUtils.GenerateRefreshToken(newUser.Email, _configuration);
 
                 return new BaseResponseModel
@@ -167,6 +189,84 @@ namespace HimariServer.Service.Services.Implements
                     Message = MessageConstants.TOKEN_NOT_VALID
                 };
             }
+        }
+
+        public async Task<BaseResponseModel> UpdateUser(UpdateUserModel user)
+        {
+            var existingUser = await _unitOfWork.UsersRepository.GetByIdAsync(user.Id);
+            if (existingUser == null)
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = MessageConstants.USER_NOT_EXIST
+                };
+            }
+
+            _mapper.Map(user, existingUser);
+
+            _unitOfWork.UsersRepository.UpdateAsync(existingUser);
+            await _unitOfWork.SaveAsync();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.USER_UPDATE_SUCCESS
+            };
+
+        }
+
+        public async Task<BaseResponseModel> GetUsers(PaginationParameter paginationParameter)
+        {
+            var users = await _unitOfWork.UsersRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                filter: x => !x.IsDeleted && x.Role.RoleName != "ADMIN",
+                include: query => query.Include(x => x.Role),
+                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+            );
+
+            var userList = _mapper.Map<Pagination<UserModel>>(users);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_USER_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = userList,
+                    MetaData = new
+                    {
+                        userList.TotalCount,
+                        userList.PageSize,
+                        userList.CurrentPage,
+                        userList.TotalPages,
+                        userList.HasNext,
+                        userList.HasPrevious
+                    }
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel> DeleteUser(int id)
+        {
+            var existingUser = await _unitOfWork.UsersRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = MessageConstants.USER_NOT_EXIST
+                };
+            }
+
+            _unitOfWork.UsersRepository.SoftDeleteAsync(existingUser);
+            await _unitOfWork.SaveAsync();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.USER_DELETE_SUCCESS
+            };
         }
     }
 }
