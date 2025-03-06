@@ -22,7 +22,6 @@ namespace HimariServer.API.Controllers
         /// Upload an image file to Firebase Storage
         /// </summary>
         /// <param name="file">The image file (JPG, JPEG, PNG)</param>
-        /// <param name="folderName">Optional folder name (defaults to 'images')</param>
         /// <returns>URL of the uploaded image</returns>
         [HttpPost("upload")]
         public Task<IActionResult> UploadImage(IFormFile file)

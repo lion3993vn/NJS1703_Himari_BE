@@ -10,6 +10,9 @@ namespace HimariServer.Service.Constants
     {
         public const string GET_USER_BY_EMAIL_SUCCESS = "Get user by email successfully";
         public const string USER_NOT_EXIST = "User is not exist";
+        public const string USER_UPDATE_SUCCESS = "User updated successfully";
+        public const string GET_USER_SUCCESS = "Get list user successfully";
+        public const string USER_DELETE_SUCCESS = "User deleted successfully";
 
         public const string GET_LIST_CATEGORY_SUCCESS = "Get list category successfully";
         public const string GET_CATEGORY_SUCCESS = "Get category successfully";
@@ -115,5 +118,6 @@ namespace HimariServer.Service.Constants
         public const string GET_LIST_PRODUCT_SYMPTOM_SUCCESS = "Get list product symptom successfully";
         public const string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
 
+        
     }
 }
