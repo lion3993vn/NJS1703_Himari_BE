@@ -8,7 +8,6 @@ using HimariServer.Service.BusinessModels.BrandModels;
 using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.BusinessModels.ProductModels;
-using HimariServer.Service.BusinessModels.SymptomModels;
 using HimariServer.Service.BusinessModels.UserDeviceModels;
 using HimariServer.Service.BusinessModels.UserModels;
 using HimariServer.Service.BusinessModels.PartSymptomModels;
@@ -71,11 +70,6 @@ namespace HimariServer.Service.Mappers
             CreateMap<Brand, BrandModel>().ReverseMap();
             CreateMap<Pagination<Brand>, Pagination<BrandModel>>().ConvertUsing<PaginationConverter<Brand, BrandModel>>();
             CreateMap<CreateBrandModel, Brand>().ReverseMap();
-
-            // PartSymptom
-            CreateMap<PartSymptom, SymptomModel>().ReverseMap();
-            CreateMap<Pagination<PartSymptom>, Pagination<SymptomModel>>().ConvertUsing<PaginationConverter<PartSymptom, SymptomModel>>();
-            CreateMap<CreateSymptomModel, PartSymptom>().ReverseMap();
 
             // PartSymptom
             CreateMap<PartSymptom, PartSymptomModel>().ReverseMap();

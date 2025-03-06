@@ -7,6 +7,7 @@ using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using HimariServer.Repository.Commons; // Add this using statement
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -98,6 +99,31 @@ namespace HimariServer.Service.Services.Implements
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.PART_SYMPTOM_DELETE_SUCCESS
+            };
+        }
+
+        public async Task<BaseResponseModel> GetPartSymptomsPaginationAsync(PaginationParameter paginationParameter)
+        {
+            var partSymptoms = await _unitOfWork.PartSymptomRepository.ToPagination(paginationParameter);
+            var partSymptomModels = _mapper.Map<Pagination<PartSymptomModel>>(partSymptoms);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_PART_SYMPTOM_SERVICE,
+                Data = new ModelPaging
+                {
+                    Data = partSymptomModels,
+                    MetaData = new
+                    {
+                        partSymptomModels.TotalCount,
+                        partSymptomModels.PageSize,
+                        partSymptomModels.CurrentPage,
+                        partSymptomModels.TotalPages,
+                        partSymptomModels.HasNext,
+                        partSymptomModels.HasPrevious
+                    }
+                }
             };
         }
     }
