@@ -34,6 +34,25 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> CreateOrder(OrderResquestModel model)
         {
             #region create order
+
+            int totalAmount = 0;
+            foreach (var item in model.Items)
+            {
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                if (product == null)
+                {
+                    throw new NotExistException(MessageConstants.ORDER_ITEM_NOT_FOUND.Replace("{id}", item.ProductId.ToString()));
+                }
+
+                if (product.Quantity < item.Quantity)
+                {
+                    throw new DefaultException(MessageConstants.INSUFFICIENT_STOCK_QUANTITY.Replace("{name}", product.ProductName));
+                }
+
+                var itemPrice = product.Price * item.Quantity;
+                totalAmount += itemPrice ?? 0;
+            }
+
             var user = await _unitOfWork.UsersRepository.GetByIdAsync(model.UserId);
             if (user == null)
             {
@@ -58,21 +77,9 @@ namespace HimariServer.Service.Services.Implements
             await _unitOfWork.OrderRepository.AddAsync(order);
             await _unitOfWork.SaveAsync();
 
-            // Calculate total amount and create order details
-            int totalAmount = 0;
-
             foreach (var item in model.Items)
             {
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
-                if (product == null)
-                {
-                    throw new NotExistException(MessageConstants.ORDER_ITEM_NOT_FOUND.Replace("{id}", item.ProductId.ToString()));
-                }
-
-                if (product.Quantity < item.Quantity)
-                {
-                    throw new DefaultException(MessageConstants.INSUFFICIENT_STOCK_QUANTITY.Replace("{name}", product.ProductName));
-                }
 
                 var itemPrice = product.Price * item.Quantity;
                 totalAmount += itemPrice ?? 0;
