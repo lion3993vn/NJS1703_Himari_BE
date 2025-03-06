@@ -26,7 +26,12 @@ namespace HimariServer.Service.Mappers
     {
         public MapperConfigProfile()
         {
-            CreateMap<User, UserModel>().ReverseMap();
+            CreateMap<User, UserModel>()
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role != null ? src.Role.RoleName : null));
+            CreateMap<UpdateUserModel, User>();
+
+            // Add mapping for pagination of UserModel (replacing UserListModel)
+            CreateMap<Pagination<User>, Pagination<UserModel>>().ConvertUsing<PaginationConverter<User, UserModel>>();
 
             CreateMap<Category, CategoryModel>()
             .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategory != null ? src.ParentCategory.CategoryName : null));
@@ -94,6 +99,8 @@ namespace HimariServer.Service.Mappers
             CreateMap<Pagination<ProductSymptom>, Pagination<ProductSymptomModel>>().ConvertUsing<PaginationConverter<ProductSymptom, ProductSymptomModel>>();
             CreateMap<CreateProductSymptomModel, ProductSymptom>().ReverseMap();
             CreateMap<UpdateProductSymptomModel, ProductSymptom>().ReverseMap();
+
+            
         }
 
         public void MapperNotification()
