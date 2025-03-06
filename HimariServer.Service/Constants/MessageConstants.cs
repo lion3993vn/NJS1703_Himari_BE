@@ -98,6 +98,7 @@ namespace HimariServer.Service.Constants
         public const string PART_SYMPTOM_FOUND = "Get part symptom successfully";
         public const string PART_SYMPTOM_UPDATE_SUCCESS = "Update part symptom successfully";
         public const string PART_SYMPTOM_DELETE_SUCCESS = "Delete part symptom successfully";
+        public const string GET_LIST_PART_SYMPTOM_SERVICE = "Get list part symptom successfully";
 
         public const string GET_CHAT_MESSAGES_SUCCESS = "Get chat messages successfully";
 
@@ -117,7 +118,6 @@ namespace HimariServer.Service.Constants
         public const string PRODUCT_SYMPTOM_DELETE_SUCCESS = "Product symptom delete successfully";
         public const string GET_LIST_PRODUCT_SYMPTOM_SUCCESS = "Get list product symptom successfully";
         public const string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
-
         
     }
 }

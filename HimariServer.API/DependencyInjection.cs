@@ -46,10 +46,6 @@ namespace HimariServer.API
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IBrandService, BrandService>();
 
-            // config symptom service
-            services.AddScoped<ISymptomRepository, SymptomRepository>();
-            services.AddScoped<ISymptomService, SymptomService>();
-
             // config user device service
             services.AddScoped<IUserDeviceRepository, UserDeviceRepository>();
             services.AddScoped<IUserDeviceService, UserDeviceService>();
