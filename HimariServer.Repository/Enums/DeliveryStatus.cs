@@ -9,6 +9,7 @@ namespace HimariServer.Repository.Enums
     public enum DeliveryStatus
     {
         NotStarted,
+        Preparing,
         Delivering,
         Delivered,
         Cancelled
