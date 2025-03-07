@@ -274,5 +274,37 @@ namespace HimariServer.Service.Services.Implements
                 }
             };
         }
+
+        public async Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string keyword)
+        {
+            string searchKeyword = string.IsNullOrEmpty(keyword) ? string.Empty : StringUtils.ConvertToUnSign(keyword.ToLower());
+            
+            var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                include: query => query.Include(x => x.Category).Include(x => x.Brand),
+                filter: query => !query.IsDeleted && query.ProductNameUnsign.Contains(searchKeyword)
+            );
+            
+            var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_PRODUCT_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listProduct,
+                    MetaData = new
+                    {
+                        listProduct.TotalCount,
+                        listProduct.PageSize,
+                        listProduct.CurrentPage,
+                        listProduct.TotalPages,
+                        listProduct.HasNext,
+                        listProduct.HasPrevious
+                    }
+                }
+            };
+        }
     }
 }
