@@ -8,6 +8,7 @@ using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,7 +49,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             var newProduct = _mapper.Map<Product>(product);
-
+            newProduct.ProductNameUnsign = StringUtils.ConvertToUnSign(newProduct.ProductName);
             await _unitOfWork.ProductRepository.AddAsync(newProduct);
             _unitOfWork.Save();
 

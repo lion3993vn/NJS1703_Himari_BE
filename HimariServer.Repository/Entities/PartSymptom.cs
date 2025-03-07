@@ -8,6 +8,7 @@ namespace HimariServer.Repository.Entities;
 public partial class PartSymptom : BaseEntity
 {
     public string Name { get; set; }
+    public string NameUnsign { get; set; }
 
     public int? BodyPartId { get; set; }
 

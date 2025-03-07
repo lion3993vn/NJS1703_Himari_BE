@@ -7,6 +7,7 @@ using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,7 +33,7 @@ namespace HimariServer.Service.Services.Implements
         {
 
             var newBrand = _mapper.Map<Brand>(brand);
-
+            newBrand.BrandNameUnsign = StringUtils.ConvertToUnSign(newBrand.BrandName);
             _unitOfWork.BrandRepository.UpdateAsync(newBrand);
             _unitOfWork.Save();
 
