@@ -8,6 +8,7 @@ namespace HimariServer.Repository.Entities;
 public partial class Brand : BaseEntity
 {
     public string BrandName { get; set; }
+    public string BrandNameUnsign { get; set; }
     public string Description { get; set; }
     public string Image { get; set; }
 

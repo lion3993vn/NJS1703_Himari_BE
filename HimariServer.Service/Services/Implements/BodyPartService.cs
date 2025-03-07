@@ -8,6 +8,7 @@ using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> AddBodyPart(AddBodyPartModel model)
         {
             var bodyPart = _mapper.Map<BodyPart>(model);
+            bodyPart.BodyPartNameUnsign = StringUtils.ConvertToUnSign(bodyPart.BodyPartName);
             await _unitOfWork.BodyPartRepository.AddAsync(bodyPart);
             _unitOfWork.Save();
 

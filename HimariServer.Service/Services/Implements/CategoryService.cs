@@ -8,6 +8,7 @@ using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -45,6 +46,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             var category = _mapper.Map<Category>(model);
+            category.CategoryNameUnsign = StringUtils.ConvertToUnSign(category.CategoryName);
             await _unitOfWork.CategoryRepository.AddAsync(category);
             _unitOfWork.Save();
 
