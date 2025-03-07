@@ -71,6 +71,7 @@ namespace HimariServer.Service.Services.Implements
                 UserId = model.UserId,
                 OrderCode = orderCode,
                 OrderPrice = 0,
+                DeliveryStatus = DeliveryStatus.NotStarted,
             };
 
             // Add order to database
@@ -183,8 +184,9 @@ namespace HimariServer.Service.Services.Implements
             if (data.code == "00")
             {
                 payment.Status = PaymentStatus.Success;
-
                 _unitOfWork.PaymentRepository.UpdateAsync(payment);
+                order.DeliveryStatus = DeliveryStatus.Preparing;
+                _unitOfWork.OrderRepository.UpdateAsync(order);
             }
             else
             {
