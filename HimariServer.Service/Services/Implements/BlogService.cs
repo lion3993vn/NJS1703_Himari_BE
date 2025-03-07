@@ -14,6 +14,7 @@ using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,7 +52,7 @@ namespace HimariServer.Service.Services.Implements
 
             var blogEntity = _mapper.Map<Blog>(blogModel);
 
-
+            blogEntity.TitleUnsign = StringUtils.ConvertToUnSign(blogEntity.Title);
             await _unitOfWork.BlogRepository.AddAsync(blogEntity);
             _unitOfWork.Save();
 

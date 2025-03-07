@@ -7,7 +7,8 @@ using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
-using HimariServer.Repository.Commons; // Add this using statement
+using HimariServer.Repository.Commons;
+using HimariServer.Service.Utils; // Add this using statement
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -25,6 +26,7 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> CreatePartSymptom(CreatePartSymptomModel model)
         {
             var partSymptom = _mapper.Map<PartSymptom>(model);
+            partSymptom.NameUnsign = StringUtils.ConvertToUnSign(partSymptom.Name);
             await _unitOfWork.PartSymptomRepository.AddAsync(partSymptom);
             await _unitOfWork.SaveAsync();
 
