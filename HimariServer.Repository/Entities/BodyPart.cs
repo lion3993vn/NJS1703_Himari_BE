@@ -8,6 +8,7 @@ namespace HimariServer.Repository.Entities;
 public partial class BodyPart : BaseEntity
 {
     public string BodyPartName { get; set; }
+    public string BodyPartNameUnsign { get; set; }
 
     public string Description { get; set; }
 

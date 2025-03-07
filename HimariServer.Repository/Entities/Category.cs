@@ -8,6 +8,7 @@ namespace HimariServer.Repository.Entities;
 public partial class Category : BaseEntity
 {
     public string CategoryName { get; set; }
+    public string CategoryNameUnsign { get; set; }
 
     public string Description { get; set; }
 

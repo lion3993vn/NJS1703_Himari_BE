@@ -19,5 +19,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter);
         Task<BaseResponseModel> UpdateProduct(UpdateProductModel product);
         Task<BaseResponseModel> GetProductsByBrand(PaginationParameter paginationParameter, int brandId);
+        Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string keyword);
     }
 }
