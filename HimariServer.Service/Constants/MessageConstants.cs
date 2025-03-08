@@ -107,6 +107,8 @@ namespace HimariServer.Service.Constants
         public const string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
         public const string PAYMENT_DESCRIPTION = "Đơn hàng ";
         public const string ORDER_CREATE_SUCCESS = "Create order successfully";
+        public const string PAYMENT_NOT_FOUND = "Payment not found";
+        public const string GET_PAYMENT_SUCCESS = "Get payment successfully";
 
         public const string UPLOAD_FILE_SUCCESS = "Upload file to firebase successfully";
         public const string NO_FILE_UPLOAD = "No file to upload firebase";

@@ -20,6 +20,11 @@ namespace HimariServer.Repository.Repositories.Implements
             _context = context;
         }
 
+        public async Task<Payment?> GetByOrderCodeAsync(int orderCode)
+        {
+            return await _context.Payments.Include(x => x.Order).FirstOrDefaultAsync(x => x.Order.OrderCode == orderCode && !x.IsDeleted);
+        }
+
         public async Task<Payment?> GetByOrderIdAsync(int orderId)
         {
             return await _context.Payments.FirstOrDefaultAsync(x => x.OrderId == orderId && !x.IsDeleted);
