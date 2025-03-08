@@ -16,7 +16,7 @@ namespace HimariServer.API.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpGet("{orderCode}")]
+        [HttpGet("order/{orderCode}")]
         public Task<IActionResult> GetPaymentByOrderCode(int orderCode)
         {
             return ValidateAndExecute(async () => await _paymentService.GetPaymentInfoByOrderCode(orderCode));
