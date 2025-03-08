@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HimariServer.Service.BusinessModels.ChatMessageModels;
 using HimariServer.Service.BusinessModels.ProductSymptomModels;
+using HimariServer.Service.BusinessModels.PaymentModels;
 
 namespace HimariServer.Service.Mappers
 {
@@ -94,7 +95,7 @@ namespace HimariServer.Service.Mappers
             CreateMap<CreateProductSymptomModel, ProductSymptom>().ReverseMap();
             CreateMap<UpdateProductSymptomModel, ProductSymptom>().ReverseMap();
 
-            
+            CreateMap<PaymentModels, Payment>().ReverseMap();
         }
 
         public void MapperNotification()
