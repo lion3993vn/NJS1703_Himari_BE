@@ -83,7 +83,7 @@ namespace HimariServer.Service.Constants
         public const string USER_DEVICE_NOT_FOUND = "User device not found";
 
         public const string NOTI_NOT_EXIST = "Notification not existed";
-        public const string USER_NOTI_NOT_EXIST = "User notification not exist";
+        public const string USER_NOTI_NOT_EXIST = "User notification not existed";
         public const string GET_NOTI_SUCCESS = "Get notification successfully";
         public const string PUSH_NOTI_USER_SUCCESS = "Push notification to user successfully";
         public const string GET_LIST_NOTI_SUCCESS = "Get list notification successfully";
