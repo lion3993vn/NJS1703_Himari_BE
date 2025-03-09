@@ -33,7 +33,7 @@ namespace HimariServer.Service.Services.Implements
             _payOSService = payOSService;
         }
 
-        public async Task<BaseResponseModel> CreateOrder(OrderResquestModel model)
+        public async Task<BaseResponseModel> CreateOrder(OrderRequestModel model)
         {
             #region create order
 
@@ -73,6 +73,7 @@ namespace HimariServer.Service.Services.Implements
                 UserId = model.UserId,
                 OrderCode = orderCode,
                 OrderPrice = 0,
+                Address = model.Address,
                 DeliveryStatus = DeliveryStatus.NotStarted,
             };
 
@@ -213,7 +214,7 @@ namespace HimariServer.Service.Services.Implements
                 filter: x => x.UserId == userId,
                 include: query => query.Include(o => o.OrderDetails)
                                       .ThenInclude(od => od.Product)
-                                      .Include(o => o.Payments), 
+                                      .Include(o => o.Payments),
                 orderBy: query => query.OrderByDescending(x => x.CreatedDate)
             );
 
@@ -232,6 +233,7 @@ namespace HimariServer.Service.Services.Implements
 
                 // Convert enum to string for DeliveryStatus
                 orderResponse.DeliveryStatus = (int)order.DeliveryStatus;
+
 
                 orderResponseList.Add(orderResponse);
             }
@@ -252,6 +254,35 @@ namespace HimariServer.Service.Services.Implements
                         orders.HasNext,
                         orders.HasPrevious
                     }
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel> UpdateOrder(OrderUpdateModel orderUpdateModel)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderUpdateModel.OrderId);
+            if (order == null)
+            {
+                throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
+            }
+
+            // Update order properties
+            order.Address = orderUpdateModel.Address;
+            order.DeliveryStatus = orderUpdateModel.DeliveryStatus;
+
+            _unitOfWork.OrderRepository.UpdateAsync(order);
+            await _unitOfWork.SaveAsync();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.ORDER_UPDATE_SUCCESS,
+                Data = new
+                {
+                    OrderId = order.Id,
+                    OrderCode = order.OrderCode,
+                    Address = order.Address,
+                    DeliveryStatus = (int)order.DeliveryStatus
                 }
             };
         }
