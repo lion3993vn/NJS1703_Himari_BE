@@ -1,4 +1,5 @@
-﻿using HimariServer.Service.BusinessModels.CategoryModels;
+﻿using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
@@ -22,6 +23,11 @@ namespace HimariServer.API.Controllers
         public Task<IActionResult> CreateOrder(OrderResquestModel model)
         {
             return ValidateAndExecute(async () => await _orderService.CreateOrder(model));
+        }
+        [HttpGet("{userId}")]
+        public Task<IActionResult> GetOrderByUserId(int userId, PaginationParameter paginationParameter)
+        {
+            return ValidateAndExecute(async () => await _orderService.GetOrderByUserId(userId, paginationParameter));
         }
     }
 }
