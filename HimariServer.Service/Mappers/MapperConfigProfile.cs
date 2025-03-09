@@ -104,7 +104,8 @@ namespace HimariServer.Service.Mappers
                 .ForMember(dest => dest.DeliveryStatus, opt => opt.MapFrom(src => (int)src.DeliveryStatus)) // Cast enum to int instead of ToString()
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payments != null && src.Payments.Any()
                     ? src.Payments.FirstOrDefault().Status
-                    : PaymentStatus.Pending));
+                    : PaymentStatus.Pending))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
 
             CreateMap<OrderDetail, OrderDetailsModel>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : null));

@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Repository.Entities;
 using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.Services.Implements;
@@ -20,7 +21,7 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpPost]
-        public Task<IActionResult> CreateOrder(OrderResquestModel model)
+        public Task<IActionResult> CreateOrder(OrderRequestModel model)
         {
             return ValidateAndExecute(async () => await _orderService.CreateOrder(model));
         }
@@ -29,5 +30,12 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _orderService.GetOrderByUserId(userId, paginationParameter));
         }
+        //orderid, delivery status, address
+        [HttpPut]
+        public Task<IActionResult> UpdateOrder(OrderUpdateModel orderUpdateModel)
+        {
+            return ValidateAndExecute(async () => await _orderService.UpdateOrder(orderUpdateModel));
+        }
+
     }
 }

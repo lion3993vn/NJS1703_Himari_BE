@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HimariServer.Service.BusinessModels.OrderModels
 {
-    public class OrderResquestModel
+    public class OrderRequestModel
     {
         public int UserId { get; set; }
         public string Address { get; set; }
