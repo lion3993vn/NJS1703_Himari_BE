@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
 using HimariServer.Repository.UnitOfWork;
@@ -9,6 +10,7 @@ using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
 using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Net.payOS.Types;
 using System;
 using System.Collections.Generic;
@@ -196,6 +198,62 @@ namespace HimariServer.Service.Services.Implements
             }
 
             await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<BaseResponseModel> GetOrderByUserId(int userId, PaginationParameter paginationParameter)
+        {
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+            }
+
+            var orders = await _unitOfWork.OrderRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                filter: x => x.UserId == userId,
+                include: query => query.Include(o => o.OrderDetails)
+                                      .ThenInclude(od => od.Product)
+                                      .Include(o => o.Payments), 
+                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+            );
+
+            // Map Order entities to OrderResponseModel using AutoMapper
+            var orderResponseList = new List<OrderResponseModel>();
+            foreach (var order in orders)
+            {
+                var orderResponse = _mapper.Map<OrderResponseModel>(order);
+
+                // Get payment status
+                var payment = order.Payments?.FirstOrDefault();
+                if (payment != null)
+                {
+                    orderResponse.PaymentStatus = payment.Status;
+                }
+
+                // Convert enum to string for DeliveryStatus
+                orderResponse.DeliveryStatus = (int)order.DeliveryStatus;
+
+                orderResponseList.Add(orderResponse);
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_ORDER_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = orderResponseList,
+                    MetaData = new
+                    {
+                        orders.TotalCount,
+                        orders.PageSize,
+                        orders.CurrentPage,
+                        orders.TotalPages,
+                        orders.HasNext,
+                        orders.HasPrevious
+                    }
+                }
+            };
         }
     }
 }
