@@ -167,6 +167,9 @@ public partial class HimariServerContext : DbContext
             entity.ToTable("Order");
 
             entity.Property(e => e.OrderCode);
+            entity.Property(e => e.DeliveryStatus)
+                .HasConversion<int>()
+                .IsRequired();
 
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
@@ -233,6 +236,7 @@ public partial class HimariServerContext : DbContext
             entity.Property(e => e.Description).IsUnicode(true);
             entity.Property(e => e.ImageUrl).IsUnicode(true);
             entity.Property(e => e.ProductName).IsUnicode(true);
+            entity.Property(e => e.ProductNameUnsign).IsUnicode(true);
 
             entity.HasOne(d => d.Brand).WithMany(p => p.Products)
                 .HasForeignKey(d => d.BrandId)

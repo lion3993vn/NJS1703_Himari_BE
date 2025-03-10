@@ -43,6 +43,12 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _productService.GetProductsByBrand(paginationParameter, brandId));
         }
 
+        [HttpGet("search")]
+        public Task<IActionResult> SearchProducts([FromQuery] PaginationParameter paginationParameter, [FromQuery] string keyword)
+        {
+            return ValidateAndExecute(async () => await _productService.SearchProductsByKeyword(paginationParameter, keyword));
+        }
+
         [HttpDelete("{id}")]
         public Task<IActionResult> DeleteProductById(int id)
         {
