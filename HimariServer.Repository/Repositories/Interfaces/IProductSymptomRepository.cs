@@ -10,5 +10,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
 {
     public interface IProductSymptomRepository : IGenericRepository<ProductSymptom>
     {
+        public Task<ProductSymptom?> FindByPartSymptomAndProduct(int partSymptomId, int productId);
     }
 }
