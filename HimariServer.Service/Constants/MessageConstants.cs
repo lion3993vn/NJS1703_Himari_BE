@@ -13,6 +13,7 @@ namespace HimariServer.Service.Constants
         public const string USER_UPDATE_SUCCESS = "User updated successfully";
         public const string GET_USER_SUCCESS = "Get list user successfully";
         public const string USER_DELETE_SUCCESS = "User deleted successfully";
+        public const string USER_ADDRESS_UPDATE_SUCCESS = "User address updated successfully";
 
         public const string GET_LIST_CATEGORY_SUCCESS = "Get list category successfully";
         public const string GET_CATEGORY_SUCCESS = "Get category successfully";
