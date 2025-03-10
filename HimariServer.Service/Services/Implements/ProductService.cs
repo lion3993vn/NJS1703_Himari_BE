@@ -97,19 +97,20 @@ namespace HimariServer.Service.Services.Implements
                                         p.OrderDetails.Sum(od => od.Quantity))
             );
 
-            var productDict = product.ToDictionary(p => p.Id);
-
+            var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
+            
+            // Calculate sold counts for all products
             foreach (var item in listProduct)
             {
-                if (productDict.TryGetValue(item.Id, out var productEntity))
+                var productEntity = product.FirstOrDefault(p => p.Id == item.Id);
+                if (productEntity != null)
                 {
                     item.Sold = productEntity.OrderDetails
-                        .Where(od => od.Order.Payments != null &&
+                        .Where(od => od.Order.Payments != null && 
                                od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
             }
-
 
             return new BaseResponseModel
             {
@@ -154,7 +155,7 @@ namespace HimariServer.Service.Services.Implements
             // Calculate sold count from successfully paid orders
             productModel.Sold = product.OrderDetails
                 .Where(od => od.Order.Payments != null && 
-                       od.Order.Payments.Any(p => p.Status == Repository.Enums.PaymentStatus.Success))
+                       od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                 .Sum(od => od.Quantity);
 
             return new BaseResponseModel
@@ -196,7 +197,7 @@ namespace HimariServer.Service.Services.Implements
                 {
                     item.Sold = productEntity.OrderDetails
                         .Where(od => od.Order.Payments != null && 
-                               od.Order.Payments.Any(p => p.Status == Repository.Enums.PaymentStatus.Success))
+                               od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
             }
@@ -243,7 +244,7 @@ namespace HimariServer.Service.Services.Implements
                 {
                     item.Sold = productEntity.OrderDetails
                         .Where(od => od.Order.Payments != null && 
-                               od.Order.Payments.Any(p => p.Status == Repository.Enums.PaymentStatus.Success))
+                               od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
             }
@@ -331,7 +332,7 @@ namespace HimariServer.Service.Services.Implements
                 {
                     item.Sold = productEntity.OrderDetails
                         .Where(od => od.Order.Payments != null && 
-                               od.Order.Payments.Any(p => p.Status == Repository.Enums.PaymentStatus.Success))
+                               od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
             }
@@ -380,7 +381,7 @@ namespace HimariServer.Service.Services.Implements
                 {
                     item.Sold = productEntity.OrderDetails
                         .Where(od => od.Order.Payments != null && 
-                               od.Order.Payments.Any(p => p.Status == Repository.Enums.PaymentStatus.Success))
+                               od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
             }
