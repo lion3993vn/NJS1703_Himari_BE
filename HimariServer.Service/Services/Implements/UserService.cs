@@ -268,5 +268,33 @@ namespace HimariServer.Service.Services.Implements
                 Message = MessageConstants.USER_DELETE_SUCCESS
             };
         }
+
+        public async Task<BaseResponseModel> UpdateUserAddress(UpdateUserAddressModel userAddress)
+        {
+            var existingUser = await _unitOfWork.UsersRepository.GetByIdAsync(userAddress.Id);
+            if (existingUser == null)
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = MessageConstants.USER_NOT_EXIST
+                };
+            }
+
+            // Update only the address fields
+            existingUser.Province = userAddress.Province;
+            existingUser.District = userAddress.District;
+            existingUser.Ward = userAddress.Ward;
+            existingUser.AddressBonus = userAddress.AddressBonus;
+
+            _unitOfWork.UsersRepository.UpdateAsync(existingUser);
+            await _unitOfWork.SaveAsync();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.USER_ADDRESS_UPDATE_SUCCESS
+            };
+        }
     }
 }
