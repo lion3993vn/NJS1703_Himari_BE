@@ -278,7 +278,10 @@ public partial class HimariServerContext : DbContext
 
             entity.ToTable("User");
 
-            entity.Property(e => e.Address).IsUnicode(true);
+            entity.Property(e => e.Province).IsUnicode(true);
+            entity.Property(e => e.District).IsUnicode(true);
+            entity.Property(e => e.Ward).IsUnicode(true);
+            entity.Property(e => e.AddressBonus).IsUnicode(true);
             entity.Property(e => e.Email).IsUnicode(true);
             entity.Property(e => e.FullName).IsUnicode(true);
             entity.Property(e => e.GoogleId).IsUnicode(true);

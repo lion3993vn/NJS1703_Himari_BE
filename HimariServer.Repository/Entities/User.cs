@@ -20,7 +20,10 @@ public partial class User : BaseEntity
 
     public string PhoneNumber { get; set; }
 
-    public string Address { get; set; }
+    public string Province { get; set; }
+    public string District { get; set; }
+    public string Ward { get; set; }
+    public string AddressBonus { get; set; }
 
     public int? Point { get; set; }
 
