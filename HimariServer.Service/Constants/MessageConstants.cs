@@ -76,14 +76,14 @@ namespace HimariServer.Service.Constants
         public const string TOKEN_REFRESH_SUCCESS_MESSAGE = "Token refresh successfully";
         public const string USER_HAS_BEEN_DELETE = "User has been deleted";
 
-        public const string DEVICE_TOKEN_EXIST = "Device token exist";
-        public const string DEVICE_TOKEN_NOT_EXIST = "Device token not exist";
+        public const string DEVICE_TOKEN_EXIST = "Device token existed";
+        public const string DEVICE_TOKEN_NOT_EXIST = "Device token not existed";
         public const string DEVICE_TOKEN_ADD_SUCCESS = "Add device token for user successfully";
         public const string DEVICE_TOKEN_DELETE_SUCCESS = "Device token delete successfully";
         public const string USER_DEVICE_NOT_FOUND = "User device not found";
 
-        public const string NOTI_NOT_EXIST = "Notification not exist";
-        public const string USER_NOTI_NOT_EXIST = "User notification not exist";
+        public const string NOTI_NOT_EXIST = "Notification not existed";
+        public const string USER_NOTI_NOT_EXIST = "User notification not existed";
         public const string GET_NOTI_SUCCESS = "Get notification successfully";
         public const string PUSH_NOTI_USER_SUCCESS = "Push notification to user successfully";
         public const string GET_LIST_NOTI_SUCCESS = "Get list notification successfully";
@@ -102,6 +102,9 @@ namespace HimariServer.Service.Constants
 
         public const string GET_CHAT_MESSAGES_SUCCESS = "Get chat messages successfully";
 
+        public const string GET_LIST_ORDER_SUCCESS = "Get list order successfully";
+        public const string ORDER_UPDATE_SUCCESS = "Update order successfully";
+        public const string ORDER_NOT_FOUND = "Order not found";
         public const string ORDER_ITEM_NOT_HAVE = "Order item must be at least 1 item";
         public const string ORDER_ITEM_NOT_FOUND = "Item id {id} not found";
         public const string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";

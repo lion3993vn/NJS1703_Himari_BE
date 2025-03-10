@@ -12,6 +12,8 @@ public partial class Order : BaseEntity
 
     public int OrderCode { get; set; }
 
+    public string Address { get; set; }
+
     public int? OrderPrice { get; set; }
 
     public int? UserId { get; set; }
