@@ -13,6 +13,7 @@ namespace HimariServer.Service.Constants
         public const string USER_UPDATE_SUCCESS = "User updated successfully";
         public const string GET_USER_SUCCESS = "Get list user successfully";
         public const string USER_DELETE_SUCCESS = "User deleted successfully";
+        public const string USER_ADDRESS_UPDATE_SUCCESS = "User address updated successfully";
 
         public const string GET_LIST_CATEGORY_SUCCESS = "Get list category successfully";
         public const string GET_CATEGORY_SUCCESS = "Get category successfully";
@@ -26,6 +27,7 @@ namespace HimariServer.Service.Constants
         public const string GET_SUB_CATEGORIES_SUCCESS = "Get sub categories successfully";
         public const string GET_SUB_CATEGORIES_BY_PARENT_SUCCESS = "Get sub categories by parent successfully";
 
+        public const string PRODUCT_REQUIRED = "Product is required";
         public const string GET_LIST_PRODUCT_SUCCESS = "Get list product successfully";
         public const string PRODUCT_FOUND = "Product founds";
         public const string PRODUCT_NOT_FOUND = "Product not found";
@@ -117,6 +119,7 @@ namespace HimariServer.Service.Constants
         public const string NO_FILE_UPLOAD = "No file to upload firebase";
         public const string IMAGE_EXTENSION_NOT_SUPPORT = "Image extension not support";
 
+        public const string LIST_SYMPTOM_REQUIRED = "List symptom is required";
         public const string PRODUCT_SYMPTOM_NOT_FOUND = "Product symptom not found";
         public const string PRODUCT_SYMPTOM_FOUND = "Product symptom found successfully";
         public const string PRODUCT_SYMPTOM_CREATE_SUCCESS = "Product symptom created successfully";

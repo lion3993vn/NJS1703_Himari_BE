@@ -16,6 +16,7 @@ namespace HimariServer.Service.BusinessModels.ProductModels
         public int? Price { get; set; }
 
         public int? Quantity { get; set; }
+        public int? Sold { get; set; }
 
         public string ImageUrl { get; set; }
         public int? CategoryId { get; set; }

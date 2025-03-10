@@ -14,5 +14,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> DeleteProductSymptomById(int id);
         Task<BaseResponseModel> GetProductSymptomsByProductId(PaginationParameter paginationParameter, int productId);
         Task<BaseResponseModel> GetProductSymptomsByPartSymptomId(PaginationParameter paginationParameter, int partSymptomId);
+        Task<BaseResponseModel> CreateMultiProductSymptom(CreateProductSymptomMutilModel multiModel);
     }
 }
