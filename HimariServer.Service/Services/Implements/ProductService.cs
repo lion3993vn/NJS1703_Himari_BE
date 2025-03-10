@@ -8,6 +8,7 @@ using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,7 +49,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             var newProduct = _mapper.Map<Product>(product);
-
+            newProduct.ProductNameUnsign = StringUtils.ConvertToUnSign(newProduct.ProductName);
             await _unitOfWork.ProductRepository.AddAsync(newProduct);
             _unitOfWork.Save();
 
@@ -252,6 +253,38 @@ namespace HimariServer.Service.Services.Implements
                 include: query => query.Include(x => x.Category).Include(x => x.Brand),
                 filter: query => !query.IsDeleted && query.BrandId == brandId
             );
+            var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_PRODUCT_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listProduct,
+                    MetaData = new
+                    {
+                        listProduct.TotalCount,
+                        listProduct.PageSize,
+                        listProduct.CurrentPage,
+                        listProduct.TotalPages,
+                        listProduct.HasNext,
+                        listProduct.HasPrevious
+                    }
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string keyword)
+        {
+            string searchKeyword = string.IsNullOrEmpty(keyword) ? string.Empty : StringUtils.ConvertToUnSign(keyword.ToLower());
+            
+            var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                include: query => query.Include(x => x.Category).Include(x => x.Brand),
+                filter: query => !query.IsDeleted && query.ProductNameUnsign.Contains(searchKeyword)
+            );
+            
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
 
             return new BaseResponseModel

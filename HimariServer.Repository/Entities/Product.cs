@@ -8,6 +8,7 @@ namespace HimariServer.Repository.Entities;
 public partial class Product : BaseEntity
 {
     public string ProductName { get; set; }
+    public string ProductNameUnsign { get; set; }
 
     public string Description { get; set; }
 
