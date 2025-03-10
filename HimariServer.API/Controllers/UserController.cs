@@ -39,5 +39,11 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _userService.DeleteUser(id));
         }
+
+        [HttpPut("address")]
+        public Task<IActionResult> UpdateUserAddress([FromBody] UpdateUserAddressModel userAddress)
+        {
+            return ValidateAndExecute(async () => await _userService.UpdateUserAddress(userAddress));
+        }
     }
 }

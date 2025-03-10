@@ -17,5 +17,6 @@ namespace HimariServer.Service.Services.Interfaces
         public Task<BaseResponseModel> UpdateUser(UpdateUserModel user);
         public Task<BaseResponseModel> GetUsers(PaginationParameter paginationParameter);
         public Task<BaseResponseModel> DeleteUser(int id);
+        public Task<BaseResponseModel> UpdateUserAddress(UpdateUserAddressModel userAddress);
     }
 }
