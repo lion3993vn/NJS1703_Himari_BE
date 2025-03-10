@@ -24,6 +24,48 @@ namespace HimariServer.Service.Services.Implements
             _mapper = mapper;
         }
 
+        public async Task<BaseResponseModel> CreateMultiProductSymptom(CreateProductSymptomMutilModel multiModel)
+        {
+            if(multiModel.ListPartSymptomId == null || !multiModel.ListPartSymptomId.Any())
+            {
+                throw new IsRequireDataException(MessageConstants.LIST_SYMPTOM_REQUIRED);
+            }
+
+            if(multiModel.ProductId == null)
+            {
+                throw new IsRequireDataException(MessageConstants.PRODUCT_REQUIRED);
+            }
+
+            foreach (var partSymptomId in multiModel.ListPartSymptomId)
+            {
+                var symptomp = await _unitOfWork.PartSymptomRepository.GetByIdAsync(partSymptomId);
+
+                if(symptomp == null)
+                {
+                    throw new NotExistException(MessageConstants.SYMPTOM_NOT_FOUND);
+                }
+
+                var productSymptomExist = await _unitOfWork.ProductSymptomRepository.FindByPartSymptomAndProduct(partSymptomId, (int)multiModel.ProductId);
+
+                if(productSymptomExist == null)
+                {
+                    var newProductSymptom = new ProductSymptom
+                    {
+                        PartSymptomId = partSymptomId,
+                        ProductId = (int)multiModel.ProductId
+                    };
+                    await _unitOfWork.ProductSymptomRepository.AddAsync(newProductSymptom);
+                }
+            }
+
+            _unitOfWork.Save();
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.PRODUCT_SYMPTOM_CREATE_SUCCESS
+            };
+        }
+
         public async Task<BaseResponseModel> CreateProductSymptom(CreateProductSymptomModel productSymptom)
         {
             if (productSymptom.ProductId != null)
