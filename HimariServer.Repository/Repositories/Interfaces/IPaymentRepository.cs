@@ -12,5 +12,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
     {
         Task<Payment?> GetByOrderIdAsync(int orderId);
         Task<List<Payment>?> GetPaymentPending();
+        Task<Payment?> GetByOrderCodeAsync(int orderCode);
     }
 }

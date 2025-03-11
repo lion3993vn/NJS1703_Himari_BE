@@ -167,6 +167,7 @@ public partial class HimariServerContext : DbContext
             entity.ToTable("Order");
 
             entity.Property(e => e.OrderCode);
+            entity.Property(e => e.Address).IsUnicode(true);
             entity.Property(e => e.DeliveryStatus)
                 .HasConversion<int>()
                 .IsRequired();

@@ -1,4 +1,5 @@
-﻿using HimariServer.Service.BusinessModels.OrderModels;
+﻿using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using Net.payOS.Types;
 using System;
@@ -11,7 +12,9 @@ namespace HimariServer.Service.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<BaseResponseModel> CreateOrder(OrderResquestModel model);
+        Task<BaseResponseModel> CreateOrder(OrderRequestModel model);
         Task ConfirmOrderPayment(WebhookType webhook);
+        Task<BaseResponseModel> GetOrderByUserId(int userId, PaginationParameter paginationParameter);
+        Task<BaseResponseModel> UpdateOrder(OrderUpdateModel orderUpdateModel);
     }
 }

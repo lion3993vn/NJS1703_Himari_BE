@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
 using HimariServer.Repository.UnitOfWork;
@@ -9,6 +10,7 @@ using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
 using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Net.payOS.Types;
 using System;
 using System.Collections.Generic;
@@ -31,7 +33,7 @@ namespace HimariServer.Service.Services.Implements
             _payOSService = payOSService;
         }
 
-        public async Task<BaseResponseModel> CreateOrder(OrderResquestModel model)
+        public async Task<BaseResponseModel> CreateOrder(OrderRequestModel model)
         {
             #region create order
 
@@ -71,6 +73,8 @@ namespace HimariServer.Service.Services.Implements
                 UserId = model.UserId,
                 OrderCode = orderCode,
                 OrderPrice = 0,
+                Address = model.Address,
+                DeliveryStatus = DeliveryStatus.NotStarted,
             };
 
             // Add order to database
@@ -183,8 +187,9 @@ namespace HimariServer.Service.Services.Implements
             if (data.code == "00")
             {
                 payment.Status = PaymentStatus.Success;
-
                 _unitOfWork.PaymentRepository.UpdateAsync(payment);
+                order.DeliveryStatus = DeliveryStatus.Preparing;
+                _unitOfWork.OrderRepository.UpdateAsync(order);
             }
             else
             {
@@ -194,6 +199,92 @@ namespace HimariServer.Service.Services.Implements
             }
 
             await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<BaseResponseModel> GetOrderByUserId(int userId, PaginationParameter paginationParameter)
+        {
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+            }
+
+            var orders = await _unitOfWork.OrderRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                filter: x => x.UserId == userId,
+                include: query => query.Include(o => o.OrderDetails)
+                                      .ThenInclude(od => od.Product)
+                                      .Include(o => o.Payments),
+                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+            );
+
+            // Map Order entities to OrderResponseModel using AutoMapper
+            var orderResponseList = new List<OrderResponseModel>();
+            foreach (var order in orders)
+            {
+                var orderResponse = _mapper.Map<OrderResponseModel>(order);
+
+                // Get payment status
+                var payment = order.Payments?.FirstOrDefault();
+                if (payment != null)
+                {
+                    orderResponse.PaymentStatus = payment.Status;
+                }
+
+                // Convert enum to string for DeliveryStatus
+                orderResponse.DeliveryStatus = (int)order.DeliveryStatus;
+
+
+                orderResponseList.Add(orderResponse);
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_ORDER_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = orderResponseList,
+                    MetaData = new
+                    {
+                        orders.TotalCount,
+                        orders.PageSize,
+                        orders.CurrentPage,
+                        orders.TotalPages,
+                        orders.HasNext,
+                        orders.HasPrevious
+                    }
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel> UpdateOrder(OrderUpdateModel orderUpdateModel)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderUpdateModel.OrderId);
+            if (order == null)
+            {
+                throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
+            }
+
+            // Update order properties
+            order.Address = orderUpdateModel.Address;
+            order.DeliveryStatus = orderUpdateModel.DeliveryStatus;
+
+            _unitOfWork.OrderRepository.UpdateAsync(order);
+            await _unitOfWork.SaveAsync();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.ORDER_UPDATE_SUCCESS,
+                Data = new
+                {
+                    OrderId = order.Id,
+                    OrderCode = order.OrderCode,
+                    Address = order.Address,
+                    DeliveryStatus = (int)order.DeliveryStatus
+                }
+            };
         }
     }
 }
