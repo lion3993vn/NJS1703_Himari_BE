@@ -1,5 +1,6 @@
 ﻿using HimariServer.Repository.DBContext;
 using HimariServer.Repository.Entities;
+using HimariServer.Repository.Enums;
 using HimariServer.Repository.Repositories.Generic;
 using HimariServer.Repository.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,11 @@ namespace HimariServer.Repository.Repositories.Implements
         public async Task<Payment?> GetByOrderIdAsync(int orderId)
         {
             return await _context.Payments.FirstOrDefaultAsync(x => x.OrderId == orderId && !x.IsDeleted);
+        }
+
+        public async Task<List<Payment>?> GetPaymentPending()
+        {
+            return await _context.Payments.Include(x => x.Order).Where(x => x.Status == PaymentStatus.Pending && !x.IsDeleted).ToListAsync();
         }
     }
 }
