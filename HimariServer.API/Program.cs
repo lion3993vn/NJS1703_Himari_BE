@@ -6,6 +6,7 @@ using HimariServer.Repository.DBContext;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Hubs;
 using HimariServer.Service.Mappers;
+using HimariServer.Service.Services.Implements;
 using HimariServer.Service.SettingModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -152,6 +153,9 @@ builder.Services.AddSignalR(options =>
     options.KeepAliveInterval = TimeSpan.FromSeconds(30);
     options.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
 });
+
+builder.Services.AddHostedService<PaymentPeriodicService>();
+// The service is already registered via AddInfractstructure
 
 var app = builder.Build();
 
