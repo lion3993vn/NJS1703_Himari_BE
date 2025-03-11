@@ -39,9 +39,16 @@ namespace HimariServer.Service.Services.Implements
 
                         if (paymentInfo.status == "EXPIRED")
                         {
-                            Console.WriteLine("cap nhat status cho don hang: " + item.Order.OrderCode);
                             item.Status = PaymentStatus.Failed;
                             unitOfWork.PaymentRepository.UpdateAsync(item);
+
+                            foreach (var orderDetail in item.Order.OrderDetails)
+                            {
+                                var product = await unitOfWork.ProductRepository.GetByIdAsync((int)orderDetail.ProductId);
+                                product.Quantity += orderDetail.Quantity;
+
+                                unitOfWork.ProductRepository.UpdateAsync(product);
+                            }
                         }
                     }
 
