@@ -85,6 +85,8 @@ namespace HimariServer.API
 
             services.AddScoped<IProductSymptomRepository, ProductSymptomRepository>();
             services.AddScoped<IProductSymptomService, ProductSymptomService>();
+
+            // Locate the section where PaymentPeriodicService is registered (near line 93)
             return services;
         }
     }
