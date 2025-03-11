@@ -37,7 +37,7 @@ namespace HimariServer.Service.Services.Implements
                     {
                         var paymentInfo = await payOSService.GetPaymentInfo(item.Order.OrderCode);
 
-                        if (paymentInfo.status == "EXPIRED")
+                        if (paymentInfo.status == "EXPIRED" || paymentInfo.status == "CANCELLED")
                         {
                             item.Status = PaymentStatus.Failed;
                             unitOfWork.PaymentRepository.UpdateAsync(item);
