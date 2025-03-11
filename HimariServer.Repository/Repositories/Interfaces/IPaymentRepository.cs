@@ -11,6 +11,7 @@ namespace HimariServer.Repository.Repositories.Interfaces
     public interface IPaymentRepository : IGenericRepository<Payment>
     {
         Task<Payment?> GetByOrderIdAsync(int orderId);
+        Task<List<Payment>?> GetPaymentPending();
         Task<Payment?> GetByOrderCodeAsync(int orderCode);
     }
 }

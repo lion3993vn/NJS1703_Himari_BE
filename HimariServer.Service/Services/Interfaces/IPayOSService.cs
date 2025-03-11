@@ -12,5 +12,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<string> CreatePaymentUrl(int orderId);
 
         WebhookData VerifyWebhook(WebhookType webhook);
+        Task<PaymentLinkInformation> GetPaymentInfo(int ordercode);
     }
 }
