@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -171,8 +172,8 @@ namespace HimariServer.Service.Services.Implements
 
         private int GenerateOrderCode()
         {
-            Random random = new Random();
-            return random.Next(100000, 1000000);
+            Random random = new();
+            return int.Parse((DateTimeOffset.Now.ToUnixTimeSeconds() % 10000000).ToString() + random.NextInt64(1,10));
         }
 
         public async Task ConfirmOrderPayment(WebhookType webhook)
