@@ -86,7 +86,6 @@ namespace HimariServer.Service.Services.Implements
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
 
                 var itemPrice = product.Price * item.Quantity;
-                totalAmount += itemPrice ?? 0;
 
                 var orderDetail = new OrderDetail
                 {
@@ -194,6 +193,13 @@ namespace HimariServer.Service.Services.Implements
             else
             {
                 payment.Status = PaymentStatus.Failed;
+
+                foreach(var item in payment.Order.OrderDetails)
+                {
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync((int)item.ProductId);
+                    product.Quantity += item.Quantity;
+                    _unitOfWork.ProductRepository.UpdateAsync(product);
+                }
 
                 _unitOfWork.PaymentRepository.UpdateAsync(payment);
             }
