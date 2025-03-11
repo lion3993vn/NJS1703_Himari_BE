@@ -27,6 +27,7 @@ namespace HimariServer.Service.Constants
         public const string GET_SUB_CATEGORIES_SUCCESS = "Get sub categories successfully";
         public const string GET_SUB_CATEGORIES_BY_PARENT_SUCCESS = "Get sub categories by parent successfully";
 
+        public const string PRODUCT_REQUIRED = "Product is required";
         public const string GET_LIST_PRODUCT_SUCCESS = "Get list product successfully";
         public const string PRODUCT_FOUND = "Product founds";
         public const string PRODUCT_NOT_FOUND = "Product not found";
@@ -77,14 +78,14 @@ namespace HimariServer.Service.Constants
         public const string TOKEN_REFRESH_SUCCESS_MESSAGE = "Token refresh successfully";
         public const string USER_HAS_BEEN_DELETE = "User has been deleted";
 
-        public const string DEVICE_TOKEN_EXIST = "Device token exist";
-        public const string DEVICE_TOKEN_NOT_EXIST = "Device token not exist";
+        public const string DEVICE_TOKEN_EXIST = "Device token existed";
+        public const string DEVICE_TOKEN_NOT_EXIST = "Device token not existed";
         public const string DEVICE_TOKEN_ADD_SUCCESS = "Add device token for user successfully";
         public const string DEVICE_TOKEN_DELETE_SUCCESS = "Device token delete successfully";
         public const string USER_DEVICE_NOT_FOUND = "User device not found";
 
-        public const string NOTI_NOT_EXIST = "Notification not exist";
-        public const string USER_NOTI_NOT_EXIST = "User notification not exist";
+        public const string NOTI_NOT_EXIST = "Notification not existed";
+        public const string USER_NOTI_NOT_EXIST = "User notification not existed";
         public const string GET_NOTI_SUCCESS = "Get notification successfully";
         public const string PUSH_NOTI_USER_SUCCESS = "Push notification to user successfully";
         public const string GET_LIST_NOTI_SUCCESS = "Get list notification successfully";
@@ -103,16 +104,22 @@ namespace HimariServer.Service.Constants
 
         public const string GET_CHAT_MESSAGES_SUCCESS = "Get chat messages successfully";
 
+        public const string GET_LIST_ORDER_SUCCESS = "Get list order successfully";
+        public const string ORDER_UPDATE_SUCCESS = "Update order successfully";
+        public const string ORDER_NOT_FOUND = "Order not found";
         public const string ORDER_ITEM_NOT_HAVE = "Order item must be at least 1 item";
         public const string ORDER_ITEM_NOT_FOUND = "Item id {id} not found";
         public const string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
         public const string PAYMENT_DESCRIPTION = "Đơn hàng ";
         public const string ORDER_CREATE_SUCCESS = "Create order successfully";
+        public const string PAYMENT_NOT_FOUND = "Payment not found";
+        public const string GET_PAYMENT_SUCCESS = "Get payment successfully";
 
         public const string UPLOAD_FILE_SUCCESS = "Upload file to firebase successfully";
         public const string NO_FILE_UPLOAD = "No file to upload firebase";
         public const string IMAGE_EXTENSION_NOT_SUPPORT = "Image extension not support";
 
+        public const string LIST_SYMPTOM_REQUIRED = "List symptom is required";
         public const string PRODUCT_SYMPTOM_NOT_FOUND = "Product symptom not found";
         public const string PRODUCT_SYMPTOM_FOUND = "Product symptom found successfully";
         public const string PRODUCT_SYMPTOM_CREATE_SUCCESS = "Product symptom created successfully";

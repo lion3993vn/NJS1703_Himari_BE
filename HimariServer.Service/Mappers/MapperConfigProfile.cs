@@ -18,6 +18,9 @@ using System.Text;
 using System.Threading.Tasks;
 using HimariServer.Service.BusinessModels.ChatMessageModels;
 using HimariServer.Service.BusinessModels.ProductSymptomModels;
+using HimariServer.Service.BusinessModels.PaymentModels;
+using HimariServer.Service.BusinessModels.OrderModels;
+using HimariServer.Repository.Enums;
 
 namespace HimariServer.Service.Mappers
 {
@@ -94,7 +97,19 @@ namespace HimariServer.Service.Mappers
             CreateMap<CreateProductSymptomModel, ProductSymptom>().ReverseMap();
             CreateMap<UpdateProductSymptomModel, ProductSymptom>().ReverseMap();
 
-            
+            CreateMap<PaymentModels, Payment>().ReverseMap();
+            // Update this mapping in MapperConfigProfile.cs
+            CreateMap<Order, OrderResponseModel>()
+                .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
+                .ForMember(dest => dest.DeliveryStatus, opt => opt.MapFrom(src => (int)src.DeliveryStatus)) // Cast enum to int instead of ToString()
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payments != null && src.Payments.Any()
+                    ? src.Payments.FirstOrDefault().Status
+                    : PaymentStatus.Pending))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+
+            CreateMap<OrderDetail, OrderDetailsModel>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : null));
+
         }
 
         public void MapperNotification()
