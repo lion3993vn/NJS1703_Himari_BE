@@ -98,7 +98,7 @@ namespace HimariServer.Service.Services.Implements
             );
 
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
-            
+
             // Calculate sold counts for all products
             foreach (var item in listProduct)
             {
@@ -106,7 +106,7 @@ namespace HimariServer.Service.Services.Implements
                 if (productEntity != null)
                 {
                     item.Sold = productEntity.OrderDetails
-                        .Where(od => od.Order.Payments != null && 
+                        .Where(od => od.Order.Payments != null &&
                                od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
@@ -151,10 +151,10 @@ namespace HimariServer.Service.Services.Implements
             }
 
             var productModel = _mapper.Map<ProductModels>(product);
-            
+
             // Calculate sold count from successfully paid orders
             productModel.Sold = product.OrderDetails
-                .Where(od => od.Order.Payments != null && 
+                .Where(od => od.Order.Payments != null &&
                        od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                 .Sum(od => od.Quantity);
 
@@ -166,37 +166,57 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetProductsByCategory(PaginationParameter paginationParameter, int categoryId)
+        public async Task<BaseResponseModel> GetProductsByCategory(
+    PaginationParameter paginationParameter,
+    int categoryId,
+    ProductSortOption sortOption = ProductSortOption.Newest)
         {
-            if (categoryId != null)
-            {
-                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(categoryId);
 
-                if (category == null || category.IsDeleted)
-                {
-                    throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
-                }
+            var category = await _unitOfWork.CategoryRepository.GetByIdAsync(categoryId);
+            if (category == null || category.IsDeleted)
+            {
+                throw new NotExistException(MessageConstants.CATEGORY_NOT_FOUND);
             }
+
+
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderByExp =
+                q => q.OrderByDescending(x => x.CreatedDate);
+
+            switch (sortOption)
+            {
+                case ProductSortOption.PriceLowToHigh:
+                    orderByExp = q => q.OrderBy(x => x.Price);
+                    break;
+                case ProductSortOption.PriceHighToLow:
+                    orderByExp = q => q.OrderByDescending(x => x.Price);
+                    break;
+                case ProductSortOption.Newest:
+                default:
+                    break;
+            }
+
+
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
-               paginationParameter,
-               include: query => query.Include(x => x.Category)
-                                      .Include(x => x.Brand)
-                                      .Include(x => x.OrderDetails)
-                                        .ThenInclude(od => od.Order)
-                                            .ThenInclude(o => o.Payments),
-               filter: query => !query.IsDeleted && query.CategoryId == categoryId
-               );
-               
+                paginationParameter,
+                include: query => query
+                    .Include(x => x.Category)
+                    .Include(x => x.Brand)
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(od => od.Order)
+                            .ThenInclude(o => o.Payments),
+                filter: query => !query.IsDeleted && query.CategoryId == categoryId,
+                orderBy: orderByExp
+            );
+
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
-            
-            // Calculate sold counts for all products
+
             foreach (var item in listProduct)
             {
                 var productEntity = product.FirstOrDefault(p => p.Id == item.Id);
                 if (productEntity != null)
                 {
                     item.Sold = productEntity.OrderDetails
-                        .Where(od => od.Order.Payments != null && 
+                        .Where(od => od.Order.Payments != null &&
                                od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
@@ -222,28 +242,47 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter)
+
+        public async Task<BaseResponseModel> GetProductsPaginationAsync(
+         PaginationParameter paginationParameter,
+         ProductSortOption sortOption = ProductSortOption.Newest)
         {
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderByExp =
+                q => q.OrderByDescending(x => x.CreatedDate);
+
+            switch (sortOption)
+            {
+                case ProductSortOption.PriceLowToHigh:
+                    orderByExp = q => q.OrderBy(x => x.Price);
+                    break;
+                case ProductSortOption.PriceHighToLow:
+                    orderByExp = q => q.OrderByDescending(x => x.Price);
+                    break;
+                case ProductSortOption.Newest:
+                default:
+                    break;
+            }
+
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
-               paginationParameter,
-               include: query => query.Include(x => x.Category)
-                                      .Include(x => x.Brand)
-                                      .Include(x => x.OrderDetails)
-                                        .ThenInclude(od => od.Order)
-                                            .ThenInclude(o => o.Payments),
-               filter: query => !query.IsDeleted
-               );
-               
+                paginationParameter,
+                include: query => query.Include(x => x.Category)
+                                       .Include(x => x.Brand)
+                                       .Include(x => x.OrderDetails)
+                                           .ThenInclude(od => od.Order)
+                                               .ThenInclude(o => o.Payments),
+                filter: query => !query.IsDeleted,
+                orderBy: orderByExp
+            );
+
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
-            
-            // Calculate sold counts for all products
+
             foreach (var item in listProduct)
             {
                 var productEntity = product.FirstOrDefault(p => p.Id == item.Id);
                 if (productEntity != null)
                 {
                     item.Sold = productEntity.OrderDetails
-                        .Where(od => od.Order.Payments != null && 
+                        .Where(od => od.Order.Payments != null &&
                                od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
@@ -268,6 +307,7 @@ namespace HimariServer.Service.Services.Implements
                 }
             };
         }
+
 
         public async Task<BaseResponseModel> UpdateProduct(UpdateProductModel newProduct)
         {
@@ -279,7 +319,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             var brand = await _unitOfWork.BrandRepository.GetByIdAsync((int)newProduct.BrandId);
-            if(brand == null)
+            if (brand == null)
             {
                 throw new NotExistException(MessageConstants.BRAND_NOT_FOUND);
             }
@@ -321,9 +361,9 @@ namespace HimariServer.Service.Services.Implements
                                             .ThenInclude(o => o.Payments),
                 filter: query => !query.IsDeleted && query.BrandId == brandId
             );
-            
+
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
-            
+
             // Calculate sold counts for all products
             foreach (var item in listProduct)
             {
@@ -331,7 +371,7 @@ namespace HimariServer.Service.Services.Implements
                 if (productEntity != null)
                 {
                     item.Sold = productEntity.OrderDetails
-                        .Where(od => od.Order.Payments != null && 
+                        .Where(od => od.Order.Payments != null &&
                                od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
@@ -360,7 +400,7 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string keyword)
         {
             string searchKeyword = string.IsNullOrEmpty(keyword) ? string.Empty : StringUtils.ConvertToUnSign(keyword.ToLower());
-            
+
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
                 paginationParameter,
                 include: query => query.Include(x => x.Category)
@@ -370,9 +410,9 @@ namespace HimariServer.Service.Services.Implements
                                            .ThenInclude(o => o.Payments),
                 filter: query => !query.IsDeleted && query.ProductNameUnsign.Contains(searchKeyword)
             );
-            
+
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
-            
+
             // Calculate sold counts for all products
             foreach (var item in listProduct)
             {
@@ -380,7 +420,7 @@ namespace HimariServer.Service.Services.Implements
                 if (productEntity != null)
                 {
                     item.Sold = productEntity.OrderDetails
-                        .Where(od => od.Order.Payments != null && 
+                        .Where(od => od.Order.Payments != null &&
                                od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
