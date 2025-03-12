@@ -222,28 +222,46 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetProductsPaginationAsync(
+     PaginationParameter paginationParameter,
+     ProductSortOption sortOption = ProductSortOption.Newest)
         {
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderByExp =
+                q => q.OrderByDescending(x => x.CreatedDate);
+
+            switch (sortOption)
+            {
+                case ProductSortOption.PriceLowToHigh:
+                    orderByExp = q => q.OrderBy(x => x.Price);
+                    break;
+                case ProductSortOption.PriceHighToLow:
+                    orderByExp = q => q.OrderByDescending(x => x.Price);
+                    break;
+                case ProductSortOption.Newest:
+                default:
+                    break;
+            }
+
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
-               paginationParameter,
-               include: query => query.Include(x => x.Category)
-                                      .Include(x => x.Brand)
-                                      .Include(x => x.OrderDetails)
-                                        .ThenInclude(od => od.Order)
-                                            .ThenInclude(o => o.Payments),
-               filter: query => !query.IsDeleted
-               );
-               
+                paginationParameter,
+                include: query => query.Include(x => x.Category)
+                                       .Include(x => x.Brand)
+                                       .Include(x => x.OrderDetails)
+                                           .ThenInclude(od => od.Order)
+                                               .ThenInclude(o => o.Payments),
+                filter: query => !query.IsDeleted,
+                orderBy: orderByExp
+            );
+
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);
-            
-            // Calculate sold counts for all products
+
             foreach (var item in listProduct)
             {
                 var productEntity = product.FirstOrDefault(p => p.Id == item.Id);
                 if (productEntity != null)
                 {
                     item.Sold = productEntity.OrderDetails
-                        .Where(od => od.Order.Payments != null && 
+                        .Where(od => od.Order.Payments != null &&
                                od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                         .Sum(od => od.Quantity);
                 }
@@ -268,6 +286,7 @@ namespace HimariServer.Service.Services.Implements
                 }
             };
         }
+
 
         public async Task<BaseResponseModel> UpdateProduct(UpdateProductModel newProduct)
         {
