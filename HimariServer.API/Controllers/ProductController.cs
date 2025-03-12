@@ -24,9 +24,9 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _productService.GetProductsPaginationAsync(paginationParameter, sortOption));
         }
         [HttpGet("category/{categoryId}")]
-        public Task<IActionResult> GetProductsByCategory([FromQuery] PaginationParameter paginationParameter, int categoryId)
+        public Task<IActionResult> GetProductsByCategory([FromQuery] PaginationParameter paginationParameter, int categoryId, [FromQuery] ProductSortOption sortOption = ProductSortOption.Newest)
         {
-            return ValidateAndExecute(async () => await _productService.GetProductsByCategory(paginationParameter, categoryId));
+            return ValidateAndExecute(async () => await _productService.GetProductsByCategory(paginationParameter, categoryId, sortOption));
         }
         [HttpGet("featured")]
         public Task<IActionResult> GetFeaturedProducts([FromQuery] PaginationParameter paginationParameter)
