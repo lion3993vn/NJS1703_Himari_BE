@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Repository.Enums;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using System;
@@ -16,7 +17,7 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> GetFeaturedProducts(PaginationParameter paginationParameter);
         Task<BaseResponseModel> GetProductById(int id);
         Task<BaseResponseModel> GetProductsByCategory(PaginationParameter paginationParameter, int categoryId);
-        Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter);
+        Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter, ProductSortOption sortOption = ProductSortOption.Newest);
         Task<BaseResponseModel> UpdateProduct(UpdateProductModel product);
         Task<BaseResponseModel> GetProductsByBrand(PaginationParameter paginationParameter, int brandId);
         Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string keyword);

@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Repository.Enums;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
@@ -16,10 +17,11 @@ namespace HimariServer.API.Controllers
         {
             _productService = productService;
         }
+
         [HttpGet]
-        public Task<IActionResult> GetProducts([FromQuery] PaginationParameter paginationParameter)
+        public Task<IActionResult> GetProducts([FromQuery] PaginationParameter paginationParameter, [FromQuery] ProductSortOption sortOption = ProductSortOption.Newest)
         {
-            return ValidateAndExecute(async () => await _productService.GetProductsPaginationAsync(paginationParameter));
+            return ValidateAndExecute(async () => await _productService.GetProductsPaginationAsync(paginationParameter, sortOption));
         }
         [HttpGet("category/{categoryId}")]
         public Task<IActionResult> GetProductsByCategory([FromQuery] PaginationParameter paginationParameter, int categoryId)
