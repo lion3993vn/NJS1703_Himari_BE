@@ -115,6 +115,7 @@ namespace HimariServer.Service.Mappers
         public void MapperNotification()
         {
             CreateMap<Notification, NotificationRequestModel>().ReverseMap();
+            CreateMap<Notification, SystemNotificationModel>().ReverseMap();
             CreateMap<Notification, NotificationModel>().ReverseMap();
             CreateMap<UserNotification, NotificationModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -127,6 +128,7 @@ namespace HimariServer.Service.Mappers
                 .ForMember(dest => dest.IsRead, opt => opt.MapFrom(src => src.IsRead));
             CreateMap<Pagination<UserNotification>, Pagination<NotificationModel>>().ConvertUsing<PaginationConverter<UserNotification, NotificationModel>>();
             CreateMap<Pagination<Notification>, Pagination<NotificationModel>>().ConvertUsing<PaginationConverter<Notification, NotificationModel>>();
+            CreateMap<Pagination<Notification>, Pagination<SystemNotificationModel>>().ConvertUsing<PaginationConverter<Notification, SystemNotificationModel>>();
         }
 
         public class PaginationConverter<TSource, TDestination> : ITypeConverter<Pagination<TSource>, Pagination<TDestination>>
