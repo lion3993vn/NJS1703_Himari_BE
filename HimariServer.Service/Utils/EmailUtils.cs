@@ -245,7 +245,7 @@ namespace HimariServer.Service.Utils
                 </p>
                 
                 <div class=""button-container"">
-                    <a href=""#"" class=""cta-button"">Tải ứng dụng Himari</a>
+                    <a href=""himari://"" class=""cta-button"">Tải ứng dụng Himari</a>
                 </div>
                 
                 <div class=""benefits"">

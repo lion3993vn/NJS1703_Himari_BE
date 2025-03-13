@@ -46,7 +46,7 @@ namespace HimariServer.Service.Hubs
             var messageBot = new ChatMessage
             {
                 UserId = userId,
-                Message = messageResponse.Message,
+                Message = messageResponse,
                 Type = MessageType.BOT
             };
             await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
@@ -56,21 +56,15 @@ namespace HimariServer.Service.Hubs
             await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
         }
 
-        private BaseResponseModel ProcessMessageResponse(string message)
+        private string ProcessMessageResponse(string message)
         {
             if(message.Contains("vàng da"))
             {
-                return new BaseResponseModel
-                {
-                    Message = "Vàng da là một loại bệnh da phổ biến, bạn nên đi khám ngay",
-                };
+                return "Vàng da là một loại bệnh da phổ biến, bạn nên đi khám ngay";
             }
             else
             {
-                return new BaseResponseModel
-                {
-                    Message = "Tôi không hiểu bạn đang nói gì",
-                };
+                return "Tôi không hiểu bạn đang nói gì";
             }
         }
     }
