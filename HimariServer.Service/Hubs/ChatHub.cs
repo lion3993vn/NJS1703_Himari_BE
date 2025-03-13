@@ -26,34 +26,34 @@ namespace HimariServer.Service.Hubs
             _chatMessageService = chatMessageService;
         }
 
-        public async Task SendMessage(int userId, string message)
+        public async Task SendMessage(string message)
         {
             try
             {
-                var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
-                if (user == null)
-                {
-                    throw new NotExistException(MessageConstants.USER_NOT_EXIST);
-                }
+                //var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+                //if (user == null)
+                //{
+                //    throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+                //}
 
-                var messageUser = new ChatMessage
-                {
-                    UserId = userId,
-                    Message = message,
-                    Type = MessageType.USER
-                };
-                await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
+                //var messageUser = new ChatMessage
+                //{
+                //    UserId = userId,
+                //    Message = message,
+                //    Type = MessageType.USER
+                //};
+                //await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
 
                 var messageResponse = ProcessMessageResponse(message);
-                var messageBot = new ChatMessage
-                {
-                    UserId = userId,
-                    Message = messageResponse,
-                    Type = MessageType.BOT
-                };
-                await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
+                //var messageBot = new ChatMessage
+                //{
+                //    UserId = userId,
+                //    Message = messageResponse,
+                //    Type = MessageType.BOT
+                //};
+                //await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
 
-                _unitOfWork.Save();
+                //_unitOfWork.Save();
 
                 await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
             }
