@@ -52,6 +52,7 @@ namespace HimariServer.Service.Mappers
             // blog
             CreateMap<Blog, BlogModel>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User != null ? src.User.FullName : null))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : null))
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User != null ? src.User.Id : (int?)null));
             CreateMap<Pagination<Blog>, Pagination<BlogModel>>().ConvertUsing<PaginationConverter<Blog, BlogModel>>();
             CreateMap<UpdateBlogModel, Blog>().ReverseMap();
