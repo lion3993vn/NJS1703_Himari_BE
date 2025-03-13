@@ -58,5 +58,11 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _productSymptomService.CreateProductSymptom(productSymptom));
         }
+
+        [HttpPost("bulk")]
+        public Task<IActionResult> CreateMultiProductSymptom([FromBody] CreateProductSymptomMutilModel multiModel)
+        {
+            return ValidateAndExecute(async () => await _productSymptomService.CreateMultiProductSymptom(multiModel));
+        }
     }
 }

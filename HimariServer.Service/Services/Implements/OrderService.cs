@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
 using HimariServer.Repository.UnitOfWork;
@@ -9,12 +10,14 @@ using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
 using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Net.payOS.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -31,7 +34,7 @@ namespace HimariServer.Service.Services.Implements
             _payOSService = payOSService;
         }
 
-        public async Task<BaseResponseModel> CreateOrder(OrderResquestModel model)
+        public async Task<BaseResponseModel> CreateOrder(OrderRequestModel model)
         {
             #region create order
 
@@ -71,6 +74,7 @@ namespace HimariServer.Service.Services.Implements
                 UserId = model.UserId,
                 OrderCode = orderCode,
                 OrderPrice = 0,
+                Address = model.Address,
                 DeliveryStatus = DeliveryStatus.NotStarted,
             };
 
@@ -83,7 +87,6 @@ namespace HimariServer.Service.Services.Implements
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
 
                 var itemPrice = product.Price * item.Quantity;
-                totalAmount += itemPrice ?? 0;
 
                 var orderDetail = new OrderDetail
                 {
@@ -169,8 +172,8 @@ namespace HimariServer.Service.Services.Implements
 
         private int GenerateOrderCode()
         {
-            Random random = new Random();
-            return random.Next(100000, 1000000);
+            Random random = new();
+            return int.Parse((DateTimeOffset.Now.ToUnixTimeSeconds() % 10000000).ToString() + random.NextInt64(1,10));
         }
 
         public async Task ConfirmOrderPayment(WebhookType webhook)
@@ -192,10 +195,103 @@ namespace HimariServer.Service.Services.Implements
             {
                 payment.Status = PaymentStatus.Failed;
 
+                foreach(var item in payment.Order.OrderDetails)
+                {
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync((int)item.ProductId);
+                    product.Quantity += item.Quantity;
+                    _unitOfWork.ProductRepository.UpdateAsync(product);
+                }
+
                 _unitOfWork.PaymentRepository.UpdateAsync(payment);
             }
 
             await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<BaseResponseModel> GetOrderByUserId(int userId, PaginationParameter paginationParameter)
+        {
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+            }
+
+            var orders = await _unitOfWork.OrderRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                filter: x => x.UserId == userId,
+                include: query => query.Include(o => o.OrderDetails)
+                                      .ThenInclude(od => od.Product)
+                                      .Include(o => o.Payments),
+                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+            );
+
+            // Map Order entities to OrderResponseModel using AutoMapper
+            var orderResponseList = new List<OrderResponseModel>();
+            foreach (var order in orders)
+            {
+                var orderResponse = _mapper.Map<OrderResponseModel>(order);
+
+                // Get payment status
+                var payment = order.Payments?.FirstOrDefault();
+                if (payment != null)
+                {
+                    orderResponse.PaymentStatus = payment.Status;
+                }
+
+                // Convert enum to string for DeliveryStatus
+                orderResponse.DeliveryStatus = (int)order.DeliveryStatus;
+
+
+                orderResponseList.Add(orderResponse);
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_ORDER_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = orderResponseList,
+                    MetaData = new
+                    {
+                        orders.TotalCount,
+                        orders.PageSize,
+                        orders.CurrentPage,
+                        orders.TotalPages,
+                        orders.HasNext,
+                        orders.HasPrevious
+                    }
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel> UpdateOrder(OrderUpdateModel orderUpdateModel)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderUpdateModel.OrderId);
+            if (order == null)
+            {
+                throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
+            }
+
+            // Update order properties
+            order.Address = orderUpdateModel.Address;
+            order.DeliveryStatus = orderUpdateModel.DeliveryStatus;
+
+            _unitOfWork.OrderRepository.UpdateAsync(order);
+            await _unitOfWork.SaveAsync();
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.ORDER_UPDATE_SUCCESS,
+                Data = new
+                {
+                    OrderId = order.Id,
+                    OrderCode = order.OrderCode,
+                    Address = order.Address,
+                    DeliveryStatus = (int)order.DeliveryStatus
+                }
+            };
         }
     }
 }

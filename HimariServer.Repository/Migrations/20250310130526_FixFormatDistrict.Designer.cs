@@ -4,6 +4,7 @@ using HimariServer.Repository.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HimariServer.Repository.Migrations
 {
     [DbContext(typeof(HimariServerContext))]
-    partial class HimariServerContextModelSnapshot : ModelSnapshot
+    [Migration("20250310130526_FixFormatDistrict")]
+    partial class FixFormatDistrict
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,9 +51,6 @@ namespace HimariServer.Repository.Migrations
 
                     b.Property<string>("Title")
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleUnsign")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -108,9 +108,6 @@ namespace HimariServer.Repository.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BodyPartNameUnsign")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -140,9 +137,6 @@ namespace HimariServer.Repository.Migrations
 
                     b.Property<string>("BrandName")
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BrandNameUnsign")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
@@ -178,9 +172,6 @@ namespace HimariServer.Repository.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CategoryNameUnsign")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
@@ -357,15 +348,8 @@ namespace HimariServer.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("DeliveryStatus")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -448,9 +432,6 @@ namespace HimariServer.Repository.Migrations
 
                     b.Property<string>("Name")
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameUnsign")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -540,10 +521,6 @@ namespace HimariServer.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductNameUnsign")
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 

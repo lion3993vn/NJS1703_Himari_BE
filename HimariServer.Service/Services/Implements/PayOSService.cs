@@ -61,6 +61,13 @@ namespace HimariServer.Service.Services.Implements
             return createPayment.checkoutUrl;
         }
 
+        public async Task<PaymentLinkInformation> GetPaymentInfo(int ordercode)
+        {
+            PayOS payOS = new PayOS(_payOSSettings.ClientID, _payOSSettings.ApiKey, _payOSSettings.ChecksumKey);
+
+            return await payOS.getPaymentLinkInformation(ordercode);
+        }
+
         public WebhookData VerifyWebhook(WebhookType webhook)
         {
             PayOS payOS = new PayOS(_payOSSettings.ClientID, _payOSSettings.ApiKey, _payOSSettings.ChecksumKey);
