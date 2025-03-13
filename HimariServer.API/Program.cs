@@ -150,8 +150,7 @@ FirebaseApp.Create(new AppOptions()
 
 builder.Services.AddSignalR(options =>
 {
-    options.KeepAliveInterval = TimeSpan.FromSeconds(30);
-    options.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
+    options.EnableDetailedErrors = true;
 });
 
 builder.Services.AddHostedService<PaymentPeriodicService>();
