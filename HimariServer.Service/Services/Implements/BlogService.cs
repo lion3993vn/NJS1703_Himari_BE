@@ -86,7 +86,7 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> GetBlogById(int id)
         {
             var blog = await _unitOfWork.BlogRepository.GetByIdIncludeAsync(id,
-                include: query => query.Include(x => x.User).AsNoTracking());
+                include: query => query.Include(x => x.User).Include(x => x.Category).AsNoTracking());
 
             if (blog == null || blog.IsDeleted)
             {
@@ -109,7 +109,7 @@ namespace HimariServer.Service.Services.Implements
         {
             var blog = await _unitOfWork.BlogRepository.ToPaginationIncludeAsync(
            paginationParameter,
-           include: query => query.Include(x => x.User),
+           include: query => query.Include(x => x.User).Include(x => x.Category),
            filter: query => !query.IsDeleted
            );
             var listBlog = _mapper.Map<Pagination<BlogModel>>(blog);
