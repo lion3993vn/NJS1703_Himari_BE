@@ -26,43 +26,36 @@ namespace HimariServer.Service.Hubs
             _chatMessageService = chatMessageService;
         }
 
-        public async Task SendMessage(string message)
+        public async Task SendMessage(int userId, string message)
         {
-            try
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+            if (user == null)
             {
-                //var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
-                //if (user == null)
-                //{
-                //    throw new NotExistException(MessageConstants.USER_NOT_EXIST);
-                //}
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+            }
 
-                //var messageUser = new ChatMessage
-                //{
-                //    UserId = userId,
-                //    Message = message,
-                //    Type = MessageType.USER
-                //};
-                //await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
+            var messageUser = new ChatMessage
+            {
+                UserId = userId,
+                Message = message,
+                Type = MessageType.USER
+            };
+            await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
 
-                Console.WriteLine($"Received message: {message}");
+            Console.WriteLine($"Received message: {message}");
                 var messageResponse = ProcessMessageResponse(message);
                 Console.WriteLine($"Processed response: {messageResponse}");
-                //var messageBot = new ChatMessage
-                //{
-                //    UserId = userId,
-                //    Message = messageResponse,
-                //    Type = MessageType.BOT
-                //};
-                //await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
-
-                //_unitOfWork.Save();
-
-                await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
-            }
-            catch (Exception ex)
+            var messageBot = new ChatMessage
             {
-                Console.WriteLine(ex.Message);
-            }
+                UserId = userId,
+                Message = messageResponse,
+                Type = MessageType.BOT
+            };
+            await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
+
+            _unitOfWork.Save();
+
+            await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
         }
 
         private string ProcessMessageResponse(string message)
