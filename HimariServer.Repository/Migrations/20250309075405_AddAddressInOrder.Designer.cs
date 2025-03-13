@@ -4,6 +4,7 @@ using HimariServer.Repository.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HimariServer.Repository.Migrations
 {
     [DbContext(typeof(HimariServerContext))]
-    partial class HimariServerContextModelSnapshot : ModelSnapshot
+    [Migration("20250309075405_AddAddressInOrder")]
+    partial class AddAddressInOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -631,7 +634,7 @@ namespace HimariServer.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AddressBonus")
+                    b.Property<string>("Address")
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
@@ -641,10 +644,6 @@ namespace HimariServer.Repository.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("District")
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsUnicode(true)
@@ -671,10 +670,6 @@ namespace HimariServer.Repository.Migrations
                     b.Property<int?>("Point")
                         .HasColumnType("int");
 
-                    b.Property<string>("Province")
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
@@ -684,10 +679,6 @@ namespace HimariServer.Repository.Migrations
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Ward")
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id")
                         .HasName("PK__User__3214EC07C8A523E4");
