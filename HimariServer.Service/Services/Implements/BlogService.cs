@@ -142,7 +142,7 @@ namespace HimariServer.Service.Services.Implements
                 throw new NotExistException(MessageConstants.PRODUCT_NOT_FOUND);
             }
 
-            var blogCategory = await _unitOfWork.BlogCategoryRepository.GetByIdAsync(newBlog.CategoryBlogId);
+            var blogCategory = await _unitOfWork.BlogCategoryRepository.GetByIdAsync(newBlog.BlogCategoryId);
             if (blogCategory == null)
             {
                 throw new NotExistException(MessageConstants.BLOG_CATEGORY_NOT_FOUND);
