@@ -60,6 +60,7 @@ namespace HimariServer.Service.Services.Implements
 
             var noti = _mapper.Map<Notification>(model);
             noti.TitleUnsign = StringUtils.ConvertToUnSign(model.Title);
+            noti.Type = NotificationType.USER;
 
             await _unitOfWork.NotificationRepository.AddAsync(noti);
             await _unitOfWork.SaveAsync(); // Ensure the notification is saved and has an ID
@@ -209,6 +210,36 @@ namespace HimariServer.Service.Services.Implements
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.MARK_ALL_NOTI_AS_READ_SUCCESS
+            };
+        }
+
+        public async Task<BaseResponseModel> GetSystemNotifications(PaginationParameter paginationParameter)
+        {
+            var notifications = await _unitOfWork.NotificationRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                filter: x => !x.IsDeleted && x.Type == NotificationType.SYSTEM,
+                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+            );
+
+            var listNoti = _mapper.Map<Pagination<NotificationModel>>(notifications);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_NOTI_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listNoti,
+                    MetaData = new
+                    {
+                        listNoti.TotalCount,
+                        listNoti.PageSize,
+                        listNoti.CurrentPage,
+                        listNoti.TotalPages,
+                        listNoti.HasNext,
+                        listNoti.HasPrevious
+                    }
+                }
             };
         }
     }
