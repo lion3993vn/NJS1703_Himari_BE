@@ -17,5 +17,6 @@ namespace HimariServer.Service.Services.Interfaces
         public Task<BaseResponseModel> GetUnreadNotificationCount(int userId);
         public Task<BaseResponseModel> MarkNotificationAsRead(int notificationId);
         public Task<BaseResponseModel> MarkAllNotificationsAsRead(int userId);
+        public Task<BaseResponseModel> GetSystemNotifications(PaginationParameter paginationParameter);
     }
 }

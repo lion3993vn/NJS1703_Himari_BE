@@ -126,6 +126,7 @@ namespace HimariServer.Service.Mappers
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.Notification.CreatedDate))
                 .ForMember(dest => dest.IsRead, opt => opt.MapFrom(src => src.IsRead));
             CreateMap<Pagination<UserNotification>, Pagination<NotificationModel>>().ConvertUsing<PaginationConverter<UserNotification, NotificationModel>>();
+            CreateMap<Pagination<Notification>, Pagination<NotificationModel>>().ConvertUsing<PaginationConverter<Notification, NotificationModel>>();
         }
 
         public class PaginationConverter<TSource, TDestination> : ITypeConverter<Pagination<TSource>, Pagination<TDestination>>
