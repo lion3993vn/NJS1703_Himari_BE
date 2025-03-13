@@ -213,15 +213,22 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetSystemNotifications(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetSystemNotifications(PaginationParameter paginationParameter, string keyword = null, bool newestFirst = true)
         {
             var notifications = await _unitOfWork.NotificationRepository.ToPaginationIncludeAsync(
                 paginationParameter,
-                filter: x => !x.IsDeleted && x.Type == NotificationType.SYSTEM,
-                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+                filter: x => !x.IsDeleted &&
+                          x.Type == NotificationType.SYSTEM &&
+                          (string.IsNullOrEmpty(keyword) ||
+                           x.Title.Contains(keyword) ||
+                           x.TitleUnsign.Contains(keyword) ||
+                           x.Message.Contains(keyword)),
+                orderBy: query => newestFirst
+                    ? query.OrderByDescending(x => x.CreatedDate)
+                    : query.OrderBy(x => x.CreatedDate)
             );
 
-            var listNoti = _mapper.Map<Pagination<NotificationModel>>(notifications);
+            var listNoti = _mapper.Map<Pagination<SystemNotificationModel>>(notifications);
 
             return new BaseResponseModel
             {
