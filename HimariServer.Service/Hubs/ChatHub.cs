@@ -44,7 +44,9 @@ namespace HimariServer.Service.Hubs
                 //};
                 //await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
 
+                Console.WriteLine($"Received message: {message}");
                 var messageResponse = ProcessMessageResponse(message);
+                Console.WriteLine($"Processed response: {messageResponse}");
                 //var messageBot = new ChatMessage
                 //{
                 //    UserId = userId,
