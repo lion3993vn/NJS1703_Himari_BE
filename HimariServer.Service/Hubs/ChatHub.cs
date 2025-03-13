@@ -28,32 +28,39 @@ namespace HimariServer.Service.Hubs
 
         public async Task SendMessage(int userId, string message)
         {
-            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
-            if (user == null)
+            try
             {
-                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+                var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+                }
+
+                var messageUser = new ChatMessage
+                {
+                    UserId = userId,
+                    Message = message,
+                    Type = MessageType.USER
+                };
+                await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
+
+                var messageResponse = ProcessMessageResponse(message);
+                var messageBot = new ChatMessage
+                {
+                    UserId = userId,
+                    Message = messageResponse,
+                    Type = MessageType.BOT
+                };
+                await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
+
+                _unitOfWork.Save();
+
+                await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
             }
-
-            var messageUser = new ChatMessage
+            catch (Exception ex)
             {
-                UserId = userId,
-                Message = message,
-                Type = MessageType.USER
-            };
-            await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
-
-            var messageResponse = ProcessMessageResponse(message);
-            var messageBot = new ChatMessage
-            {
-                UserId = userId,
-                Message = messageResponse,
-                Type = MessageType.BOT
-            };
-            await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
-
-            _unitOfWork.Save();
-
-            await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private string ProcessMessageResponse(string message)
