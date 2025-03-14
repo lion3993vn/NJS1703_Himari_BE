@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HimariServer.Repository.Commons;
+using HimariServer.Service.BusinessModels.EmailModels;
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -30,12 +31,14 @@ namespace HimariServer.Service.Services.Implements
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IMailService mailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _configuration = configuration;
+            _mailService = mailService;
         }
 
         public async Task<BaseResponseModel> GetUserById(int id)
@@ -119,6 +122,14 @@ namespace HimariServer.Service.Services.Implements
 
                 await _unitOfWork.UsersRepository.AddAsync(newUser);
                 _unitOfWork.Save();
+
+                _ = Task.Run(async () =>
+                    await _mailService.SendEmailAsync(new MailRequest()
+                    {
+                        Subject = "Chào mừng bạn đến với Himari!",
+                        Body = EmailUtils.WelcomeEmail(newUser.FullName),
+                        ToEmail = newUser.Email
+                    }));
 
                 var accessToken = AuthenTokenUtils.GenerateAccessToken(newUser.Email, newUser, role.RoleName, _configuration);
                 var refreshToken = AuthenTokenUtils.GenerateRefreshToken(newUser.Email, _configuration);

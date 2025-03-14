@@ -106,7 +106,7 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> GetPartSymptomsPaginationAsync(PaginationParameter paginationParameter)
         {
-            var partSymptoms = await _unitOfWork.PartSymptomRepository.ToPagination(paginationParameter);
+            var partSymptoms = await _unitOfWork.PartSymptomRepository.ToPaginationIncludeAsync(paginationParameter, filter: x => !x.IsDeleted);
             var partSymptomModels = _mapper.Map<Pagination<PartSymptomModel>>(partSymptoms);
 
             return new BaseResponseModel
