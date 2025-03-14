@@ -126,6 +126,7 @@ namespace HimariServer.Service.Constants
         public const string PRODUCT_SYMPTOM_DELETE_SUCCESS = "Product symptom delete successfully";
         public const string GET_LIST_PRODUCT_SYMPTOM_SUCCESS = "Get list product symptom successfully";
         public const string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
-        
+
+        public static string ORDER_FOUND = "Get order successfully";
     }
 }
