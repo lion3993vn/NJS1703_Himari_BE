@@ -21,7 +21,11 @@ namespace HimariServer.Repository.Repositories.Implements
 
         public async Task<Order?> GetOrderByCodeAsync(int orderCode)
         {
-            return await _context.Orders.Where(x => x.OrderCode == orderCode && !x.IsDeleted).FirstOrDefaultAsync();
+            return await _context.Orders.Include(o => o.OrderDetails)
+                                      .ThenInclude(od => od.Product)
+                                      .Include(o => o.Payments)
+                                      .Include(x => x.User)
+                                      .Where(x => x.OrderCode == orderCode && !x.IsDeleted).FirstOrDefaultAsync();
         }
     }
 }

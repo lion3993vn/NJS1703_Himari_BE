@@ -3,6 +3,7 @@ using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
 using HimariServer.Repository.UnitOfWork;
+using HimariServer.Service.BusinessModels.EmailModels;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
@@ -26,12 +27,14 @@ namespace HimariServer.Service.Services.Implements
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IPayOSService _payOSService;
+        private readonly IMailService _mailService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IPayOSService payOSService)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IPayOSService payOSService, IMailService mailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _payOSService = payOSService;
+            _mailService = mailService;
         }
 
         public async Task<BaseResponseModel> CreateOrder(OrderRequestModel model)
@@ -190,6 +193,14 @@ namespace HimariServer.Service.Services.Implements
                 _unitOfWork.PaymentRepository.UpdateAsync(payment);
                 order.DeliveryStatus = DeliveryStatus.Preparing;
                 _unitOfWork.OrderRepository.UpdateAsync(order);
+
+                _ = Task.Run(async () =>
+                    await _mailService.SendEmailAsync(new MailRequest()
+                    {
+                        Subject = $"Himari - Đơn hàng mới {(int)data.orderCode}",
+                        Body = EmailUtils.OrderMail(_mapper.Map<OrderResponseModel>(order)),
+                        ToEmail = order.User.Email,
+                    }));
             }
             else
             {
@@ -239,7 +250,7 @@ namespace HimariServer.Service.Services.Implements
                 }
 
                 // Convert enum to string for DeliveryStatus
-                orderResponse.DeliveryStatus = (int)order.DeliveryStatus;
+                orderResponse.DeliveryStatus = order.DeliveryStatus;
 
 
                 orderResponseList.Add(orderResponse);
@@ -291,6 +302,22 @@ namespace HimariServer.Service.Services.Implements
                     Address = order.Address,
                     DeliveryStatus = (int)order.DeliveryStatus
                 }
+            };
+        }
+
+        public async Task<BaseResponseModel> GetOrderByOrderCode(int orderCode)
+        {
+            var order = await _unitOfWork.OrderRepository.GetOrderByCodeAsync(orderCode);
+
+            if(order == null)
+            {
+                throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
+            }
+
+            return new BaseResponseModel {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.ORDER_FOUND,
+                Data = _mapper.Map<OrderResponseModel>(order)
             };
         }
     }
