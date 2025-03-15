@@ -346,8 +346,9 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> GetOrderByOrderId(int orderId)
         {
             var order = await _unitOfWork.OrderRepository.GetByIdIncludeAsync(orderId,
-                include: query => query.Include(o => o.Payments).Include(o => o.User));
-
+                include: query => query.Include(o => o.OrderDetails)
+                                      .ThenInclude(od => od.Product)
+                                      .Include(o => o.Payments));
             if (order == null)
             {
                 throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
@@ -357,7 +358,7 @@ namespace HimariServer.Service.Services.Implements
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.ORDER_FOUND,
-                Data = _mapper.Map<BasicOrderResponseModel>(order)
+                Data = _mapper.Map<OrderResponseModel>(order)
             };
         }
     }
