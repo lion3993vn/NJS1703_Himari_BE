@@ -14,11 +14,11 @@ namespace HimariServer.Service.BusinessModels.OrderModels
         public int Id { get; set; }
         public int OrderCode { get; set; }
         public int OrderPrice { get; set; }
+        public string Address { get; set; }
         public DateTime CreatedDate { get; set; }
         public DeliveryStatus DeliveryStatus { get; set; } // Changed from string to int
         public PaymentStatus PaymentStatus { get; set; }
         public List<OrderDetailsModel> OrderDetails { get; set; }
-        public string Address { get; set; }
     }
     public class OrderDetailsModel
     {
