@@ -107,6 +107,15 @@ namespace HimariServer.Service.Mappers
                     ? src.Payments.FirstOrDefault().Status
                     : PaymentStatus.Pending))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+            CreateMap<Pagination<Order>, Pagination<OrderResponseModel>>().ConvertUsing<PaginationConverter<Order, OrderResponseModel>>();
+            //get order không lấy order details
+            CreateMap<Order, BasicOrderResponseModel>()
+                .ForMember(dest => dest.DeliveryStatus, opt => opt.MapFrom(src => (int)src.DeliveryStatus)) // Cast enum to int instead of ToString()
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payments != null && src.Payments.Any()
+                    ? src.Payments.FirstOrDefault().Status
+                    : PaymentStatus.Pending))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+            CreateMap<Pagination<Order>, Pagination<BasicOrderResponseModel>>().ConvertUsing<PaginationConverter<Order, BasicOrderResponseModel>>();
 
             CreateMap<OrderDetail, OrderDetailsModel>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : null));
