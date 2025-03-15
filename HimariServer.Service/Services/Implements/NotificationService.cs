@@ -46,7 +46,7 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> PushNotificationByUserId(NotificationRequestModel model)
+        public async Task<BaseResponseModel> PushNotificationByUserId(NotificationRequestUserModel model)
         {
             var user = await _unitOfWork.UsersRepository.GetByIdAsync(model.UserId);
             if (user == null)
@@ -247,6 +247,38 @@ namespace HimariServer.Service.Services.Implements
                         listNoti.HasPrevious
                     }
                 }
+            };
+        }
+
+        public async Task<BaseResponseModel> PushNotification(NotificationRequestModel model)
+        {
+            var userDevices = await _unitOfWork.UserDeviceRepository.GetAllAsync();
+
+            var noti = _mapper.Map<Notification>(model);
+            noti.TitleUnsign = StringUtils.ConvertToUnSign(model.Title);
+            noti.Type = NotificationType.SYSTEM;
+
+            await _unitOfWork.NotificationRepository.AddAsync(noti);
+            await _unitOfWork.SaveAsync();
+
+            var tokens = userDevices.Select(x => x.DeviceToken).ToList(); //tokens of all devices
+
+            var userNotis = userDevices.Select(x => new UserNotification
+            {
+                NotificationId = noti.Id,
+                UserId = x.UserId,
+                IsRead = false
+            }).ToList();
+
+            await _unitOfWork.UserNotificationRepository.AddRangeAsync(userNotis);
+            await _unitOfWork.SaveAsync();
+
+            await FirebaseLibrary.SendRangeMessageFireBase(model.Title, model.Message, tokens);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.PUSH_NOTI_SUCCESS
             };
         }
     }
