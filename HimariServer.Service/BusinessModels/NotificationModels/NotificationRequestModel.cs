@@ -8,11 +8,16 @@ namespace HimariServer.Service.BusinessModels.NotificationModels
 {
     public class NotificationRequestModel
     {
-        public int UserId { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
     }
 
+    public class NotificationRequestUserModel
+    {
+        public int UserId { get; set; }
+        public string Title { get; set; }
+        public string Message { get; set; }
+    }
     public class MarkAllAsReadRequest
     {
         public int UserId { get; set; }
