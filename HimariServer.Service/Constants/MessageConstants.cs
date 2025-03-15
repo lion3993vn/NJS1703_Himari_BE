@@ -94,6 +94,7 @@ namespace HimariServer.Service.Constants
         public const string MARK_NOTI_AS_READ_SUCCESS = "Mark notification as read success";
         public const string MARK_ALL_NOTI_AS_READ_SUCCESS = "Mark all notification as read success";
         public const string NO_NOTI_MARK_AS_READ = "No notification mark as read";
+        public const string PUSH_NOTI_SUCCESS = "Get notifications successfully";
 
         public const string PART_SYMPTOM_CREATE_SUCCESS = "Part symptom create successfully";
         public const string PART_SYMPTOM_NOT_FOUND = "Part symptom not existed";
@@ -127,6 +128,6 @@ namespace HimariServer.Service.Constants
         public const string GET_LIST_PRODUCT_SYMPTOM_SUCCESS = "Get list product symptom successfully";
         public const string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
 
-        public static string ORDER_FOUND = "Get order successfully";
+        public const string ORDER_FOUND = "Get order successfully";
     }
 }
