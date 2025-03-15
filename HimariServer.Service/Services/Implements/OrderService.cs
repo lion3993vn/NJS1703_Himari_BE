@@ -176,7 +176,7 @@ namespace HimariServer.Service.Services.Implements
         private int GenerateOrderCode()
         {
             Random random = new();
-            return int.Parse((DateTimeOffset.Now.ToUnixTimeSeconds() % 10000000).ToString() + random.NextInt64(1,10));
+            return int.Parse((DateTimeOffset.Now.ToUnixTimeSeconds() % 10000000).ToString() + random.NextInt64(1, 10));
         }
 
         public async Task ConfirmOrderPayment(WebhookType webhook)
@@ -206,7 +206,7 @@ namespace HimariServer.Service.Services.Implements
             {
                 payment.Status = PaymentStatus.Failed;
 
-                foreach(var item in payment.Order.OrderDetails)
+                foreach (var item in payment.Order.OrderDetails)
                 {
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync((int)item.ProductId);
                     product.Quantity += item.Quantity;
@@ -309,15 +309,55 @@ namespace HimariServer.Service.Services.Implements
         {
             var order = await _unitOfWork.OrderRepository.GetOrderByCodeAsync(orderCode);
 
-            if(order == null)
+            if (order == null)
             {
                 throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
             }
 
-            return new BaseResponseModel {
+            return new BaseResponseModel
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.ORDER_FOUND,
                 Data = _mapper.Map<OrderResponseModel>(order)
+            };
+        }
+
+        public async Task<BaseResponseModel> GetAllOrders(PaginationParameter paginationParameter)
+        {
+            var orders = await _unitOfWork.OrderRepository.ToPaginationIncludeAsync(
+                     paginationParameter,
+                     include: query => query.Include(o => o.Payments).Include(o => o.User),
+                     orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+                 );
+
+            if (orders == null)
+            {
+                throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.ORDER_FOUND,
+                Data = _mapper.Map<Pagination<BasicOrderResponseModel>>(orders)
+            };
+        }
+
+        public async Task<BaseResponseModel> GetOrderByOrderId(int orderId)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdIncludeAsync(orderId,
+                include: query => query.Include(o => o.Payments).Include(o => o.User));
+
+            if (order == null)
+            {
+                throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.ORDER_FOUND,
+                Data = _mapper.Map<BasicOrderResponseModel>(order)
             };
         }
     }
