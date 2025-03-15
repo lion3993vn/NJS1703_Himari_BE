@@ -22,7 +22,7 @@ namespace HimariServer.API.Controllers
         [HttpPost("push")]
         public Task<IActionResult> PushMessageByUserId(NotificationRequestModel model)
         {
-            return ValidateAndExecute(async () => await _notificationService.PushNotificationByUserId(model));
+            return ValidateAndExecute(async () => await _notificationService.PushNotification(model));
         }
 
         [HttpGet("user/{userId}")]

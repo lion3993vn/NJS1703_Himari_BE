@@ -16,6 +16,7 @@ namespace HimariServer.Service.Services.Interfaces
         Task ConfirmOrderPayment(WebhookType webhook);
         Task<BaseResponseModel> GetOrderByUserId(int userId, PaginationParameter paginationParameter);
         Task<BaseResponseModel> UpdateOrder(OrderUpdateModel orderUpdateModel);
-        Task<BaseResponseModel> GetOrderByOrderCode(int orderCode);
+        Task<BaseResponseModel> GetAllOrders(PaginationParameter paginationParameter);
+        Task<BaseResponseModel> GetOrderByOrderId(int orderId);
     }
 }
