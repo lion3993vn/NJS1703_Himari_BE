@@ -18,5 +18,7 @@ namespace HimariServer.Service.BusinessModels.OrderModels
         public DeliveryStatus DeliveryStatus { get; set; } // Changed from string to int
         public PaymentStatus PaymentStatus { get; set; }
         public string Address { get; set; }
+        public int UserId { get; set; }
+        public string FullName { get; set; }
     }
 }

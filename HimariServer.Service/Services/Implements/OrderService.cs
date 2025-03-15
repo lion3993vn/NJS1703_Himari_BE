@@ -326,7 +326,7 @@ namespace HimariServer.Service.Services.Implements
         {
             var orders = await _unitOfWork.OrderRepository.ToPaginationIncludeAsync(
                      paginationParameter,
-                     include: query => query.Include(o => o.Payments),
+                     include: query => query.Include(o => o.Payments).Include(o => o.User),
                      orderBy: query => query.OrderByDescending(x => x.CreatedDate)
                  );
 
@@ -346,7 +346,7 @@ namespace HimariServer.Service.Services.Implements
         public async Task<BaseResponseModel> GetOrderByOrderId(int orderId)
         {
             var order = await _unitOfWork.OrderRepository.GetByIdIncludeAsync(orderId,
-                include: query => query.Include(o => o.Payments));
+                include: query => query.Include(o => o.Payments).Include(o => o.User));
 
             if (order == null)
             {
