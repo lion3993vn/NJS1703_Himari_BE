@@ -42,6 +42,9 @@ namespace HimariServer.Service.Services.Implements
                             item.Status = PaymentStatus.Failed;
                             unitOfWork.PaymentRepository.UpdateAsync(item);
 
+                            item.Order.DeliveryStatus = DeliveryStatus.Cancelled;
+                            unitOfWork.OrderRepository.UpdateAsync(item.Order);
+
                             foreach (var orderDetail in item.Order.OrderDetails)
                             {
                                 var product = await unitOfWork.ProductRepository.GetByIdAsync((int)orderDetail.ProductId);
