@@ -11,7 +11,7 @@ namespace HimariServer.Service.Services.Interfaces
 {
     public interface INotificationService
     {
-        public Task<BaseResponseModel> PushNotificationByUserId(NotificationRequestUserModel model);
+        public Task<BaseResponseModel> PushNotificationByUserId(int userId, NotificationRequestModel model);
         public Task<BaseResponseModel> GetNotificationById(int id);
         public Task<BaseResponseModel> GetNotificationsByUserId(PaginationParameter paginationParameter, int userId, int type);
         public Task<BaseResponseModel> GetUnreadNotificationCount(int userId);
