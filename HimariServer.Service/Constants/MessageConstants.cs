@@ -95,6 +95,14 @@ namespace HimariServer.Service.Constants
         public const string MARK_ALL_NOTI_AS_READ_SUCCESS = "Mark all notification as read success";
         public const string NO_NOTI_MARK_AS_READ = "No notification mark as read";
         public const string PUSH_NOTI_SUCCESS = "Get notifications successfully";
+        public const string APP_NOTI_ORDER_DELIVERING_TITLE = "🚚 Đơn hàng đang giao!";
+        public const string APP_NOTI_ORDER_DELIVERED_TITLE = "✅ Đơn hàng đã giao!";
+        public const string APP_NOTI_ORDER_CENCELLED_TITLE = "❌ Đơn hàng bị hủy!";
+        public const string APP_NOTI_ORDER_DEFAULT_TITLE = "ℹ️ Cập nhật đơn hàng!";
+        public const string APP_NOTI_ORDER_DELIVERING_MESSAGE = "Đơn hàng #{0} đang trên đường đến bạn. Hãy chuẩn bị nhận hàng nhé!";
+        public const string APP_NOTI_ORDER_DELIVERED_MESSAGE = "Đơn hàng #{0} đã được giao thành công. Cảm ơn bạn đã mua sắm! 💖";
+        public const string APP_NOTI_ORDER_CANCELLED_MESSAGE = "Đơn hàng #{0} đã bị hủy. Nếu có thắc mắc, vui lòng liên hệ hỗ trợ. 📞";
+        public const string APP_NOTI_ORDER_DEFAULT_MESSAGE = "Đơn hàng #{0} có cập nhật mới. Vui lòng kiểm tra chi tiết! 🔍";
 
         public const string PART_SYMPTOM_CREATE_SUCCESS = "Part symptom create successfully";
         public const string PART_SYMPTOM_NOT_FOUND = "Part symptom not existed";
