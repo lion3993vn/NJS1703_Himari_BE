@@ -403,7 +403,8 @@ namespace HimariServer.Service.Services.Implements
                 Data = _mapper.Map<OrderResponseModel>(order)
             };
         }
-        public async Task<BaseResponseModel> SearchOrders(string searchTerm, PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> SearchOrders(string? searchTerm, PaginationParameter paginationParameter, bool newestFirst,
+            DeliveryStatus? deliveryStatus = null, PaymentStatus? paymentStatus = null)
         {
             string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
 
@@ -414,10 +415,14 @@ namespace HimariServer.Service.Services.Implements
                 filter: query => !query.IsDeleted &&
                                  (query.User.UnsignName.Contains(searchKeyword) ||
                                   query.OrderCode.ToString().Contains(searchKeyword) ||
-                                  query.UnsignAddress.ToLower().Contains(searchKeyword)),
-                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+                                  query.UnsignAddress.ToLower().Contains(searchKeyword)) &&
+                                 (!deliveryStatus.HasValue || query.DeliveryStatus == deliveryStatus.Value) &&
+                                 (!paymentStatus.HasValue || query.Payments.Any(p => p.Status == paymentStatus.Value)),
+                orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
             );
-            
+
             if (orders == null)
             {
                 throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
@@ -443,7 +448,6 @@ namespace HimariServer.Service.Services.Implements
                     }
                 }
             };
-
         }
     }
 }

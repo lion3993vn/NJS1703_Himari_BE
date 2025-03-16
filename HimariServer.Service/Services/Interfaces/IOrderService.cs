@@ -1,4 +1,5 @@
 ﻿using HimariServer.Repository.Commons;
+using HimariServer.Repository.Enums;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using Net.payOS.Types;
@@ -18,6 +19,7 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> UpdateOrder(OrderUpdateModel orderUpdateModel);
         Task<BaseResponseModel> GetAllOrders(PaginationParameter paginationParameter);
         Task<BaseResponseModel> GetOrderByOrderId(int orderId);
-        Task<BaseResponseModel> SearchOrders(string searchTerm, PaginationParameter paginationParameter);
+        Task<BaseResponseModel> SearchOrders(string? searchTerm, PaginationParameter paginationParameter, bool newestFirst,
+            DeliveryStatus? deliveryStatus = null, PaymentStatus? paymentStatus = null);
     }
 }
