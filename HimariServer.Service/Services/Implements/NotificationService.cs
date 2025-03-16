@@ -46,9 +46,9 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> PushNotificationByUserId(NotificationRequestUserModel model)
+        public async Task<BaseResponseModel> PushNotificationByUserId(int userId, NotificationRequestModel model)
         {
-            var user = await _unitOfWork.UsersRepository.GetByIdAsync(model.UserId);
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
             if (user == null)
             {
                 return new BaseResponseModel
@@ -68,13 +68,13 @@ namespace HimariServer.Service.Services.Implements
             var userNoti = new UserNotification
             {
                 NotificationId = noti.Id,
-                UserId = model.UserId,
+                UserId = userId,
                 IsRead = false
             };
             await _unitOfWork.UserNotificationRepository.AddAsync(userNoti);
             await _unitOfWork.SaveAsync(); // Ensure the user notification is saved
 
-            var userDevice = await _unitOfWork.UserDeviceRepository.GetUserDeviceByUserId(model.UserId);
+            var userDevice = await _unitOfWork.UserDeviceRepository.GetUserDeviceByUserId(userId);
 
             if (userDevice.Count == 0)
             {
