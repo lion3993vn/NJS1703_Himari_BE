@@ -14,12 +14,7 @@ using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Net.payOS.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Org.BouncyCastle.Asn1.Cmp.Challenge;
+using StackExchange.Redis;
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -75,12 +70,13 @@ namespace HimariServer.Service.Services.Implements
 
             int orderCode = await ValidateOrderCode();
 
-            var order = new Order
+            var order = new Repository.Entities.Order
             {
                 UserId = model.UserId,
                 OrderCode = orderCode,
                 OrderPrice = 0,
                 Address = model.Address,
+                UnsignAddress = StringUtils.ConvertToUnSign(model.Address),
                 DeliveryStatus = DeliveryStatus.NotStarted,
             };
 
@@ -289,6 +285,7 @@ namespace HimariServer.Service.Services.Implements
 
             // Update order properties
             order.Address = orderUpdateModel.Address;
+            order.UnsignAddress = StringUtils.ConvertToUnSign(orderUpdateModel.Address);
 
             var notification = new NotificationRequestModel();
             if (orderUpdateModel.DeliveryStatus > order.DeliveryStatus)
@@ -365,13 +362,27 @@ namespace HimariServer.Service.Services.Implements
             {
                 throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
             }
+            var listOrders = _mapper.Map<Pagination<BasicOrderResponseModel>>(orders);
 
             return new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = MessageConstants.ORDER_FOUND,
-                Data = _mapper.Map<Pagination<BasicOrderResponseModel>>(orders)
+                Message = MessageConstants.GET_LIST_ORDER_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listOrders,
+                    MetaData = new
+                    {
+                        listOrders.TotalCount,
+                        listOrders.PageSize,
+                        listOrders.CurrentPage,
+                        listOrders.TotalPages,
+                        listOrders.HasNext,
+                        listOrders.HasPrevious
+                    }
+                }
             };
+
         }
 
         public async Task<BaseResponseModel> GetOrderByOrderId(int orderId)
@@ -391,6 +402,48 @@ namespace HimariServer.Service.Services.Implements
                 Message = MessageConstants.ORDER_FOUND,
                 Data = _mapper.Map<OrderResponseModel>(order)
             };
+        }
+        public async Task<BaseResponseModel> SearchOrders(string searchTerm, PaginationParameter paginationParameter)
+        {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
+
+            var orders = await _unitOfWork.OrderRepository.ToPaginationIncludeAsync(
+                paginationParameter,
+                include: query => query.Include(x => x.User)
+                                       .Include(x => x.Payments),
+                filter: query => !query.IsDeleted &&
+                                 (query.User.UnsignName.Contains(searchKeyword) ||
+                                  query.OrderCode.ToString().Contains(searchKeyword) ||
+                                  query.UnsignAddress.ToLower().Contains(searchKeyword)),
+                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+            );
+            
+            if (orders == null)
+            {
+                throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
+            }
+
+            var listOrders = _mapper.Map<Pagination<BasicOrderResponseModel>>(orders);
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_LIST_ORDER_SUCCESS,
+                Data = new ModelPaging
+                {
+                    Data = listOrders,
+                    MetaData = new
+                    {
+                        listOrders.TotalCount,
+                        listOrders.PageSize,
+                        listOrders.CurrentPage,
+                        listOrders.TotalPages,
+                        listOrders.HasNext,
+                        listOrders.HasPrevious
+                    }
+                }
+            };
+
         }
     }
 }

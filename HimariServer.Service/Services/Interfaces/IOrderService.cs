@@ -18,5 +18,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> UpdateOrder(OrderUpdateModel orderUpdateModel);
         Task<BaseResponseModel> GetAllOrders(PaginationParameter paginationParameter);
         Task<BaseResponseModel> GetOrderByOrderId(int orderId);
+        Task<BaseResponseModel> SearchOrders(string searchTerm, PaginationParameter paginationParameter);
     }
 }
