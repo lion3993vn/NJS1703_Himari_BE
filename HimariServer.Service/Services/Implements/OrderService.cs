@@ -4,6 +4,7 @@ using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
 using HimariServer.Repository.UnitOfWork;
 using HimariServer.Service.BusinessModels.EmailModels;
+using HimariServer.Service.BusinessModels.NotificationModels;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
@@ -28,13 +29,15 @@ namespace HimariServer.Service.Services.Implements
         private readonly IMapper _mapper;
         private readonly IPayOSService _payOSService;
         private readonly IMailService _mailService;
+        private readonly INotificationService _notificationService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IPayOSService payOSService, IMailService mailService)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IPayOSService payOSService, IMailService mailService, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _payOSService = payOSService;
             _mailService = mailService;
+            _notificationService = notificationService;
         }
 
         public async Task<BaseResponseModel> CreateOrder(OrderRequestModel model)
@@ -286,7 +289,35 @@ namespace HimariServer.Service.Services.Implements
 
             // Update order properties
             order.Address = orderUpdateModel.Address;
-            order.DeliveryStatus = orderUpdateModel.DeliveryStatus;
+
+            var notification = new NotificationRequestModel();
+            if (orderUpdateModel.DeliveryStatus > order.DeliveryStatus)
+            {
+                order.DeliveryStatus = orderUpdateModel.DeliveryStatus;
+                switch (order.DeliveryStatus)
+                {
+                    case DeliveryStatus.Delivering:
+                        notification.Title = MessageConstants.APP_NOTI_ORDER_DELIVERING_TITLE;
+                        notification.Message = string.Format(MessageConstants.APP_NOTI_ORDER_DELIVERING_MESSAGE, order.OrderCode);
+                        break;
+                    case DeliveryStatus.Delivered:
+                        notification.Title = MessageConstants.APP_NOTI_ORDER_DELIVERED_TITLE;
+                        notification.Message = string.Format(MessageConstants.APP_NOTI_ORDER_DELIVERED_MESSAGE, order.OrderCode);
+                        break;
+                    case DeliveryStatus.Cancelled:
+                        notification.Title = MessageConstants.APP_NOTI_ORDER_CENCELLED_TITLE;
+                        notification.Message = string.Format(MessageConstants.APP_NOTI_ORDER_CANCELLED_MESSAGE, order.OrderCode);
+                        break;
+                    default:
+                        notification.Title = MessageConstants.APP_NOTI_ORDER_DEFAULT_TITLE;
+                        notification.Message = string.Format(MessageConstants.APP_NOTI_ORDER_DEFAULT_MESSAGE, order.OrderCode);
+                        break;
+                }
+
+                await _notificationService.PushNotificationByUserId((int)order.UserId, notification);
+            }
+
+
 
             _unitOfWork.OrderRepository.UpdateAsync(order);
             await _unitOfWork.SaveAsync();
