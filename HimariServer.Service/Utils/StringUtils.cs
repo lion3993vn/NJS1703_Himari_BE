@@ -11,6 +11,7 @@ namespace HimariServer.Service.Utils
     {
         public static string ConvertToUnSign(string input)
         {
+            if (input == null) return string.Empty;
             input = input.Trim();
             for (int i = 0x20; i < 0x30; i++)
             {
