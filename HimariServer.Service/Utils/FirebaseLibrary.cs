@@ -18,10 +18,17 @@ namespace HimariServer.Service.Utils
                     Notification = new Notification()
                     {
                         Title = title,
-                        Body = body,
-                        ImageUrl = "https://firebasestorage.googleapis.com/v0/b/thelavenstore-fe036.appspot.com/o/HimariLogo.jpg?alt=media&token=33c99a89-4a91-4c9f-9b81-2aea896ed569"
+                        Body = body
                     },
-                    Token = token
+                    Token = token,
+                    Android = new AndroidConfig()
+                    {
+                        Notification = new AndroidNotification()
+                        {
+                            Icon = "ic_notification",
+                            Color = "#FF5733" 
+                        }
+                    }
                 };
 
                 var reponse = await FirebaseMessaging.DefaultInstance.SendAsync(message);
