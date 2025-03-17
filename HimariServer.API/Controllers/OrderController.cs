@@ -1,5 +1,6 @@
 ﻿using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
+using HimariServer.Repository.Enums;
 using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.Services.Implements;
@@ -48,6 +49,17 @@ namespace HimariServer.API.Controllers
         public Task<IActionResult> GetOrderByOrderCode(int orderId)
         {
             return ValidateAndExecute(async () => await _orderService.GetOrderByOrderId(orderId));
+        }
+        [HttpGet("search")]
+        public Task<IActionResult> SearchOrders(
+            [FromQuery] string? searchTerm,
+            [FromQuery] PaginationParameter paginationParameter,
+            [FromQuery] bool newestFirst = true,
+            [FromQuery] DeliveryStatus? deliveryStatus = null,
+            [FromQuery] PaymentStatus? paymentStatus = null)
+        {
+            return ValidateAndExecute(async () =>
+                await _orderService.SearchOrders(searchTerm, paginationParameter, newestFirst, deliveryStatus, paymentStatus));
         }
     }
 }
