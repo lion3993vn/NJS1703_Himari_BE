@@ -94,7 +94,7 @@ namespace HimariServer.Service.Constants
         public const string MARK_NOTI_AS_READ_SUCCESS = "Mark notification as read success";
         public const string MARK_ALL_NOTI_AS_READ_SUCCESS = "Mark all notification as read success";
         public const string NO_NOTI_MARK_AS_READ = "No notification mark as read";
-        public const string PUSH_NOTI_SUCCESS = "Get notifications successfully";
+        public const string PUSH_NOTI_SUCCESS = "Push notifications successfully";
         public const string APP_NOTI_ORDER_DELIVERING_TITLE = "🚚 Đơn hàng đang giao!";
         public const string APP_NOTI_ORDER_DELIVERED_TITLE = "✅ Đơn hàng đã giao!";
         public const string APP_NOTI_ORDER_CENCELLED_TITLE = "❌ Đơn hàng bị hủy!";
