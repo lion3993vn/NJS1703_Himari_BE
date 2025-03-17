@@ -13,6 +13,7 @@ public partial class Order : BaseEntity
     public int OrderCode { get; set; }
 
     public string Address { get; set; }
+    public string UnsignAddress { get; set; }
 
     public int? OrderPrice { get; set; }
 
