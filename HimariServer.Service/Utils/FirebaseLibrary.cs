@@ -26,7 +26,7 @@ namespace HimariServer.Service.Utils
                         Notification = new AndroidNotification()
                         {
                             Icon = "ic_notification",
-                            Color = "#FF5733" 
+                            Color = "#FF5733"
                         }
                     }
                 };
@@ -40,22 +40,36 @@ namespace HimariServer.Service.Utils
             }
         }
 
-        public static async Task<bool> SendRangeMessageFireBase(string title, string body, List<string> tokens)
+        public static async Task<List<string>> SendRangeMessageFireBase(string title, string body, List<string> tokens)
         {
             var message = new MulticastMessage()
             {
                 Notification = new Notification()
                 {
                     Title = title,
-                    Body = body,
-                    ImageUrl = "https://firebasestorage.googleapis.com/v0/b/thelavenstore-fe036.appspot.com/o/HimariLogo.jpg?alt=media&token=33c99a89-4a91-4c9f-9b81-2aea896ed569"
+                    Body = body
                 },
                 Tokens = tokens
             };
 
-            var reponse = await FirebaseMessaging.DefaultInstance.SendEachForMulticastAsync(message);
-            return true;
+            List<string> tokensNotValid = new();
+            var response = await FirebaseMessaging.DefaultInstance.SendEachForMulticastAsync(message);
 
+            for (int i = 0; i < response.Responses.Count; i++)
+            {
+                if (!response.Responses[i].IsSuccess)
+                {
+                    var errorMessage = response.Responses[i].Exception?.Message ?? "Unknown error";
+
+                    if (response.Responses[i].Exception is FirebaseMessagingException fcmEx &&
+                        fcmEx.MessagingErrorCode == MessagingErrorCode.InvalidArgument)
+                    {
+                        tokensNotValid.Add(tokens[i]);
+                    }
+                }
+            }
+
+            return tokensNotValid;
         }
 
         public static async Task<string> SendMessagePaymentFireBase(string title, string body, string token)
