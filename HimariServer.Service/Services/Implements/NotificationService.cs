@@ -162,7 +162,7 @@ namespace HimariServer.Service.Services.Implements
         {
             var userNoti = await _unitOfWork.UserNotificationRepository.GetByIdAsync(notificationId);
 
-            if(userNoti == null)
+            if (userNoti == null)
             {
                 throw new NotExistException(MessageConstants.USER_NOTI_NOT_EXIST);
             }
@@ -273,13 +273,31 @@ namespace HimariServer.Service.Services.Implements
             await _unitOfWork.UserNotificationRepository.AddRangeAsync(userNotis);
             await _unitOfWork.SaveAsync();
 
-            await FirebaseLibrary.SendRangeMessageFireBase(model.Title, model.Message, tokens);
+            var tokensNotValid = await FirebaseLibrary.SendRangeMessageFireBase(model.Title, model.Message, tokens);
+
+            if (tokensNotValid.Any())
+            {
+                await RemoveTokenNotValid(tokensNotValid);
+            }
+
 
             return new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.PUSH_NOTI_SUCCESS
             };
+        }
+
+        private async Task RemoveTokenNotValid(List<string> tokens)
+        {
+            foreach(var token in tokens)
+            {
+                var userDevice = await _unitOfWork.UserDeviceRepository.GetByTokenDevice(token);
+
+                _unitOfWork.UserDeviceRepository.SoftDeleteAsync(userDevice);
+            }
+
+            await _unitOfWork.SaveAsync();
         }
     }
 }
