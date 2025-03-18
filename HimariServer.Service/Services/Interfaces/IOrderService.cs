@@ -21,5 +21,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> GetOrderByOrderId(int orderId);
         Task<BaseResponseModel> SearchOrders(string? searchTerm, PaginationParameter paginationParameter, bool newestFirst,
             DeliveryStatus? deliveryStatus = null, PaymentStatus? paymentStatus = null);
+        Task<BaseResponseModel> GetStatistics(int? month, int? year);
     }
 }

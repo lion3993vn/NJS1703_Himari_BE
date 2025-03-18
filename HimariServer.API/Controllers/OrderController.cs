@@ -5,6 +5,7 @@ using HimariServer.Service.BusinessModels.CategoryModels;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
+using MailKit.Search;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -61,5 +62,12 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () =>
                 await _orderService.SearchOrders(searchTerm, paginationParameter, newestFirst, deliveryStatus, paymentStatus));
         }
+        [HttpGet("statistics")]
+        public Task<IActionResult> GetStatistics([FromQuery] int? month = null, [FromQuery] int? year = null)
+        {
+            return ValidateAndExecute(async () =>
+               await _orderService.GetStatistics(month, year));
+        }
+
     }
 }
