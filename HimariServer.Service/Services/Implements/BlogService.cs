@@ -15,6 +15,7 @@ using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
 using HimariServer.Service.Utils;
+using MailKit.Search;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +40,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             var blogCategory = await _unitOfWork.BlogCategoryRepository.GetByIdAsync((int)blogModel.BlogCategoryId);
-            if(blogCategory == null)
+            if (blogCategory == null)
             {
                 throw new NotExistException(MessageConstants.BLOG_CATEGORY_NOT_FOUND);
             }
@@ -105,12 +106,18 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetBlogsPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetBlogsPaginationAsync(PaginationParameter paginationParameter, int? blogCategoryId,
+            bool newestFirst,
+            string? searchTerm)
         {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
             var blog = await _unitOfWork.BlogRepository.ToPaginationIncludeAsync(
            paginationParameter,
            include: query => query.Include(x => x.User).Include(x => x.Category),
-           filter: query => !query.IsDeleted
+           filter: query => !query.IsDeleted && (!blogCategoryId.HasValue || query.BlogCategoryId == blogCategoryId) && (query.TitleUnsign.Contains(searchKeyword)),
+           orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
            );
             var listBlog = _mapper.Map<Pagination<BlogModel>>(blog);
 

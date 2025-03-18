@@ -39,18 +39,18 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _orderService.UpdateOrder(orderUpdateModel));
         }
 
-        [HttpGet]
-        public Task<IActionResult> GetAllOrders([FromQuery] PaginationParameter paginationParameter)
-        {
-            return ValidateAndExecute(async () => await _orderService.GetAllOrders(paginationParameter));
-        }
+        //[HttpGet]
+        //public Task<IActionResult> GetAllOrders([FromQuery] PaginationParameter paginationParameter)
+        //{
+        //    return ValidateAndExecute(async () => await _orderService.GetAllOrders(paginationParameter));
+        //}
 
         [HttpGet("id/{orderId}")]
         public Task<IActionResult> GetOrderByOrderCode(int orderId)
         {
             return ValidateAndExecute(async () => await _orderService.GetOrderByOrderId(orderId));
         }
-        [HttpGet("search")]
+        [HttpGet]
         public Task<IActionResult> SearchOrders(
             [FromQuery] string? searchTerm,
             [FromQuery] PaginationParameter paginationParameter,

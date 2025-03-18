@@ -408,7 +408,8 @@ namespace HimariServer.Service.Services.Implements
                                      .Include(x => x.OrderDetails)
                                        .ThenInclude(od => od.Order)
                                            .ThenInclude(o => o.Payments),
-                filter: query => !query.IsDeleted && query.ProductNameUnsign.Contains(searchKeyword)
+                filter: query => !query.IsDeleted && (query.ProductNameUnsign.Contains(searchKeyword)
+                || query.Brand.BrandNameUnsign.Contains(searchKeyword))
             );
 
             var listProduct = _mapper.Map<Pagination<ProductModels>>(product);

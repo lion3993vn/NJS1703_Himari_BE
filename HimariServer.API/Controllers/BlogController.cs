@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics.Eventing.Reader;
+using System.Security.Claims;
 using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Service.BusinessModels.BlogModels;
@@ -21,9 +22,13 @@ namespace HimariServer.API.Controllers
            _blogService = blogService;
         }
         [HttpGet]
-        public Task<IActionResult> GetBlogs([FromQuery] PaginationParameter paginationParameter)
+        public Task<IActionResult> GetBlogs(
+            [FromQuery] PaginationParameter paginationParameter, 
+            [FromQuery] int? blogCategoryId = null , 
+            [FromQuery] bool newestFirst = true, 
+            [FromQuery] string? searchTerm = null)
         {
-            return ValidateAndExecute(async () => await _blogService.GetBlogsPaginationAsync(paginationParameter));
+            return ValidateAndExecute(async () => await _blogService.GetBlogsPaginationAsync(paginationParameter, blogCategoryId,newestFirst, searchTerm));
         }
 
         [HttpGet("{id}")]
