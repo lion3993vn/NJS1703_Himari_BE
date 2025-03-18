@@ -8,6 +8,7 @@ using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
 using HimariServer.Service.Services.Interfaces;
+using HimariServer.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -85,12 +86,16 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetBlogsCategoryPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetBlogsCategoryPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm)
         {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
             var blog = await _unitOfWork.BlogCategoryRepository.ToPaginationIncludeAsync(
                      paginationParameter,
 
-                     filter: query => !query.IsDeleted
+                     filter: query => !query.IsDeleted && (query.NameUnsign.Contains(searchKeyword)),
+                     orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
                      );
             var listBlog = _mapper.Map<Pagination<BlogCategoryModel>>(blog);
 
