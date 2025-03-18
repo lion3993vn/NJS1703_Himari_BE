@@ -77,6 +77,7 @@ public partial class HimariServerContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__BlogCategory_");
             entity.ToTable("BlogCategory");
             entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.NameUnsign).IsRequired();
         });
 
         modelBuilder.Entity<Blog>(entity =>
