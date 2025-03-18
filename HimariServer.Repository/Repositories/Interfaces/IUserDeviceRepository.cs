@@ -12,5 +12,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
     {
         Task<UserDevice> GetByTokenDevice(string token);
         Task<List<UserDevice>> GetUserDeviceByUserId(int userId);
+        Task<List<UserDevice>> GetAllWithUser();
     }
 }
