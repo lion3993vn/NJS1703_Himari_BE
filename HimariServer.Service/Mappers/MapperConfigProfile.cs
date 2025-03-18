@@ -109,6 +109,8 @@ namespace HimariServer.Service.Mappers
             CreateMap<Order, OrderResponseModel>()
                 .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
                 .ForMember(dest => dest.DeliveryStatus, opt => opt.MapFrom(src => (int)src.DeliveryStatus)) 
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber)) 
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName)) 
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payments != null && src.Payments.Any()
                     ? src.Payments.FirstOrDefault().Status
                     : PaymentStatus.Pending))
