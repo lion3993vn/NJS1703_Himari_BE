@@ -252,7 +252,7 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> PushNotification(NotificationRequestModel model)
         {
-            var userDevices = await _unitOfWork.UserDeviceRepository.GetAllAsync();
+            var userDevices = await _unitOfWork.UserDeviceRepository.GetAllWithUser();
 
             var noti = _mapper.Map<Notification>(model);
             noti.TitleUnsign = StringUtils.ConvertToUnSign(model.Title);
@@ -263,7 +263,7 @@ namespace HimariServer.Service.Services.Implements
 
             var tokens = userDevices.Select(x => x.DeviceToken).ToList(); //tokens of all devices
 
-            var userNotis = userDevices.Select(x => new UserNotification
+            var userNotis = userDevices.DistinctBy(x => x.UserId).Select(x => new UserNotification
             {
                 NotificationId = noti.Id,
                 UserId = x.UserId,
