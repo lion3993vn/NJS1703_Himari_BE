@@ -15,17 +15,22 @@ namespace HimariServer.Service.Services.Implements
     {
         private readonly IDistributedCache _cache;
         private readonly RedisSettings _settings;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         public RedisService(IDistributedCache cache, IOptions<RedisSettings> settings)
         {
             _cache = cache;
             _settings = settings.Value;
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
         }
 
         public async Task<T> GetAsync<T>(string key)
         {
             var value = await _cache.GetStringAsync(key);
-            return value == null ? default : JsonSerializer.Deserialize<T>(value);
+            return value == null ? default : JsonSerializer.Deserialize<T>(value, _jsonOptions);
         }
 
         public async Task SetAsync<T>(string key, T value, TimeSpan? expiry = null)
@@ -34,7 +39,7 @@ namespace HimariServer.Service.Services.Implements
             {
                 AbsoluteExpirationRelativeToNow = expiry ?? TimeSpan.FromMinutes(_settings.DefaultExpiryMinutes)
             };
-            await _cache.SetStringAsync(key, JsonSerializer.Serialize(value), options);
+            await _cache.SetStringAsync(key, JsonSerializer.Serialize(value, _jsonOptions), options);
         }
 
         public async Task RemoveAsync(string key)
@@ -46,6 +51,5 @@ namespace HimariServer.Service.Services.Implements
         {
             return await _cache.GetStringAsync(key) != null;
         }
-
     }
 }
