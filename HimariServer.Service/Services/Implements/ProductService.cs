@@ -24,11 +24,15 @@ namespace HimariServer.Service.Services.Implements
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IRedisService _redisService;
+        private const string PRODUCT_CACHE_KEY = "product_";
+        private const string PRODUCTS_CACHE_KEY = "products_";
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _redisService = redisService;
         }
 
         public async Task<BaseResponseModel> CreateProduct(CreateProductModel product)
@@ -57,12 +61,17 @@ namespace HimariServer.Service.Services.Implements
             var newProductInclude = await _unitOfWork.ProductRepository.GetByIdIncludeAsync(newProduct.Id,
                 include: query => query.Include(x => x.Category).Include(x => x.Brand));
 
-            return new BaseResponseModel
+            var result = new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.PRODUCT_CREATE_SUCCESS,
                 Data = _mapper.Map<ProductModels>(newProductInclude)
             };
+
+            // Invalidate products cache after creating a new product
+            await _redisService.RemoveAsync(PRODUCTS_CACHE_KEY);
+            
+            return result;
         }
 
         public async Task<BaseResponseModel> DeleteProductById(int id)
@@ -76,6 +85,11 @@ namespace HimariServer.Service.Services.Implements
 
             _unitOfWork.ProductRepository.SoftDeleteAsync(product);
             _unitOfWork.Save();
+
+            // Remove product from cache
+            await _redisService.RemoveAsync($"{PRODUCT_CACHE_KEY}{id}");
+            await _redisService.RemoveAsync(PRODUCTS_CACHE_KEY);
+
             return new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
@@ -85,13 +99,23 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> GetFeaturedProducts(PaginationParameter paginationParameter)
         {
+            // Generate a cache key based on pagination parameters for featured products
+            string cacheKey = $"{PRODUCTS_CACHE_KEY}featured_{paginationParameter.PageIndex}_{paginationParameter.PageSize}";
+            
+            // Try to get featured products from cache first
+            var cachedProducts = await _redisService.GetAsync<BaseResponseModel>(cacheKey);
+            if (cachedProducts != null)
+            {
+                return cachedProducts;
+            }
+
             var product = await _unitOfWork.ProductRepository.ToPaginationIncludeAsync(
                 paginationParameter,
                 include: query => query.Include(x => x.Category)
-                                       .Include(x => x.OrderDetails)
+                                      .Include(x => x.OrderDetails)
                                           .ThenInclude(od => od.Order)
                                              .ThenInclude(o => o.Payments)
-                                       .Include(x => x.Brand),
+                                      .Include(x => x.Brand),
                 filter: query => !query.IsDeleted,
                 orderBy: query => query.OrderByDescending(p =>
                                         p.OrderDetails.Sum(od => od.Quantity))
@@ -112,7 +136,7 @@ namespace HimariServer.Service.Services.Implements
                 }
             }
 
-            return new BaseResponseModel
+            var response = new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.GET_LIST_PRODUCT_SUCCESS,
@@ -130,10 +154,23 @@ namespace HimariServer.Service.Services.Implements
                     }
                 }
             };
+
+            // Store in cache with 15 minutes expiration
+            await _redisService.SetAsync(cacheKey, response, TimeSpan.FromMinutes(15));
+
+            return response;
         }
 
         public async Task<BaseResponseModel> GetProductById(int id)
         {
+            // Try to get product from cache first
+            var cachedProduct = await _redisService.GetAsync<BaseResponseModel>($"{PRODUCT_CACHE_KEY}{id}");
+            if (cachedProduct != null)
+            {
+                return cachedProduct;
+            }
+
+            // If not in cache, get from database
             var product = await _unitOfWork.ProductRepository.GetByIdIncludeAsync(id,
                include: query => query.Include(x => x.Category)
                                       .Include(x => x.Brand)
@@ -158,12 +195,17 @@ namespace HimariServer.Service.Services.Implements
                        od.Order.Payments.Any(p => p.Status == PaymentStatus.Success))
                 .Sum(od => od.Quantity);
 
-            return new BaseResponseModel
+            var response = new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.PRODUCT_FOUND,
                 Data = productModel
             };
+
+            // Store in cache
+            await _redisService.SetAsync($"{PRODUCT_CACHE_KEY}{id}", response, TimeSpan.FromHours(1));
+
+            return response;
         }
 
         public async Task<BaseResponseModel> GetProductsByCategory(
@@ -247,6 +289,16 @@ namespace HimariServer.Service.Services.Implements
          PaginationParameter paginationParameter,
          ProductSortOption sortOption = ProductSortOption.Newest)
         {
+            // Generate a cache key based on pagination parameters and sort option
+            string cacheKey = $"{PRODUCTS_CACHE_KEY}{paginationParameter.PageIndex}_{paginationParameter.PageSize}_{sortOption}";
+            
+            // Try to get products from cache first
+            var cachedProducts = await _redisService.GetAsync<BaseResponseModel>(cacheKey);
+            if (cachedProducts != null)
+            {
+                return cachedProducts;
+            }
+
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderByExp =
                 q => q.OrderByDescending(x => x.CreatedDate);
 
@@ -288,7 +340,7 @@ namespace HimariServer.Service.Services.Implements
                 }
             }
 
-            return new BaseResponseModel
+            var response = new BaseResponseModel
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = MessageConstants.GET_LIST_PRODUCT_SUCCESS,
@@ -306,6 +358,11 @@ namespace HimariServer.Service.Services.Implements
                     }
                 }
             };
+
+            // Store in cache with 15 minutes expiration
+            await _redisService.SetAsync(cacheKey, response, TimeSpan.FromMinutes(15));
+
+            return response;
         }
 
 
@@ -335,6 +392,10 @@ namespace HimariServer.Service.Services.Implements
 
             _unitOfWork.ProductRepository.UpdateAsync(eProduct);
             _unitOfWork.Save();
+
+            // Remove cached product after update
+            await _redisService.RemoveAsync($"{PRODUCT_CACHE_KEY}{newProduct.Id}");
+            await _redisService.RemoveAsync(PRODUCTS_CACHE_KEY);
 
             return new BaseResponseModel
             {
