@@ -7,6 +7,7 @@ using HimariServer.Repository.Commons;
 using HimariServer.Service.BusinessModels.BlogModels;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.BusinessModels.ResultModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HimariServer.Service.Services.Interfaces
 {
@@ -14,7 +15,10 @@ namespace HimariServer.Service.Services.Interfaces
     {
         Task<BaseResponseModel> DeleteBlogById(int id);
         Task<BaseResponseModel> GetBlogById(int id);
-        Task<BaseResponseModel> GetBlogsPaginationAsync(PaginationParameter paginationParameter);
+        Task<BaseResponseModel> GetBlogsPaginationAsync(PaginationParameter paginationParameter,
+            int? blogCategoryId,
+            bool newestFirst,
+            string? searchTerm);
         Task<BaseResponseModel> UpdateBlog(UpdateBlogModel blog);
         Task<BaseResponseModel> AddBlog(AddBlogModel blog);
 

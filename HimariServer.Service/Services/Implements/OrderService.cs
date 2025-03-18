@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FirebaseAdmin.Messaging;
 using HimariServer.Repository.Commons;
 using HimariServer.Repository.Entities;
 using HimariServer.Repository.Enums;
@@ -390,7 +391,8 @@ namespace HimariServer.Service.Services.Implements
             var order = await _unitOfWork.OrderRepository.GetByIdIncludeAsync(orderId,
                 include: query => query.Include(o => o.OrderDetails)
                                       .ThenInclude(od => od.Product)
-                                      .Include(o => o.Payments));
+                                      .Include(o => o.Payments)
+                                      .Include(o=>o.User));
             if (order == null)
             {
                 throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
@@ -447,6 +449,26 @@ namespace HimariServer.Service.Services.Implements
                         listOrders.HasPrevious
                     }
                 }
+            };
+        }
+        public async Task<BaseResponseModel> GetStatistics(int? month, int? year)
+        {
+            year ??= DateTime.Now.Year;
+            OrderStatisticsModel obj = new OrderStatisticsModel()
+            {
+                TotalOrder = await _unitOfWork.OrderRepository.GetTotalOrder(month, year),
+                NotStartedOrder = await _unitOfWork.OrderRepository.GetNotStartedOrder(month, year),
+                PreparingOrder = await _unitOfWork.OrderRepository.GetOrderByDeliveryStatus(month, year, DeliveryStatus.Preparing),
+                DeliveringOrder = await _unitOfWork.OrderRepository.GetOrderByDeliveryStatus(month, year, DeliveryStatus.Delivering),
+                DeliveredOrder = await _unitOfWork.OrderRepository.GetOrderByDeliveryStatus(month, year, DeliveryStatus.Delivered),
+                CancelledOrder = await _unitOfWork.OrderRepository.GetOrderByDeliveryStatus(month, year, DeliveryStatus.Cancelled)
+            };
+
+            return new BaseResponseModel
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = MessageConstants.GET_ORDER_STATISTICS_SUCCESS,
+                Data = obj
             };
         }
     }

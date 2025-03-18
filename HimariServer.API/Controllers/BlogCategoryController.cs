@@ -20,9 +20,9 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet]
-        public Task<IActionResult> GetBlogCategories([FromQuery] PaginationParameter paginationParameter)
+        public Task<IActionResult> GetBlogCategories([FromQuery] PaginationParameter paginationParameter, [FromQuery] bool newestFirst = true, [FromQuery] string? searchTerm = null)
         {
-            return ValidateAndExecute(async () => await _blogCategoryService.GetBlogsCategoryPaginationAsync(paginationParameter));
+            return ValidateAndExecute(async () => await _blogCategoryService.GetBlogsCategoryPaginationAsync(paginationParameter, newestFirst, searchTerm));
         }
 
         [HttpGet("{id}")]
