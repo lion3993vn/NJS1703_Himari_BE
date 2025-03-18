@@ -391,7 +391,8 @@ namespace HimariServer.Service.Services.Implements
             var order = await _unitOfWork.OrderRepository.GetByIdIncludeAsync(orderId,
                 include: query => query.Include(o => o.OrderDetails)
                                       .ThenInclude(od => od.Product)
-                                      .Include(o => o.Payments));
+                                      .Include(o => o.Payments)
+                                      .Include(o=>o.User));
             if (order == null)
             {
                 throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);
