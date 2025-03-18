@@ -20,6 +20,11 @@ namespace HimariServer.Repository.Repositories.Implements
             _context = context;
         }
 
+        public async Task<List<UserDevice>> GetAllWithUser()
+        {
+            return await _context.UserDevices.Include(x => x.User).Where(x => !x.IsDeleted).ToListAsync();
+        }
+
         public async Task<UserDevice?> GetByTokenDevice(string token)
         {
             return await _context.UserDevices.Where(x => x.DeviceToken == token && !x.IsDeleted).FirstOrDefaultAsync();
