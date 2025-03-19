@@ -213,16 +213,15 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetSystemNotifications(PaginationParameter paginationParameter, string keyword = null, bool newestFirst = true)
+        public async Task<BaseResponseModel> GetSystemNotifications(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm)
         {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
             var notifications = await _unitOfWork.NotificationRepository.ToPaginationIncludeAsync(
                 paginationParameter,
                 filter: x => !x.IsDeleted &&
                           x.Type == NotificationType.SYSTEM &&
-                          (string.IsNullOrEmpty(keyword) ||
-                           x.Title.Contains(keyword) ||
-                           x.TitleUnsign.Contains(keyword) ||
-                           x.Message.Contains(keyword)),
+                          (x.TitleUnsign.Contains(searchKeyword) ||
+                           x.Message.Contains(searchKeyword)),
                 orderBy: query => newestFirst
                     ? query.OrderByDescending(x => x.CreatedDate)
                     : query.OrderBy(x => x.CreatedDate)
