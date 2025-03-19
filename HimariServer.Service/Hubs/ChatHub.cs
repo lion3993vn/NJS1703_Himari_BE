@@ -4,12 +4,8 @@ using HimariServer.Repository.UnitOfWork;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Exceptions;
-using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,7 +40,54 @@ namespace HimariServer.Service.Hubs
             };
             await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
 
-            var messageResponse = await ProcessMessageResponse(message);
+            // Create a placeholder for the bot's response
+            var messageBot = new ChatMessage
+            {
+                UserId = userId,
+                Message = "", // Will be updated with the full response at the end
+                Type = MessageType.BOT
+            };
+            await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
+            _unitOfWork.Save();
+
+            var fullResponse = new StringBuilder();
+            
+            // Use streaming mode
+            await _deepseekService.StreamResponseMessage(message, async (partialResponse) => 
+            {
+                // Send each chunk to the client as it arrives
+                await Clients.Caller.SendAsync("ReceiveStreamingMessage", partialResponse, false);
+                
+                // Accumulate the full response
+                fullResponse.Append(partialResponse);
+            });
+            
+            // Update the bot message in the database with the complete response
+            messageBot.Message = fullResponse.ToString();
+            _unitOfWork.ChatMessageRepository.UpdateAsync(messageBot);
+            _unitOfWork.Save();
+            
+            // Signal completion of the streaming - don't send the full message again
+            await Clients.Caller.SendAsync("ReceiveStreamingMessage", "", true);
+        }
+
+        public async Task SendMessageWithoutStreaming(int userId, string message)
+        {
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+            }
+
+            var messageUser = new ChatMessage
+            {
+                UserId = userId,
+                Message = message,
+                Type = MessageType.USER
+            };
+            await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
+
+            var messageResponse = await _deepseekService.ResponseMessage(message);
 
             var messageBot = new ChatMessage
             {
@@ -57,11 +100,6 @@ namespace HimariServer.Service.Hubs
             _unitOfWork.Save();
 
             await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
-        }
-
-        private async Task<string> ProcessMessageResponse(string message)
-        {
-            return await _deepseekService.ResponseMessage(message);
         }
     }
 }
