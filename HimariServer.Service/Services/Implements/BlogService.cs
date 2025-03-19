@@ -156,7 +156,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             _mapper.Map(newBlog, blog);
-
+            blog.TitleUnsign = StringUtils.ConvertToUnSign(blog.Title);
             _unitOfWork.BlogRepository.UpdateAsync(blog);
             _unitOfWork.Save();
 

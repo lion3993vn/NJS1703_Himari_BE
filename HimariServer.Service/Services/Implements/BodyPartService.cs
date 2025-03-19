@@ -136,6 +136,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             _mapper.Map(model, bodyPart);
+            bodyPart.BodyPartNameUnsign = StringUtils.ConvertToUnSign(bodyPart.BodyPartName);
             _unitOfWork.BodyPartRepository.UpdateAsync(bodyPart);
             _unitOfWork.Save();
 
