@@ -29,9 +29,9 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet]
-        public Task<IActionResult> GetPartSymptoms([FromQuery] PaginationParameter paginationParameter)
+        public Task<IActionResult> GetPartSymptoms([FromQuery] PaginationParameter paginationParameter, [FromQuery] bool newestFirst = true, [FromQuery] string? searchTerm = null)
         {
-            return ValidateAndExecute(async () => await _partSymptomService.GetPartSymptomsPaginationAsync(paginationParameter));
+            return ValidateAndExecute(async () => await _partSymptomService.GetPartSymptomsPaginationAsync(paginationParameter, newestFirst, searchTerm));
         }
 
         [HttpPut]

@@ -62,11 +62,11 @@ namespace HimariServer.API.Controllers
         [HttpGet("system")]
         public Task<IActionResult> GetSystemNotifications(
             [FromQuery] PaginationParameter paginationParameter,
-            [FromQuery] string keyword = null,
-            [FromQuery] bool newestFirst = true)
+            [FromQuery] bool newestFirst = true, 
+            [FromQuery] string? searchTerm = null)
         {
             return ValidateAndExecute(async () =>
-                await _notificationService.GetSystemNotifications(paginationParameter, keyword, newestFirst));
+                await _notificationService.GetSystemNotifications(paginationParameter, newestFirst, searchTerm));
         }
     }
 }

@@ -71,6 +71,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             _mapper.Map(model, partSymptom);
+            partSymptom.NameUnsign = StringUtils.ConvertToUnSign(partSymptom.Name);
             _unitOfWork.PartSymptomRepository.UpdateAsync(partSymptom);
             await _unitOfWork.SaveAsync();
 
@@ -104,9 +105,14 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetPartSymptomsPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetPartSymptomsPaginationAsync(PaginationParameter paginationParameter,bool newestFirst, string? searchTerm)
         {
-            var partSymptoms = await _unitOfWork.PartSymptomRepository.ToPaginationIncludeAsync(paginationParameter, filter: x => !x.IsDeleted);
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
+            var partSymptoms = await _unitOfWork.PartSymptomRepository.ToPaginationIncludeAsync(paginationParameter, filter: x => !x.IsDeleted && x.NameUnsign.Contains(searchKeyword),
+                orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
+            );
             var partSymptomModels = _mapper.Map<Pagination<PartSymptomModel>>(partSymptoms);
 
             return new BaseResponseModel

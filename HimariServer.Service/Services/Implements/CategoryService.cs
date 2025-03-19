@@ -105,12 +105,16 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetCategoriesPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetCategoriesPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm)
         {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
             var category = await _unitOfWork.CategoryRepository.ToPaginationIncludeAsync(
                 paginationParameter,
                 include: query => query.Include(c => c.ParentCategory),
-                filter: query => !query.IsDeleted
+                filter: query => !query.IsDeleted && query.CategoryNameUnsign.Contains(searchKeyword),
+                               orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
                 );
 
             var listCategory = _mapper.Map<Pagination<CategoryModel>>(category);
@@ -184,6 +188,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             _mapper.Map(model, category);
+            category.CategoryNameUnsign = StringUtils.ConvertToUnSign(category.CategoryName);
             _unitOfWork.CategoryRepository.UpdateAsync(category);
             _unitOfWork.Save();
 
@@ -195,12 +200,16 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetParentCategoriesPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetParentCategoriesPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm)
         {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
             var parentCategories = await _unitOfWork.CategoryRepository.ToPaginationIncludeAsync(
                 paginationParameter,
                 include: query => query.Include(c => c.ParentCategory),
-                filter: query => !query.IsDeleted && query.ParentCategoryId == null
+                filter: query => !query.IsDeleted && query.ParentCategoryId == null && query.CategoryNameUnsign.Contains(searchKeyword),
+                               orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
             );
 
             var listParentCategories = _mapper.Map<Pagination<CategoryModel>>(parentCategories);
