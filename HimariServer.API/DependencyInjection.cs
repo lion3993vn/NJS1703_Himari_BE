@@ -86,6 +86,8 @@ namespace HimariServer.API
 
             services.AddScoped<IProductSymptomRepository, ProductSymptomRepository>();
             services.AddScoped<IProductSymptomService, ProductSymptomService>();
+
+            services.AddScoped<IDeepseekService, DeepseekService>();
             return services;
         }
     }
