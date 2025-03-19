@@ -19,11 +19,13 @@ namespace HimariServer.Service.Hubs
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IChatMessageService _chatMessageService;
+        private readonly IDeepseekService _deepseekService;
 
-        public ChatHub(IUnitOfWork unitOfWork, IChatMessageService chatMessageService)
+        public ChatHub(IUnitOfWork unitOfWork, IChatMessageService chatMessageService, IDeepseekService deepseekService)
         {
             _unitOfWork = unitOfWork;
             _chatMessageService = chatMessageService;
+            _deepseekService = deepseekService;
         }
 
         public async Task SendMessage(int userId, string message)
@@ -42,9 +44,8 @@ namespace HimariServer.Service.Hubs
             };
             await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
 
-            Console.WriteLine($"Received message: {message}");
-                var messageResponse = ProcessMessageResponse(message);
-                Console.WriteLine($"Processed response: {messageResponse}");
+            var messageResponse = await ProcessMessageResponse(message);
+
             var messageBot = new ChatMessage
             {
                 UserId = userId,
@@ -58,16 +59,9 @@ namespace HimariServer.Service.Hubs
             await Clients.Caller.SendAsync("ReceiveMessage", messageResponse);
         }
 
-        private string ProcessMessageResponse(string message)
+        private async Task<string> ProcessMessageResponse(string message)
         {
-            if(message.Contains("vàng da"))
-            {
-                return "Vàng da là một loại bệnh da phổ biến, bạn nên đi khám ngay";
-            }
-            else
-            {
-                return "Tôi không hiểu bạn đang nói gì";
-            }
+            return await _deepseekService.ResponseMessage(message);
         }
     }
 }
