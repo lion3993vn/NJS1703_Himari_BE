@@ -28,7 +28,8 @@ namespace HimariServer.Service.Services.Implements
                 Messages = [
                     Message.NewSystemMessage(systemMessage),
                     Message.NewUserMessage(userText)
-                    ]
+                    ],
+                Temperature = 0.3,
             };
 
             var chatResponse = await _deepseekClient.ChatAsync(request, new CancellationToken());
