@@ -1,6 +1,7 @@
 using HimariServer.Repository.Commons;
 using HimariServer.Service.BusinessModels.PartSymptomModels;
 using HimariServer.Service.BusinessModels.ResultModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HimariServer.Service.Services.Interfaces
 {
@@ -10,6 +11,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> GetPartSymptomById(int id);
         Task<BaseResponseModel> UpdatePartSymptom(PartSymptomModel model);
         Task<BaseResponseModel> DeletePartSymptomById(int id);
-        Task<BaseResponseModel> GetPartSymptomsPaginationAsync(PaginationParameter paginationParameter);
+        Task<BaseResponseModel> GetPartSymptomsPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm);
     }
 }

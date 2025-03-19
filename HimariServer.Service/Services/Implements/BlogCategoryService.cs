@@ -34,7 +34,7 @@ namespace HimariServer.Service.Services.Implements
 
 
             var blogEntity = _mapper.Map<BlogCategory>(blog);
-
+            blogEntity.NameUnsign = StringUtils.ConvertToUnSign(blogEntity.Name);
             await _unitOfWork.BlogCategoryRepository.AddAsync(blogEntity);
             _unitOfWork.Save();
 
@@ -129,7 +129,7 @@ namespace HimariServer.Service.Services.Implements
 
 
             _mapper.Map(newBlog, blog);
-
+            blog.NameUnsign = StringUtils.ConvertToUnSign(blog.Name);
             _unitOfWork.BlogCategoryRepository.UpdateAsync(blog);
             _unitOfWork.Save();
 
