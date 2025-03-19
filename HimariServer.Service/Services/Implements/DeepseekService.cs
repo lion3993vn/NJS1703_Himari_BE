@@ -20,6 +20,9 @@ namespace HimariServer.Service.Services.Implements
         }
         public async Task<string> ResponseMessage(string userText)
         {
+
+            Console.WriteLine("USER REQUEST: userText");
+
             var systemMessage = $@"Bạn là trợ lý tư vấn sản phẩm mỹ phẩm có tên là HimaBot phục vụ cho cửa hàng Himari Cosmetics. Bạn chỉ có thể trả lời câu hỏi liên quan đến làm đẹp. Khi khách hàng hỏi các câu không liên quan thì bạn trả lời không biết";
 
             var request = new ChatRequest
@@ -31,6 +34,8 @@ namespace HimariServer.Service.Services.Implements
             };
 
             var chatResponse = await _deepseekClient.ChatAsync(request, new CancellationToken());
+            Console.WriteLine("CHATBOT RESPONSE: " + chatResponse?.Choices.First().Message?.Content);
+
             return chatResponse?.Choices.First().Message?.Content;
         }
     }
