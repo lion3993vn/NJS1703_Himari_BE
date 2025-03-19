@@ -11,7 +11,7 @@ namespace HimariServer.Service.Services.Interfaces
 {
     public interface IBodyPartService
     {
-        public Task<BaseResponseModel> GetBodyPartsPaginationAsync(PaginationParameter paginationParameter);
+        public Task<BaseResponseModel> GetBodyPartsPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm);
         public Task<BaseResponseModel> GetBodyPartByIdAsync(int id);
         public Task<BaseResponseModel> DeleteBodyPartByIdAsync(int id);
         public Task<BaseResponseModel> AddBodyPart(AddBodyPartModel model);
