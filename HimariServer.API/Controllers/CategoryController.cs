@@ -17,9 +17,9 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet]
-        public Task<IActionResult> GetCategories([FromQuery] PaginationParameter paginationParameter)
+        public Task<IActionResult> GetCategories([FromQuery] PaginationParameter paginationParameter, [FromQuery] bool newestFirst = true, [FromQuery] string? searchTerm = null)
         {
-            return ValidateAndExecute(async () => await _categoryService.GetCategoriesPaginationAsync(paginationParameter));
+            return ValidateAndExecute(async () => await _categoryService.GetCategoriesPaginationAsync(paginationParameter, newestFirst, searchTerm ));
         }
 
         [HttpGet("{id}")]
@@ -47,9 +47,9 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet("parent")]
-        public Task<IActionResult> GetParentCategories([FromQuery] PaginationParameter paginationParameter)
+        public Task<IActionResult> GetParentCategories([FromQuery] PaginationParameter paginationParameter, [FromQuery] bool newestFirst = true, [FromQuery] string? searchTerm = null)
         {
-            return ValidateAndExecute(async () => await _categoryService.GetParentCategoriesPaginationAsync(paginationParameter));
+            return ValidateAndExecute(async () => await _categoryService.GetParentCategoriesPaginationAsync(paginationParameter,newestFirst, searchTerm ));
         }
 
         [HttpGet("parent/{parentId}/subcategories")]

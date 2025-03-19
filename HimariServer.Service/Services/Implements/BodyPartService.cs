@@ -89,11 +89,15 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> GetBodyPartsPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetBodyPartsPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm)
         {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
             var bodyParts = await _unitOfWork.BodyPartRepository.ToPaginationIncludeAsync(paginationParameter,
-            filter: query => !query.IsDeleted
-                );
+            filter: query => !query.IsDeleted && query.BodyPartNameUnsign.Contains(searchKeyword),
+            orderBy: query => newestFirst
+                    ? query.OrderByDescending(x => x.CreatedDate)
+                    : query.OrderBy(x => x.CreatedDate)
+            );
 
             var listBodyPart = _mapper.Map<Pagination<BodyPartModel>>(bodyParts);
 
@@ -132,6 +136,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             _mapper.Map(model, bodyPart);
+            bodyPart.BodyPartNameUnsign = StringUtils.ConvertToUnSign(bodyPart.BodyPartName);
             _unitOfWork.BodyPartRepository.UpdateAsync(bodyPart);
             _unitOfWork.Save();
 
