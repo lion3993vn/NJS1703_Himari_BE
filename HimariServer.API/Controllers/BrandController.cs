@@ -15,9 +15,9 @@ namespace HimariServer.API.Controllers
             _brandService = brandService;
         }
         [HttpGet]
-        public Task<IActionResult> GetBrands([FromQuery] PaginationParameter paginationParameter)
+        public Task<IActionResult> GetBrands([FromQuery] PaginationParameter paginationParameter, [FromQuery] bool newestFirst = true, [FromQuery] string? searchTerm = null)
         {
-            return ValidateAndExecute(async () => await _brandService.GetBrandsPaginationAsync(paginationParameter));
+            return ValidateAndExecute(async () => await _brandService.GetBrandsPaginationAsync(paginationParameter, newestFirst, searchTerm));
         }
 
         [HttpGet("{id}")]
