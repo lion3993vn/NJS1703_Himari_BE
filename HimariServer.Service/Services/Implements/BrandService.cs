@@ -84,11 +84,15 @@ namespace HimariServer.Service.Services.Implements
         }
         
 
-        public async Task<BaseResponseModel> GetBrandsPaginationAsync(PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetBrandsPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm)
         {
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
             var brand = await _unitOfWork.BrandRepository.ToPaginationIncludeAsync(
                paginationParameter,
-               filter: query => !query.IsDeleted
+               filter: query => !query.IsDeleted && query.BrandNameUnsign.Contains(searchKeyword),
+                               orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
                );
             var listBrand = _mapper.Map<Pagination<BrandModel>>(brand);
 
