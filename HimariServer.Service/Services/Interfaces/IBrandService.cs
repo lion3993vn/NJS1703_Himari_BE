@@ -9,7 +9,7 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> CreateBrand(CreateBrandModel brand);
         Task<BaseResponseModel> DeleteBrandById(int id);
         Task<BaseResponseModel> GetBrandById(int id);
-        Task<BaseResponseModel> GetBrandsPaginationAsync(PaginationParameter paginationParameter);
+        Task<BaseResponseModel> GetBrandsPaginationAsync(PaginationParameter paginationParameter, bool newestFirst, string? searchTerm);
         Task<BaseResponseModel> UpdateBrand(BrandModel brand);
     }
 }
