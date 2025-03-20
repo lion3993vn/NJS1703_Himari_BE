@@ -86,7 +86,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("app-cors",
         builder =>
         {
-            builder.WithOrigins("http://192.168.1.55:8081")
+            builder.AllowAnyOrigin()
             .AllowAnyHeader()
             .WithExposedHeaders("X-Pagination")
             .AllowAnyMethod();
