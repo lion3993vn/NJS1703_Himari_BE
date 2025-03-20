@@ -86,11 +86,17 @@ builder.Services.AddCors(options =>
     options.AddPolicy("app-cors",
         builder =>
         {
-            builder.AllowAnyOrigin()
+            builder.WithOrigins("http://192.168.1.55:8081")
             .AllowAnyHeader()
             .WithExposedHeaders("X-Pagination")
             .AllowAnyMethod();
         });
+});
+
+builder.Services.AddHttpClient("HimariHttpClient", client =>
+{
+    // Configure default headers, timeout, etc. if needed
+    client.Timeout = TimeSpan.FromSeconds(30);
 });
 
 builder.Services.AddAuthentication(options =>
@@ -143,6 +149,7 @@ builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailS
 builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOS"));
 builder.Services.Configure<FirebaseStorageSettings>(builder.Configuration.GetSection("FirebaseStorage"));
 builder.Services.Configure<DeepseekSettings>(builder.Configuration.GetSection("OpenAI"));
+builder.Services.Configure<ChromaDBSettings>(builder.Configuration.GetSection("ChromaDB"));
 
 FirebaseApp.Create(new AppOptions()
 {
