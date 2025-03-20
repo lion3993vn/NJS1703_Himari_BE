@@ -9,6 +9,7 @@ namespace HimariServer.Service.Services.Interfaces
     public interface IDeepseekService
     {
         Task<string> ResponseMessage(string userText);
+        Task<string> FormatMessageUser(string userText);
         
         Task StreamResponseMessage(string userText, Func<string, Task> onMessageReceived);
     }
