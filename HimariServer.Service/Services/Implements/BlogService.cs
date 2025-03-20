@@ -25,11 +25,13 @@ namespace HimariServer.Service.Services.Implements
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public BlogService(IUnitOfWork unitOfWork, IMapper mapper)
+        public BlogService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
         public async Task<BaseResponseModel> AddBlog(AddBlogModel blogModel)
         {
@@ -56,6 +58,12 @@ namespace HimariServer.Service.Services.Implements
             blogEntity.TitleUnsign = StringUtils.ConvertToUnSign(blogEntity.Title);
             await _unitOfWork.BlogRepository.AddAsync(blogEntity);
             _unitOfWork.Save();
+
+            await _notificationService.PushNotification(new()
+            {
+                Title = MessageConstants.NEW_BLOG_NOTI,
+                Message = blogModel.Title,
+            });
 
             return new BaseResponseModel
             {
