@@ -23,8 +23,8 @@ namespace HimariServer.API
 
             // config category service
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICategoryService, CategoryService>();    
-            
+            services.AddScoped<ICategoryService, CategoryService>();
+
             // config product service
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
@@ -35,12 +35,11 @@ namespace HimariServer.API
 
             // config bodypart service
             services.AddScoped<IBodyPartRepository, BodyPartRepository>();
-            services.AddScoped<IBodyPartService, BodyPartService>();            
-            
-            //config blogCategory services
+            services.AddScoped<IBodyPartService, BodyPartService>();
 
+            //config blogCategory services
             services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
-            services.AddScoped<IBlogCategoryService,BlogCategoryService>();
+            services.AddScoped<IBlogCategoryService, BlogCategoryService>();
 
             // config brand service
             services.AddScoped<IBrandRepository, BrandRepository>();
@@ -55,7 +54,7 @@ namespace HimariServer.API
 
             // config claim service
             //services.AddScoped<IClaimsService, ClaimsService>();
-  
+
             // config mail service
             services.AddScoped<IMailService, MailService>();
 
@@ -87,7 +86,15 @@ namespace HimariServer.API
             services.AddScoped<IProductSymptomRepository, ProductSymptomRepository>();
             services.AddScoped<IProductSymptomService, ProductSymptomService>();
 
-            services.AddScoped<IDeepseekService, DeepseekService>();
+            // Register AI services as singletons for better performance
+            services.AddSingleton<IDeepseekService, DeepseekService>();
+
+            // config embedding services
+            services.AddSingleton<IHuggingFaceTokenizerService, HuggingFaceTokenizerService>();
+            services.AddSingleton<IOnnxEmbeddingService, OnnxEmbeddingService>();
+
+            services.AddSingleton<IChromaService, ChromaService>();
+
             return services;
         }
     }
