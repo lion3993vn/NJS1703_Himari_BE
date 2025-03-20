@@ -57,7 +57,7 @@ namespace HimariServer.Service.Services.Implements
                     Message.NewSystemMessage(_systemMessage),
                     Message.NewUserMessage(userText)
                 ],
-                Temperature = 0.3,
+                Temperature = 1,
                 Stream = true // Enable streaming
             };
 
