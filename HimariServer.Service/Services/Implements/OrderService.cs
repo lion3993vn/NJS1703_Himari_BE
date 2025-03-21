@@ -78,6 +78,7 @@ namespace HimariServer.Service.Services.Implements
                 OrderCode = orderCode,
                 OrderPrice = 0,
                 Address = model.Address,
+                PhoneNumber = model.PhoneNumber,
                 UnsignAddress = StringUtils.ConvertToUnSign(model.Address),
                 DeliveryStatus = DeliveryStatus.NotStarted,
             };
@@ -297,6 +298,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             // Update order properties
+            order.PhoneNumber = orderUpdateModel.PhoneNumber;
             order.Address = orderUpdateModel.Address;
             order.UnsignAddress = StringUtils.ConvertToUnSign(orderUpdateModel.Address);
 

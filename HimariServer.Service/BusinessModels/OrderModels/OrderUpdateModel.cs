@@ -11,6 +11,7 @@ namespace HimariServer.Service.BusinessModels.OrderModels
     {
         public int OrderId { get; set; }
         public string Address { get; set; }
+        public string PhoneNumber { get; set; }
         public DeliveryStatus DeliveryStatus { get; set; }
     }
 }
