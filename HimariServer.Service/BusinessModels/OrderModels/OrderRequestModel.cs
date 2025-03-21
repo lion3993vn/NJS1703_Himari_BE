@@ -11,6 +11,7 @@ namespace HimariServer.Service.BusinessModels.OrderModels
     {
         public int UserId { get; set; }
         public string Address { get; set; }
+        public string PhoneNumber { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public List<ItemCreateOrder> Items { get; set; }
     }

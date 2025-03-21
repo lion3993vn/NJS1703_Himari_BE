@@ -29,9 +29,12 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet("{userId}")]
-        public Task<IActionResult> GetOrderByUserId(int userId, PaginationParameter paginationParameter)
+        public Task<IActionResult> GetOrderByUserId(int userId, [FromQuery] PaginationParameter paginationParameter, [FromQuery] string? searchTerm,
+            [FromQuery] bool newestFirst = true,
+            [FromQuery] DeliveryStatus? deliveryStatus = null,
+            [FromQuery] PaymentStatus? paymentStatus = null)
         {
-            return ValidateAndExecute(async () => await _orderService.GetOrderByUserId(userId, paginationParameter));
+            return ValidateAndExecute(async () => await _orderService.GetOrderByUserId(userId, paginationParameter, searchTerm, newestFirst, deliveryStatus, paymentStatus));
         }
 
         [HttpPut]
