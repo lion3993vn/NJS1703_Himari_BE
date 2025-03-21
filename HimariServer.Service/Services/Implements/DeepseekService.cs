@@ -12,7 +12,7 @@ namespace HimariServer.Service.Services.Implements
     public class DeepseekService : IDeepseekService
     {
         private readonly DeepSeekClient _deepseekClient;
-        private readonly string _systemMessage = @"Bạn là trợ lý có tên là HimaBot phục vụ cho cửa hàng Himari Cosmetics. Bạn chỉ có thể trả lời câu hỏi liên quan đến làm đẹp. Khi khách hàng hỏi các câu không liên quan thì bạn trả lời không biết. Trả lời ngắn gọn. Nếu người dùng muốn tứ vấn sản phẩm cụ thể thì trả lời là : 'Bạn đợi tí nhé, tôi sẽ tìm các sản phẩm phù hợp với yêu cầu của bạn'";
+        private readonly string _systemMessage = @"Bạn là trợ lý có tên là HimaBot phục vụ cho cửa hàng Himari Cosmetics. Bạn chỉ có thể trả lời câu hỏi liên quan đến làm đẹp. Khi khách hàng hỏi các câu không liên quan thì bạn trả lời không biết. Trả lời ngắn gọn. Nếu người dùng muốn tư vấn sản phẩm cụ thể thì trả lời là : 'Bạn đợi tí nhé, tôi sẽ tìm các sản phẩm phù hợp với yêu cầu của bạn' (không trả lời câu này nếu người dùng chưa kêu tư vấn sản phẩm)";
         private readonly string _systemFormatMessage = @"Nhiệm vụ của bạn là format lại câu hỏi của người dùng theo chuẩn như sau: 'Sản phẩm tên <sản phẩm> có mô tả như sau <mô tả> thuộc thương hiệu <brand> có thể chữa trị các triệu chứng <cái người dùng cần điều trị - để dùng mục đích gì> thuộc <bộ phận cơ thể>' . Không hỏi hoặc trả lời thêm, chỉ trả lời theo format đưa ra thôi, nếu người dùng không có đưa đủ thông tin thì bạn suy luận ra, nhớ bỏ dấu < và > trong câu trả lời, chỉnh sửa lại câu nếu sai chính tả";
 
         public DeepseekService(IOptions<DeepseekSettings> deepseekSettings)
@@ -57,7 +57,6 @@ namespace HimariServer.Service.Services.Implements
                     Message.NewSystemMessage(_systemMessage),
                     Message.NewUserMessage(userText)
                 ],
-                Temperature = 1,
                 Stream = true // Enable streaming
             };
 
