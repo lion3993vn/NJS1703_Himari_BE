@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Net.payOS.Types;
 using StackExchange.Redis;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HimariServer.Service.Services.Implements
 {
@@ -77,6 +78,7 @@ namespace HimariServer.Service.Services.Implements
                 OrderCode = orderCode,
                 OrderPrice = 0,
                 Address = model.Address,
+                PhoneNumber = model.PhoneNumber,
                 UnsignAddress = StringUtils.ConvertToUnSign(model.Address),
                 DeliveryStatus = DeliveryStatus.NotStarted,
             };
@@ -219,21 +221,32 @@ namespace HimariServer.Service.Services.Implements
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<BaseResponseModel> GetOrderByUserId(int userId, PaginationParameter paginationParameter)
+        public async Task<BaseResponseModel> GetOrderByUserId(int userId, PaginationParameter paginationParameter, string? searchTerm,
+        bool newestFirst,
+        DeliveryStatus? deliveryStatus,
+        PaymentStatus? paymentStatus)
         {
             var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId);
             if (user == null)
             {
                 throw new NotExistException(MessageConstants.USER_NOT_EXIST);
             }
+            string searchKeyword = string.IsNullOrEmpty(searchTerm) ? string.Empty : StringUtils.ConvertToUnSign(searchTerm.ToLower());
 
             var orders = await _unitOfWork.OrderRepository.ToPaginationIncludeAsync(
-                paginationParameter,
-                filter: x => x.UserId == userId,
+            paginationParameter,
+            filter: query => query.UserId == userId && !query.IsDeleted &&
+            (query.User.UnsignName.Contains(searchKeyword) ||
+                                  query.OrderCode.ToString().Contains(searchKeyword) ||
+                                  query.UnsignAddress.ToLower().Contains(searchKeyword)) &&
+                                 (!deliveryStatus.HasValue || query.DeliveryStatus == deliveryStatus.Value) &&
+                                 (!paymentStatus.HasValue || query.Payments.Any(p => p.Status == paymentStatus.Value)),
                 include: query => query.Include(o => o.OrderDetails)
                                       .ThenInclude(od => od.Product)
                                       .Include(o => o.Payments),
-                orderBy: query => query.OrderByDescending(x => x.CreatedDate)
+                orderBy: query => newestFirst
+                                    ? query.OrderByDescending(x => x.CreatedDate)
+                                    : query.OrderBy(x => x.CreatedDate)
             );
 
             // Map Order entities to OrderResponseModel using AutoMapper
@@ -285,6 +298,7 @@ namespace HimariServer.Service.Services.Implements
             }
 
             // Update order properties
+            order.PhoneNumber = orderUpdateModel.PhoneNumber;
             order.Address = orderUpdateModel.Address;
             order.UnsignAddress = StringUtils.ConvertToUnSign(orderUpdateModel.Address);
 

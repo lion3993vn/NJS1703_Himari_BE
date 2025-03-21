@@ -9,7 +9,7 @@ namespace HimariServer.Repository.Entities;
 public partial class Order : BaseEntity
 {
     public int Id { get; set; }
-
+    public string PhoneNumber { get; set; }
     public int OrderCode { get; set; }
 
     public string Address { get; set; }
