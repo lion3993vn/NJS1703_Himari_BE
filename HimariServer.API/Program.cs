@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -150,6 +151,7 @@ builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayO
 builder.Services.Configure<FirebaseStorageSettings>(builder.Configuration.GetSection("FirebaseStorage"));
 builder.Services.Configure<DeepseekSettings>(builder.Configuration.GetSection("OpenAI"));
 builder.Services.Configure<ChromaDBSettings>(builder.Configuration.GetSection("ChromaDB"));
+builder.Services.Configure<RedisSettings>(builder.Configuration.GetSection("RedisSettings"));
 
 FirebaseApp.Create(new AppOptions()
 {
