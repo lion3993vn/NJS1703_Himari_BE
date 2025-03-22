@@ -45,14 +45,6 @@ namespace HimariServer.Service.Hubs
             };
             await _unitOfWork.ChatMessageRepository.AddAsync(messageUser);
 
-            // Create a placeholder for the bot's response
-            var messageBot = new ChatMessage
-            {
-                UserId = userId,
-                Message = "", // Will be updated with the full response at the end
-                Type = MessageType.BOT
-            };
-            await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
             _unitOfWork.Save();
 
             var fullResponse = new StringBuilder();
@@ -84,9 +76,13 @@ namespace HimariServer.Service.Hubs
                     await Clients.Caller.SendAsync("ReceiveStreamingMessage", noProduct, false);
                 }
             }
-
-            messageBot.Message = fullResponse.ToString();
-            _unitOfWork.ChatMessageRepository.UpdateAsync(messageBot);
+            var messageBot = new ChatMessage
+            {
+                UserId = userId,
+                Message = fullResponse.ToString(),
+                Type = MessageType.BOT
+            };
+            await _unitOfWork.ChatMessageRepository.AddAsync(messageBot);
             _unitOfWork.Save();
 
             await Clients.Caller.SendAsync("ReceiveStreamingMessage", "", true);
