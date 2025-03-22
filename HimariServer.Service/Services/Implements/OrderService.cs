@@ -243,7 +243,8 @@ namespace HimariServer.Service.Services.Implements
                                  (!paymentStatus.HasValue || query.Payments.Any(p => p.Status == paymentStatus.Value)),
                 include: query => query.Include(o => o.OrderDetails)
                                       .ThenInclude(od => od.Product)
-                                      .Include(o => o.Payments),
+                                      .Include(o => o.Payments)
+                                      .Include(x => x.User),
                 orderBy: query => newestFirst
                                     ? query.OrderByDescending(x => x.CreatedDate)
                                     : query.OrderBy(x => x.CreatedDate)
