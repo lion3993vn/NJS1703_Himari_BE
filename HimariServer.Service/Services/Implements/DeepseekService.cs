@@ -80,11 +80,7 @@ namespace HimariServer.Service.Services.Implements
             {
                 var content = response?.Delta?.Content;
 
-                if (!string.IsNullOrEmpty(content))
-                {
-                    // Send the content chunk to the caller
-                    await onMessageReceived(content);
-                }
+                await onMessageReceived(content);
             }
         }
     }
