@@ -17,16 +17,16 @@ namespace HimariServer.Service.Hubs
     public class ChatHub : Hub
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IChatMessageService _chatMessageService;
         private readonly IDeepseekService _deepseekService;
         private readonly IChromaService _chromaService;
+        private readonly IGeminiService _geminiService;
 
-        public ChatHub(IUnitOfWork unitOfWork, IChatMessageService chatMessageService, IDeepseekService deepseekService, IChromaService chromaService)
+        public ChatHub(IUnitOfWork unitOfWork, IDeepseekService deepseekService, IChromaService chromaService, IGeminiService geminiService)
         {
             _unitOfWork = unitOfWork;
-            _chatMessageService = chatMessageService;
             _deepseekService = deepseekService;
             _chromaService = chromaService;
+            _geminiService = geminiService;
         }
 
         public async Task SendMessage(int userId, string message)
@@ -49,8 +49,8 @@ namespace HimariServer.Service.Hubs
 
             var fullResponse = new StringBuilder();
 
-            // Use streaming mode
-            await _deepseekService.StreamResponseMessage(message, async (partialResponse) =>
+            // Use streaming mode của gemini
+            await _geminiService.StreamResponseMessage(message, async (partialResponse) =>
             {
                 // Send each chunk to the client as it arrives
                 await Clients.Caller.SendAsync("ReceiveStreamingMessage", partialResponse, false);
@@ -60,7 +60,7 @@ namespace HimariServer.Service.Hubs
             });
 
             // 🔹 Kiểm tra nếu tin nhắn có yêu cầu giới thiệu sản phẩm
-            if (IsProductInquiry(message))
+            if (await IsProductInquiry(message))
             {
                 var listProduct = await _chromaService.QuerySimilarProducts(message);
                 listProduct = listProduct.Take(2).ToList();
@@ -89,22 +89,15 @@ namespace HimariServer.Service.Hubs
         }
 
 
-        private bool IsProductInquiry(string message)
+        private async Task<bool> IsProductInquiry(string message)
         {
-            string normalizedMessage = StringUtils.ConvertToUnSign(message.ToLower());
+            var response = await _geminiService.IntentMessage(message);
 
-            string[] productKeywords = {
-               "san pham", "gia", "mua", "tu van", "dat hang",
-               "loai nao", "co khong", "tot nhat", "khuyen mai", "bao hanh",
-               "giao hang", "phi ship", "co san", "hang moi", "giam gia",
-               "con hang", "dat mua", "phan loai", "tinh nang", "mo ta",
-               "so sanh", "chat luong", "bao lau", "chinh hang", "mau sac",
-               "kich thuoc", "dung luong", "hieu nang", "thuong hieu", "test thu",
-               "su dung", "cach dung", "huong dan", "cach chon", "uu dai",
-               "doi tra", "che do", "ngung ban", "hot deal", "don hang"
-            };
-
-            return productKeywords.Any(keyword => normalizedMessage.Contains(keyword));
+            if (response == "1")
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task SendMessageWithoutStreaming(int userId, string message)
