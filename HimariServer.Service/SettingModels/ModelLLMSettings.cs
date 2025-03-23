@@ -10,4 +10,9 @@ namespace HimariServer.Service.SettingModels
     {
         public string APIKey { get; set; }
     }
+
+    public class GeminiSettings
+    {
+        public string APIKey { get; set; }
+    }
 }
