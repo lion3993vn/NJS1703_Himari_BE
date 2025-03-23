@@ -34,7 +34,7 @@ namespace HimariServer.Service.Services.Implements
 
         => sau đây là câu hỏi của người dùng: ";
 
-        private static readonly string _systemIntentMessage = @"Nếu người dùng cần tư vấn sản phẩm mỹ phẩm, làm đẹp, chữa các triệu chứng cụ thể, hãy trả lời là: 1, còn lại là 0. Không trả lời thêm.
+        private static readonly string _systemIntentMessage = @"Nếu người dùng đang tìm kiếm sản phẩm liên quan đến mỹ phẩm, làm đẹp hoặc sản phẩm hỗ trợ điều trị các triệu chứng cụ thể đến làm đẹp và mỹ phẩm, hãy trả lời '1'. Nếu không, hãy trả lời '0'. Không cung cấp thêm bất kỳ thông tin nào khác. Không trả lời thêm.
 
         => sau đây là câu hỏi của người dùng: ";
 
