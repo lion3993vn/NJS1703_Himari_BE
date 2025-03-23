@@ -137,12 +137,18 @@ builder.Services.AddInfractstructure(builder.Configuration);
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetSection("RedisSettings:RedisConnectionString").Value;
+    var redisConnection = builder.Configuration.GetSection("RedisSettings:RedisConnectionString").Value;
+
+    options.Configuration = redisConnection;
     options.InstanceName = builder.Configuration.GetSection("RedisSettings:InstanceName").Value;
+
     options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
     {
         AbortOnConnectFail = true,
-        EndPoints = { options.Configuration }
+        AllowAdmin = true,
+        EndPoints = { redisConnection },
+        ConnectRetry = 5,
+        ConnectTimeout = 5000
     };
 });
 
