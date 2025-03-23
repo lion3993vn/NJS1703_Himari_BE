@@ -59,8 +59,8 @@ namespace HimariServer.Service.Hubs
                 fullResponse.Append(partialResponse);
             });
 
-            // 🔹 Kiểm tra nếu tin nhắn có yêu cầu giới thiệu sản phẩm
-            if (await IsProductInquiry(message))
+            var checkIntent = await IsProductInquiry(message);
+            if (checkIntent)
             {
                 var listProduct = await _chromaService.QuerySimilarProducts(message);
                 listProduct = listProduct.Take(2).ToList();
@@ -93,7 +93,9 @@ namespace HimariServer.Service.Hubs
         {
             var response = await _geminiService.IntentMessage(message);
 
-            if (response == "1")
+            Console.WriteLine("BOT INTENT RESPONSE = " + response);
+
+            if (response.Contains("1"))
             {
                 return true;
             }
