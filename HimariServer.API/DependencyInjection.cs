@@ -86,6 +86,7 @@ namespace HimariServer.API
 
             // Register AI services as singletons for better performance
             services.AddSingleton<IDeepseekService, DeepseekService>();
+            services.AddSingleton<IGeminiService, GeminiService>();
 
             // config embedding services
             services.AddSingleton<IHuggingFaceTokenizerService, HuggingFaceTokenizerService>();
