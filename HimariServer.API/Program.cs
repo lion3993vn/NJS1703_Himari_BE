@@ -149,7 +149,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOS"));
 builder.Services.Configure<FirebaseStorageSettings>(builder.Configuration.GetSection("FirebaseStorage"));
-builder.Services.Configure<DeepseekSettings>(builder.Configuration.GetSection("OpenAI"));
+builder.Services.Configure<DeepseekSettings>(builder.Configuration.GetSection("Deepseek"));
+builder.Services.Configure<GeminiSettings>(builder.Configuration.GetSection("Gemini"));
 builder.Services.Configure<ChromaDBSettings>(builder.Configuration.GetSection("ChromaDB"));
 builder.Services.Configure<RedisSettings>(builder.Configuration.GetSection("RedisSettings"));
 
