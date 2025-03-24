@@ -63,7 +63,7 @@ namespace HimariServer.Service.Constants
         public const string BLOG_UPDATE_SUCCESS = "Blog updated successfully";
         public const string BLOG_CREATE_SUCCESS = "Blog create successfully";
         public const string BLOG_REQUIRE_DATA = "Blog is require data";
-        public const string NEW_BLOG_NOTI = "Himari - BLog mới";
+        public const string NEW_BLOG_NOTI = "Himari - Blog mới";
 
         public const string GET_LIST_BLOG_CATEGORY_SUCCESS = "Get list blog category successfully";
         public const string BLOG_CATEGORY_FOUND = "Blog category not founds";
