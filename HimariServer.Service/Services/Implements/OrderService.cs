@@ -27,6 +27,7 @@ namespace HimariServer.Service.Services.Implements
         private readonly IPayOSService _payOSService;
         private readonly IMailService _mailService;
         private readonly INotificationService _notificationService;
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IPayOSService payOSService, IMailService mailService, INotificationService notificationService)
         {
@@ -39,9 +40,12 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> CreateOrder(OrderRequestModel model)
         {
+            await _semaphore.WaitAsync();
+            try
+            {
             #region create order
 
-            int totalAmount = 0;
+                        int totalAmount = 0;
             foreach (var item in model.Items)
             {
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
@@ -160,7 +164,12 @@ namespace HimariServer.Service.Services.Implements
                     }
                 };
             }
-            #endregion
+                        #endregion
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         private async Task<int> ValidateOrderCode()
