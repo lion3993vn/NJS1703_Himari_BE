@@ -48,9 +48,12 @@ namespace HimariServer.Service.Services.Implements
                             foreach (var orderDetail in item.Order.OrderDetails)
                             {
                                 var product = await unitOfWork.ProductRepository.GetByIdAsync((int)orderDetail.ProductId);
-                                product.Quantity += orderDetail.Quantity;
-
-                                unitOfWork.ProductRepository.UpdateAsync(product);
+                                if(product != null)
+                                {
+                                    product.Quantity += orderDetail.Quantity;
+                                    unitOfWork.ProductRepository.UpdateAsync(product);
+                                }
+                                
                             }
                         }
                     }
