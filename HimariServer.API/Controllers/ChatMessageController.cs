@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using HimariServer.Repository.Commons;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HimariServer.API.Controllers
 {
@@ -17,7 +18,7 @@ namespace HimariServer.API.Controllers
         {
             _chatMessageService = ChatMessageService;
         }
-
+        [Authorize(Roles = "1,3,4")]
         [HttpGet("{userId}")]
         public Task<IActionResult> GetMessageChatByUserIdPaginated(int userId, [FromQuery] PaginationParameter paginationParameter)
         {
