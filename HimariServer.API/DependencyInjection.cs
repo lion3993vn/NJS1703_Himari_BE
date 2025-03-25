@@ -84,6 +84,8 @@ namespace HimariServer.API
             services.AddScoped<IProductSymptomRepository, ProductSymptomRepository>();
             services.AddScoped<IProductSymptomService, ProductSymptomService>();
 
+            services.AddScoped<IDashboardService, DashboardService>();
+
             // Register AI services as singletons for better performance
             services.AddSingleton<IDeepseekService, DeepseekService>();
             services.AddSingleton<IGeminiService, GeminiService>();
@@ -93,6 +95,7 @@ namespace HimariServer.API
             services.AddSingleton<IOnnxEmbeddingService, OnnxEmbeddingService>();
 
             services.AddSingleton<IChromaService, ChromaService>();
+            
 
             return services;
         }
