@@ -17,34 +17,35 @@ namespace HimariServer.API.Controllers
             _userService = userService;
         }
 
-        
+        [Authorize(Roles = "3")]
         [HttpGet]
         public Task<IActionResult> GetUsers([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _userService.GetUsers(paginationParameter));
         }
 
-        [Authorize(Roles = "3,4")]
+        [Authorize(Roles = "3")]
         [HttpPut]
         public Task<IActionResult> UpdateUser([FromBody] UpdateUserModel user)
         {
             return ValidateAndExecute(async () => await _userService.UpdateUser(user));
         }
 
+        [Authorize(Roles = "1,3,4")]
         [HttpGet("{id}")]
         public Task<IActionResult> GetUser(int id)
         {
             return ValidateAndExecute(async () => await _userService.GetUserById(id));
         }
 
-        [Authorize(Roles = "3,4")]
+        [Authorize(Roles = "3")]
         [HttpDelete("{id}")]
         public Task<IActionResult> DeleteUser(int id)
         {
             return ValidateAndExecute(async () => await _userService.DeleteUser(id));
         }
 
-        [Authorize(Roles = "3,4")]
+        [Authorize(Roles = "3")]
         [HttpPut("address")]
         public Task<IActionResult> UpdateUserAddress([FromBody] UpdateUserAddressModel userAddress)
         {
