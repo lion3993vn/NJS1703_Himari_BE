@@ -48,6 +48,18 @@ namespace HimariServer.Service.Mappers
             CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
             CreateMap<UpdateProductModel, Product>().ReverseMap();
             CreateMap<CreateProductModel, Product>().ReverseMap();
+            CreateMap<Product, ProductRAGModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Brand != null ? src.Brand.BrandName : null))
+                .ForMember(dest => dest.Symptomp, opt => opt.MapFrom(src => string.Join(", ", src.ProductSymptoms
+                                                                .Where(ps => !ps.IsDeleted && ps.PartSymptom != null)
+                                                                .Select(ps => ps.PartSymptom.Name))))
+                .ForMember(dest => dest.BodyPart, opt => opt.MapFrom(src => string.Join(", ", src.ProductSymptoms
+                                                              .Where(ps => !ps.IsDeleted && ps.PartSymptom != null && ps.PartSymptom.BodyPart != null)
+                                                              .Select(ps => ps.PartSymptom.BodyPart.BodyPartName)
+                                                              .Distinct())));
 
             // blog
             CreateMap<Blog, BlogModel>()
@@ -108,8 +120,8 @@ namespace HimariServer.Service.Mappers
         {
             CreateMap<Order, OrderResponseModel>()
                 .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
-                .ForMember(dest => dest.DeliveryStatus, opt => opt.MapFrom(src => (int)src.DeliveryStatus)) 
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName)) 
+                .ForMember(dest => dest.DeliveryStatus, opt => opt.MapFrom(src => (int)src.DeliveryStatus))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payments != null && src.Payments.Any()
                     ? src.Payments.FirstOrDefault().Status
                     : PaymentStatus.Pending))
