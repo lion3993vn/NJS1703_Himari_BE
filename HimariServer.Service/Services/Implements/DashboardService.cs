@@ -85,5 +85,89 @@ namespace HimariServer.Service.Services.Implements
                 return value.ToString("0.0");
             }
         }
+
+        public async Task<BaseResponseModel> GetNewOrder()
+        {
+            DateTime currentDate = DateTime.Now;
+            int currentMonth = currentDate.Month;
+            int previousMonth = currentDate.Month == 1 ? 12 : currentDate.Month - 1;
+            int currentYear = currentDate.Year;
+            int previousYear = currentDate.Month == 1 ? currentDate.Year - 1 : currentDate.Year;
+
+            int currentMonthOrders = await _unitOfWork.OrderRepository.GetTotalOrder(currentMonth, currentYear);
+            int previousMonthOrders = await _unitOfWork.OrderRepository.GetTotalOrder(previousMonth, previousYear);
+
+            double percentageChange = 0;
+            bool isIncrease = false;
+
+            if (previousMonthOrders > 0)
+            {
+                percentageChange = Math.Abs(((double)(currentMonthOrders - previousMonthOrders) / previousMonthOrders) * 100);
+                isIncrease = currentMonthOrders >= previousMonthOrders;
+            }
+            else if (currentMonthOrders > 0)
+            {
+                percentageChange = 100;
+                isIncrease = true;
+            }
+
+            // Create new order model with formatted values
+            var newOrderModel = new NewOrderModel
+            {
+                QuantityOrder = currentMonthOrders,
+                Percent = FormatPercentage(percentageChange),
+                IsIncrease = isIncrease
+            };
+
+            // Create and return response
+            return new BaseResponseModel
+            {
+                StatusCode = 200,
+                Message = MessageConstants.GET_NEW_ORDER_SUCCESS,
+                Data = newOrderModel
+            };
+        }
+
+        public async Task<BaseResponseModel> GetNewUser()
+        {
+            DateTime currentDate = DateTime.Now;
+            int currentMonth = currentDate.Month;
+            int previousMonth = currentDate.Month == 1 ? 12 : currentDate.Month - 1;
+            int currentYear = currentDate.Year;
+            int previousYear = currentDate.Month == 1 ? currentDate.Year - 1 : currentDate.Year;
+
+            int currentMonthUsers = await _unitOfWork.UsersRepository.GetUserCountByMonth(currentMonth, currentYear);
+            int previousMonthUsers = await _unitOfWork.UsersRepository.GetUserCountByMonth(previousMonth, previousYear);
+
+            double percentageChange = 0;
+            bool isIncrease = false;
+
+            if (previousMonthUsers > 0)
+            {
+                percentageChange = Math.Abs(((double)(currentMonthUsers - previousMonthUsers) / previousMonthUsers) * 100);
+                isIncrease = currentMonthUsers >= previousMonthUsers;
+            }
+            else if (currentMonthUsers > 0)
+            {
+                percentageChange = 100;
+                isIncrease = true;
+            }
+
+            // Create new user model with formatted values
+            var newUserModel = new NewUserModel
+            {
+                QuantityUser = currentMonthUsers,
+                Percent = FormatPercentage(percentageChange),
+                IsIncrease = isIncrease
+            };
+
+            // Create and return response
+            return new BaseResponseModel
+            {
+                StatusCode = 200,
+                Message = MessageConstants.GET_NEW_USER_SUCCESS,
+                Data = newUserModel
+            };
+        }
     }
 }
