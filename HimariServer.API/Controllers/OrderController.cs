@@ -79,6 +79,5 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () =>
                await _orderService.GetStatistics(month, year));
         }
-
     }
 }
