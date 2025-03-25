@@ -6,6 +6,7 @@ using HimariServer.Service.BusinessModels.BlogModels;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,7 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _blogService.GetBlogById(id));
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpPost]
         public Task<IActionResult> CreateBlog([FromBody] AddBlogModel blog)
         {
@@ -44,12 +46,14 @@ namespace HimariServer.API.Controllers
 
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpPut]
         public Task<IActionResult> UpdateBlog([FromBody] UpdateBlogModel blog)
         {
             return ValidateAndExecute(async () => await _blogService.UpdateBlog(blog));
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpDelete("{id}")]
         public Task<IActionResult> DeleteBlogById(int id)
         {

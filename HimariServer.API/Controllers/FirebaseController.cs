@@ -1,6 +1,7 @@
 using HimariServer.Repository.Commons;
 using HimariServer.Service.BusinessModels.FileModels;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace HimariServer.API.Controllers
         /// </summary>
         /// <param name="file">The image file (JPG, JPEG, PNG)</param>
         /// <returns>URL of the uploaded image</returns>
+        [Authorize(Roles = "3,4")]
         [HttpPost("upload")]
         public Task<IActionResult> UploadImage(IFormFile file)
         {
