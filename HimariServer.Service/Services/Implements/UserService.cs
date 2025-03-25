@@ -92,7 +92,7 @@ namespace HimariServer.Service.Services.Implements
                         Message = MessageConstants.USER_HAS_BEEN_DELETE,
                     };
                 }
-                var accessToken = AuthenTokenUtils.GenerateAccessToken(existUser.Email, existUser, existUser.Role.RoleName, _configuration);
+                var accessToken = AuthenTokenUtils.GenerateAccessToken(existUser.Email, existUser, existUser.Role.Id.ToString(), _configuration);
                 var refreshToken = AuthenTokenUtils.GenerateRefreshToken(existUser.Email, _configuration);
 
                 return new BaseResponseModel
