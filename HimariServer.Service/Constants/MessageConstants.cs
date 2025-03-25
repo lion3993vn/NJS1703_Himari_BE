@@ -140,6 +140,7 @@ namespace HimariServer.Service.Constants
         public const string PRODUCT_SYMPTOM_UPDATE_SUCCESS = "Update product symptom successfully";
 
         public const string ORDER_FOUND = "Get order successfully";
-        
+
+        public const string GET_REVENUE_SUCCESS = "Revenue data retrieved successfully";
     }
 }

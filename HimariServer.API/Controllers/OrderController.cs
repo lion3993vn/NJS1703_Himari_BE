@@ -65,12 +65,12 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () =>
                 await _orderService.SearchOrders(searchTerm, paginationParameter, newestFirst, deliveryStatus, paymentStatus));
         }
+
         [HttpGet("statistics")]
         public Task<IActionResult> GetStatistics([FromQuery] int? month = null, [FromQuery] int? year = null)
         {
             return ValidateAndExecute(async () =>
                await _orderService.GetStatistics(month, year));
         }
-
     }
 }
