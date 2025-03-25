@@ -10,6 +10,7 @@ namespace HimariServer.Service.Services.Interfaces
     public interface IChromaService
     {
         Task<List<ProductChatModel>> QuerySimilarProducts(string queryText);
-        
+
+        Task AddProductsToChromaDB(List<ProductRAGModel> products);
     }
 }

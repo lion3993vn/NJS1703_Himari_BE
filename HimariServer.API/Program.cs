@@ -171,6 +171,7 @@ builder.Services.AddSignalR(options =>
 });
 
 builder.Services.AddHostedService<PaymentPeriodicService>();
+builder.Services.AddHostedService<ChromaPeriodicService>();
 // The service is already registered via AddInfractstructure
 
 var app = builder.Build();
