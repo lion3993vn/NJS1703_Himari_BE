@@ -6,6 +6,7 @@ using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
 using MailKit.Search;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,12 +23,14 @@ namespace HimariServer.API.Controllers
             _orderService = orderService;
         }
 
+        [Authorize(Roles = "1")]
         [HttpPost]
         public Task<IActionResult> CreateOrder(OrderRequestModel model)
         {
             return ValidateAndExecute(async () => await _orderService.CreateOrder(model));
         }
 
+        [Authorize(Roles = "1,3,4")]
         [HttpGet("{userId}")]
         public Task<IActionResult> GetOrderByUserId(int userId, [FromQuery] PaginationParameter paginationParameter, [FromQuery] string? searchTerm,
             [FromQuery] bool newestFirst = true,
@@ -37,6 +40,7 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _orderService.GetOrderByUserId(userId, paginationParameter, searchTerm, newestFirst, deliveryStatus, paymentStatus));
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpPut]
         public Task<IActionResult> UpdateOrder(OrderUpdateModel orderUpdateModel)
         {
@@ -48,12 +52,14 @@ namespace HimariServer.API.Controllers
         //{
         //    return ValidateAndExecute(async () => await _orderService.GetAllOrders(paginationParameter));
         //}
-
+        [Authorize(Roles = "1,3,4")]
         [HttpGet("id/{orderId}")]
         public Task<IActionResult> GetOrderByOrderCode(int orderId)
         {
             return ValidateAndExecute(async () => await _orderService.GetOrderByOrderId(orderId));
         }
+
+        [Authorize(Roles = "3,4")]
         [HttpGet]
         public Task<IActionResult> SearchOrders(
             [FromQuery] string? searchTerm,
@@ -66,6 +72,7 @@ namespace HimariServer.API.Controllers
                 await _orderService.SearchOrders(searchTerm, paginationParameter, newestFirst, deliveryStatus, paymentStatus));
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpGet("statistics")]
         public Task<IActionResult> GetStatistics([FromQuery] int? month = null, [FromQuery] int? year = null)
         {

@@ -1,6 +1,7 @@
 ﻿using HimariServer.Repository.Commons;
 using HimariServer.Service.BusinessModels.BrandModels;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HimariServer.API.Controllers
@@ -25,17 +26,21 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _brandService.GetBrandById(id));
         }
-
+        [Authorize(Roles = "3,4")]
         [HttpDelete("{id}")]
         public Task<IActionResult> DeleteBrandById(int id)
         {
             return ValidateAndExecute(async () => await _brandService.DeleteBrandById(id));
         }
+
+        [Authorize(Roles = "3,4")]
         [HttpPut]
         public Task<IActionResult> UpdateBrand([FromBody] BrandModel brand)
         {
             return ValidateAndExecute(async () => await _brandService.UpdateBrand(brand));
         }
+
+        [Authorize(Roles = "3,4")]
         [HttpPost]
         public Task<IActionResult> CreateBrand([FromBody] CreateBrandModel brand)
         {
