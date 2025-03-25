@@ -135,5 +135,43 @@ namespace HimariServer.Service.Services.Implements
                 throw;
             }
         }
+
+        public async Task AddProductsToChromaDB(List<ProductRAGModel> products)
+        {
+            if (products == null || products.Count == 0)
+            {
+                return;
+            }
+
+            var ids = products.Select(p => p.Id.ToString()).ToList();
+
+            var documents = products.Select(p =>
+                $"{p.ProductName} {p.Description} {p.BrandName} {p.Symptomp} {p.BodyPart}").ToList();
+
+            var metadatas = products.Select(p => new Dictionary<string, object>
+                {
+                    { "id", p.Id },
+                    { "name", p.ProductName ?? string.Empty },
+                    { "description", p.Description ?? string.Empty },
+                    { "brand", p.BrandName ?? string.Empty },
+                    { "symptoms", p.Symptomp ?? string.Empty },
+                    { "bodyPart", p.BodyPart ?? string.Empty }
+                }).ToList();
+
+            var embeddings = new List<ReadOnlyMemory<float>>();
+
+            foreach (var product in products)
+            {
+                string textToEmbed = $"Sản phẩm tên {product.ProductName} có mô tả như sau {product.Description} thuộc thương hiệu {product.BrandName} có thể chữa trị các triệu chứng {product.Symptomp} thuộc {product.BodyPart}";
+
+                // Generate embedding using ONNX model
+                float[] embedding = await _onnxEmbeddingService.GenerateEmbedding(textToEmbed);
+
+                // Add to embeddings list
+                embeddings.Add(new ReadOnlyMemory<float>(embedding));
+            }
+
+            await _collectionClient.Add(ids, embeddings: embeddings, documents: documents, metadatas: metadatas);
+        }
     }
 }

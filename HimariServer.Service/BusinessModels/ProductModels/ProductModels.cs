@@ -26,4 +26,14 @@ namespace HimariServer.Service.BusinessModels.ProductModels
 
         public bool? Gender { get; set; }
     }
+
+    public class ProductRAGModel
+    {
+        public int Id { get; set; }
+        public string ProductName { get; set; }
+        public string Description { get; set; }
+        public string BrandName { get; set; }
+        public string Symptomp { get; set; }
+        public string BodyPart { get; set; }
+    }
 }
