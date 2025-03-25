@@ -23,5 +23,10 @@ namespace HimariServer.Repository.Repositories.Implements
         {
             return await _context.Users.Include(x => x.Role).Where(x => x.Email == email).FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetUserCountByMonth(int currentMonth, int currentYear)
+        {
+            return await _context.Users.Where(x => x.CreatedDate.Month == currentMonth && x.CreatedDate.Year == currentYear && !x.IsDeleted ).CountAsync();
+        }
     }
 }
