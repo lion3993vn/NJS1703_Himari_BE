@@ -3,6 +3,7 @@ using HimariServer.Repository.Enums;
 using HimariServer.Service.BusinessModels.ProductModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,16 +52,21 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _productService.SearchProductsByKeyword(paginationParameter, keyword));
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpDelete("{id}")]
         public Task<IActionResult> DeleteProductById(int id)
         {
             return ValidateAndExecute(async () => await _productService.DeleteProductById(id));
         }
+
+        [Authorize(Roles = "3,4")]
         [HttpPut]
         public Task<IActionResult> UpdateProduct([FromBody] UpdateProductModel product)
         {
             return ValidateAndExecute(async () => await _productService.UpdateProduct(product));
         }
+
+        [Authorize(Roles = "3,4")]
         [HttpPost]
         public Task<IActionResult> CreateProduct([FromBody] CreateProductModel product)
         {
