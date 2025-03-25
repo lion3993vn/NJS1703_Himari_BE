@@ -1,6 +1,7 @@
 using HimariServer.Repository.Commons;
 using HimariServer.Service.BusinessModels.ProductSymptomModels;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,25 +41,29 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _productSymptomService.GetProductSymptomsByPartSymptomId(paginationParameter, partSymptomId));
         }
-        
+
+        [Authorize(Roles = "3,4")]
         [HttpDelete("{id}")]
         public Task<IActionResult> DeleteProductSymptomById(int id)
         {
             return ValidateAndExecute(async () => await _productSymptomService.DeleteProductSymptomById(id));
         }
-        
+
+        [Authorize(Roles = "3,4")]
         [HttpPut]
         public Task<IActionResult> UpdateProductSymptom([FromBody] UpdateProductSymptomModel productSymptom)
         {
             return ValidateAndExecute(async () => await _productSymptomService.UpdateProductSymptom(productSymptom));
         }
-        
+
+        [Authorize(Roles = "3,4")]
         [HttpPost]
         public Task<IActionResult> CreateProductSymptom([FromBody] CreateProductSymptomModel productSymptom)
         {
             return ValidateAndExecute(async () => await _productSymptomService.CreateProductSymptom(productSymptom));
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpPost("bulk")]
         public Task<IActionResult> CreateMultiProductSymptom([FromBody] CreateProductSymptomMutilModel multiModel)
         {
