@@ -21,5 +21,17 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _dashboardService.GetRevenue());
         }
+
+        [HttpGet("new-order")]
+        public Task<IActionResult> GetNewOrder()
+        {
+            return ValidateAndExecute(async () => await _dashboardService.GetNewOrder());
+        }
+
+        [HttpGet("new-user")]
+        public Task<IActionResult> GetNewUser()
+        {
+            return ValidateAndExecute(async () => await _dashboardService.GetNewUser());
+        }
     }
 }

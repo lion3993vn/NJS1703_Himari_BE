@@ -10,6 +10,7 @@ namespace HimariServer.Repository.Repositories.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        public Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByEmailAsync(string email);
+        Task<int> GetUserCountByMonth(int currentMonth, int currentYear);
     }
 }

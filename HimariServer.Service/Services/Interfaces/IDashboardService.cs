@@ -10,5 +10,8 @@ namespace HimariServer.Service.Services.Interfaces
     public interface IDashboardService
     {
         Task<BaseResponseModel> GetRevenue();
+        Task<BaseResponseModel> GetNewOrder();
+
+        Task<BaseResponseModel> GetNewUser();
     }
 }
