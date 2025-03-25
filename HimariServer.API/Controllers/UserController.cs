@@ -1,6 +1,7 @@
 ﻿using HimariServer.Repository.Commons;
 using HimariServer.Service.BusinessModels.UserModels;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +16,15 @@ namespace HimariServer.API.Controllers
         {
             _userService = userService;
         }
+
         
         [HttpGet]
         public Task<IActionResult> GetUsers([FromQuery] PaginationParameter paginationParameter)
         {
             return ValidateAndExecute(async () => await _userService.GetUsers(paginationParameter));
         }
-        
+
+        [Authorize(Roles = "3,4")]
         [HttpPut]
         public Task<IActionResult> UpdateUser([FromBody] UpdateUserModel user)
         {
@@ -33,13 +36,15 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _userService.GetUserById(id));
         }
-        
+
+        [Authorize(Roles = "3,4")]
         [HttpDelete("{id}")]
         public Task<IActionResult> DeleteUser(int id)
         {
             return ValidateAndExecute(async () => await _userService.DeleteUser(id));
         }
 
+        [Authorize(Roles = "3,4")]
         [HttpPut("address")]
         public Task<IActionResult> UpdateUserAddress([FromBody] UpdateUserAddressModel userAddress)
         {

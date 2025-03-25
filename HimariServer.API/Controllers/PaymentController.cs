@@ -1,6 +1,7 @@
 ﻿using HimariServer.Service.BusinessModels.PartSymptomModels;
 using HimariServer.Service.Services.Implements;
 using HimariServer.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace HimariServer.API.Controllers
             _paymentService = paymentService;
         }
 
+        [Authorize(Roles = "1,3,4")]
         [HttpGet("order/{orderCode}")]
         public Task<IActionResult> GetPaymentByOrderCode(int orderCode)
         {
