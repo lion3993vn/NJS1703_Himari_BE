@@ -205,6 +205,11 @@ namespace HimariServer.Service.Services.Implements
                 order.DeliveryStatus = DeliveryStatus.Preparing;
                 _unitOfWork.OrderRepository.UpdateAsync(order);
 
+                await _notificationService.PushNotificationByUserId((int)order.UserId, new NotificationRequestModel
+                {
+                    Title = MessageConstants.APP_NOTI_ORDER_CONFIRMED_TITLE,
+                    Message = string.Format(MessageConstants.APP_NOTI_ORDER_CONFIRMED_MESSAGE, order.OrderCode)
+                });
                 _ = Task.Run(async () =>
                     await _mailService.SendEmailAsync(new MailRequest()
                     {
