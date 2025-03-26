@@ -13,5 +13,7 @@ namespace HimariServer.Repository.Repositories.Interfaces
         Task<bool> IsContainProduct(int categoryId);
 
         Task<List<Product>> GetAllProduct();
+
+        Task<int> GetProductCountByMonth(int month, int year);
     }
 }
