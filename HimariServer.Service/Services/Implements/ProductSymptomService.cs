@@ -117,7 +117,7 @@ namespace HimariServer.Service.Services.Implements
             {
                 throw new NotExistException(MessageConstants.PRODUCT_SYMPTOM_NOT_FOUND);
             }
-
+           
             _unitOfWork.ProductSymptomRepository.SoftDeleteAsync(productSymptom);
             _unitOfWork.Save();
             
