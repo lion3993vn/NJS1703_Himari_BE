@@ -30,6 +30,13 @@ namespace HimariServer.Repository.Repositories.Implements
                                                   .ToListAsync();
         }
 
+        public async Task<List<Product>> GetAllProductByBrandId(int brandId)
+        {
+            return await _context.Products.Include(x => x.Brand)
+                                                  .Where(x => !x.IsDeleted && x.BrandId == brandId)
+                                                  .ToListAsync();
+        }
+
         public async Task<int> GetProductCountByMonth(int month, int year)
         {
             return await _context.Products
