@@ -34,6 +34,7 @@ namespace HimariServer.Service.Constants
         public const string PRODUCT_DELETE_SUCCESS = "Product deleted successfully";
         public const string PRODUCT_UPDATE_SUCCESS = "Product updated successfully";
         public const string PRODUCT_CREATE_SUCCESS = "Product created successfully";
+        public const string GET_NEW_PRODUCT_SUCCESS = "New product data retrieved successfully";
 
         public const string GET_LIST_BRAND_SUCCESS = "Get list brand successfully";
         public const string BRAND_FOUND = "Brand founds";

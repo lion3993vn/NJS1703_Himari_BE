@@ -29,5 +29,14 @@ namespace HimariServer.Repository.Repositories.Implements
                                                   .Where(x => !x.IsDeleted)
                                                   .ToListAsync();
         }
+
+        public async Task<int> GetProductCountByMonth(int month, int year)
+        {
+            return await _context.Products
+                .Where(p => p.CreatedDate.Month == month && 
+                           p.CreatedDate.Year == year && 
+                           !p.IsDeleted)
+                .CountAsync();
+        }
     }
 }
