@@ -21,6 +21,7 @@ using HimariServer.Service.BusinessModels.ProductSymptomModels;
 using HimariServer.Service.BusinessModels.PaymentModels;
 using HimariServer.Service.BusinessModels.OrderModels;
 using HimariServer.Repository.Enums;
+using HimariServer.Service.BusinessModels.DashboardModels;
 
 namespace HimariServer.Service.Mappers
 {
@@ -48,6 +49,7 @@ namespace HimariServer.Service.Mappers
             CreateMap<Pagination<Product>, Pagination<ProductModels>>().ConvertUsing<PaginationConverter<Product, ProductModels>>();
             CreateMap<UpdateProductModel, Product>().ReverseMap();
             CreateMap<CreateProductModel, Product>().ReverseMap();
+            CreateMap<LowQuantityProductModel, Product>().ReverseMap();
             CreateMap<Product, ProductRAGModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))

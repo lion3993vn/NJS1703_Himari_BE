@@ -1,4 +1,6 @@
-﻿using HimariServer.Repository.UnitOfWork;
+﻿using AutoMapper;
+using HimariServer.Repository.Enums;
+using HimariServer.Repository.UnitOfWork;
 using HimariServer.Service.BusinessModels.DashboardModels;
 using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
@@ -14,9 +16,12 @@ namespace HimariServer.Service.Services.Implements
     public class DashboardService : IDashboardService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public DashboardService(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+
+        public DashboardService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<BaseResponseModel> GetRevenue()
@@ -209,6 +214,84 @@ namespace HimariServer.Service.Services.Implements
                 StatusCode = 200,
                 Message = MessageConstants.GET_NEW_PRODUCT_SUCCESS,
                 Data = newProductModel
+            };
+        }
+
+        public async Task<BaseResponseModel> GetRevenueWithListMonth()
+        {
+            List<(int Year, int Month)> lastSixMonths = new List<(int, int)>();
+
+            DateTime currentDate = DateTime.Now;
+
+            for (int i = 0; i < 6; i++)
+            {
+                int month = currentDate.Month - i;
+                int year = currentDate.Year;
+
+                if (month <= 0)
+                {
+                    month += 12;
+                    year -= 1;
+                }
+
+                lastSixMonths.Add((year, month));
+            }
+
+            List<RevenueByMonthModel> data = new();
+
+            foreach(var item in lastSixMonths)
+            {
+                var revenue = await _unitOfWork.OrderRepository.GetTotalPriceByMonthAndYear(item.Month, item.Year);
+
+                data.Add(new RevenueByMonthModel
+                {
+                    Month = "Tháng " + item.Month,
+                    Revenue = revenue,
+                });
+            }
+
+            return new BaseResponseModel
+            {
+                StatusCode = 200,
+                Message = MessageConstants.GET_REVENUE_WITH_LIST_MONTH_SUCCESS,
+                Data = data
+            };
+        }
+
+        public async Task<BaseResponseModel> GetOrderWithRevenue()
+        {
+            var resultSuccess = await _unitOfWork.OrderRepository.GetTotalPriceWithDeliveryStatus(DeliveryStatus.Delivered);
+            var resultFailPayment = await _unitOfWork.OrderRepository.GetTotalPriceWithPaymentStatus(PaymentStatus.Failed);
+            var resultFailShip = await _unitOfWork.OrderRepository.GetTotalPriceWithDeliveryStatus(DeliveryStatus.Cancelled);
+
+            List<OrderWithRevenue> data = new();
+            data.Add(new OrderWithRevenue
+            {
+                Status = "Thành công",
+                Revenue = resultSuccess,
+            });
+            data.Add(new OrderWithRevenue
+            {
+                Status = "Thất bại",
+                Revenue = resultFailPayment + resultFailShip,
+            });
+
+            return new BaseResponseModel
+            {
+                StatusCode = 200,
+                Message = MessageConstants.GET_ORDER_WITH_REVENUE_STATUS_SUCCESS,
+                Data = data,
+            };
+        }
+
+        public async Task<BaseResponseModel> GetLowQuantityProduct()
+        {
+            var products = await _unitOfWork.ProductRepository.GetLowQuantityProduct();
+            return new BaseResponseModel
+            {
+                StatusCode = 200,
+                Message = MessageConstants.GET_LOW_QUANTITY_PRODUCT_SUCCESS,
+                Data = _mapper.Map<List<LowQuantityProductModel>>(products)
             };
         }
     }
