@@ -105,6 +105,8 @@ namespace HimariServer.Service.Constants
         public const string APP_NOTI_ORDER_DELIVERED_MESSAGE = "Đơn hàng #{0} đã được giao thành công. Cảm ơn bạn đã mua sắm! 💖";
         public const string APP_NOTI_ORDER_CANCELLED_MESSAGE = "Đơn hàng #{0} đã bị hủy. Nếu có thắc mắc, vui lòng liên hệ hỗ trợ. 📞";
         public const string APP_NOTI_ORDER_DEFAULT_MESSAGE = "Đơn hàng #{0} có cập nhật mới. Vui lòng kiểm tra chi tiết! 🔍";
+        public const string APP_NOTI_ORDER_CONFIRMED_TITLE = "✅ Đơn hàng đã được xác nhận";
+        public const string APP_NOTI_ORDER_CONFIRMED_MESSAGE = "Đơn hàng #{0} đã được xác nhận và sẽ sớm được xử lý. Cảm ơn bạn đã mua hàng! 🛒";
 
         public const string PART_SYMPTOM_CREATE_SUCCESS = "Part symptom create successfully";
         public const string PART_SYMPTOM_NOT_FOUND = "Part symptom not existed";
@@ -148,5 +150,6 @@ namespace HimariServer.Service.Constants
         public const string GET_REVENUE_WITH_LIST_MONTH_SUCCESS = "Revenue data retrieved successfully";
         public const string GET_ORDER_WITH_REVENUE_STATUS_SUCCESS = "Revenue data retrieved successfully";
         public const string GET_LOW_QUANTITY_PRODUCT_SUCCESS = "Product data retrieved successfully";
+        
     }
 }
