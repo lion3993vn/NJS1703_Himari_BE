@@ -145,5 +145,8 @@ namespace HimariServer.Service.Constants
         public const string GET_REVENUE_SUCCESS = "Revenue data retrieved successfully";
         public const string GET_NEW_ORDER_SUCCESS = "New order data retrieved successfully";
         public const string GET_NEW_USER_SUCCESS = "New user data retrieved successfully";
+        public const string GET_REVENUE_WITH_LIST_MONTH_SUCCESS = "Revenue data retrieved successfully";
+        public const string GET_ORDER_WITH_REVENUE_STATUS_SUCCESS = "Revenue data retrieved successfully";
+        public const string GET_LOW_QUANTITY_PRODUCT_SUCCESS = "Product data retrieved successfully";
     }
 }

@@ -38,5 +38,12 @@ namespace HimariServer.Repository.Repositories.Implements
                            !p.IsDeleted)
                 .CountAsync();
         }
+
+        public async Task<List<Product>> GetLowQuantityProduct()
+        {
+            return await _context.Products
+                .Where(p => p.Quantity < 10 && !p.IsDeleted)
+                .ToListAsync();
+        }
     }
 }

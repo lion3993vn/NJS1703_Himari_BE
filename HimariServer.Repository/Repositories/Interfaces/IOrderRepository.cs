@@ -16,5 +16,8 @@ namespace HimariServer.Repository.Repositories.Interfaces
         Task<int> GetNotStartedOrder(int? month, int? year);
         Task<int> GetOrderByDeliveryStatus(int? month, int? year, DeliveryStatus status);
         Task<int> GetTotalPriceByMonth(int month);
+        Task<int> GetTotalPriceByMonthAndYear(int month, int year);
+        Task<int> GetTotalPriceWithDeliveryStatus(DeliveryStatus status);
+        Task<int> GetTotalPriceWithPaymentStatus(PaymentStatus status);
     }
 }

@@ -54,5 +54,26 @@ namespace HimariServer.Repository.Repositories.Implements
                            x.CreatedDate.Year == currentYear && x.DeliveryStatus == DeliveryStatus.Delivered)
                 .SumAsync(x => x.OrderPrice ?? 0);
         }
+
+        public async Task<int> GetTotalPriceByMonthAndYear(int month, int year)
+        {
+            return await _context.Orders
+                .Where(x => !x.IsDeleted &&
+                           x.CreatedDate.Month == month &&
+                           x.CreatedDate.Year == year && x.DeliveryStatus == DeliveryStatus.Delivered)
+                .SumAsync(x => x.OrderPrice ?? 0);
+        }
+
+        public async Task<int> GetTotalPriceWithDeliveryStatus(DeliveryStatus status)
+        {
+            return await _context.Orders
+                .Where(x => !x.IsDeleted && x.DeliveryStatus == status).SumAsync(x => x.OrderPrice ?? 0);
+        }
+
+        public async Task<int> GetTotalPriceWithPaymentStatus(PaymentStatus status)
+        {
+            return await _context.Orders.Include(x => x.Payments)
+                .Where(x => !x.IsDeleted && x.Payments.FirstOrDefault().Status == status).SumAsync(x => x.OrderPrice ?? 0);
+        }
     }
 }
