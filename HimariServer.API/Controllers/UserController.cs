@@ -24,7 +24,7 @@ namespace HimariServer.API.Controllers
             return ValidateAndExecute(async () => await _userService.GetUsers(paginationParameter));
         }
 
-        [Authorize(Roles = "3")]
+        [Authorize(Roles = "1,3,4")]
         [HttpPut]
         public Task<IActionResult> UpdateUser([FromBody] UpdateUserModel user)
         {
