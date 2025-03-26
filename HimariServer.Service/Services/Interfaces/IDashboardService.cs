@@ -11,8 +11,10 @@ namespace HimariServer.Service.Services.Interfaces
     {
         Task<BaseResponseModel> GetRevenue();
         Task<BaseResponseModel> GetNewOrder();
-
         Task<BaseResponseModel> GetNewUser();
         Task<BaseResponseModel> GetNewProduct();
+        Task<BaseResponseModel> GetRevenueWithListMonth();
+        Task<BaseResponseModel> GetOrderWithRevenue();
+        Task<BaseResponseModel> GetLowQuantityProduct();
     }
 }

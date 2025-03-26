@@ -39,5 +39,23 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _dashboardService.GetNewProduct());
         }
+
+        [HttpGet("revenue-month")]
+        public Task<IActionResult> GetRevenueWithListMonth()
+        {
+            return ValidateAndExecute(async () => await _dashboardService.GetRevenueWithListMonth());
+        }
+
+        [HttpGet("revenue-percent")]
+        public Task<IActionResult> GetOrderWithRevenue()
+        {
+            return ValidateAndExecute(async () => await _dashboardService.GetOrderWithRevenue());
+        }
+
+        [HttpGet("product-low-quantity")]
+        public Task<IActionResult> GetLowQuantityProduct()
+        {
+            return ValidateAndExecute(async () => await _dashboardService.GetLowQuantityProduct());
+        }
     }
 }
