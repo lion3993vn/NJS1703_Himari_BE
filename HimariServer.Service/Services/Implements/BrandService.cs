@@ -53,6 +53,12 @@ namespace HimariServer.Service.Services.Implements
                 throw new NotExistException(MessageConstants.BRAND_NOT_FOUND);
             }
 
+            var product = await _unitOfWork.ProductRepository.GetAllProductByBrandId(id);
+            if (product.Any())
+            {
+                throw new Exception(MessageConstants.BRAND_DELETE_FAIL);
+            }
+
             _unitOfWork.BrandRepository.SoftDeleteAsync(brand);
             _unitOfWork.Save();
             return new BaseResponseModel

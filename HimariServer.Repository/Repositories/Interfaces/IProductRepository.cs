@@ -16,5 +16,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
 
         Task<int> GetProductCountByMonth(int month, int year);
         Task<List<Product>> GetLowQuantityProduct();
+        Task<List<Product>> GetAllProductByBrandId(int brandId);
     }
 }
