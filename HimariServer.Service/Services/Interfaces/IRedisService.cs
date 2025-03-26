@@ -12,5 +12,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task SetAsync<T>(string key, T value, TimeSpan? expiry = null);
         Task RemoveAsync(string key);
         Task<bool> ExistsAsync(string key);
+        Task ClearAllCachedKeys();
     }
 }

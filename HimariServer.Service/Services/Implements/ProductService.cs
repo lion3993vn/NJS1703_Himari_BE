@@ -69,8 +69,7 @@ namespace HimariServer.Service.Services.Implements
             };
 
             // Invalidate products cache after creating a new product
-            await _redisService.RemoveAsync(PRODUCTS_CACHE_KEY);
-            
+            await _redisService.ClearAllCachedKeys();
             return result;
         }
 
@@ -87,8 +86,7 @@ namespace HimariServer.Service.Services.Implements
             _unitOfWork.Save();
 
             // Remove product from cache
-            await _redisService.RemoveAsync($"{PRODUCT_CACHE_KEY}{id}");
-            await _redisService.RemoveAsync(PRODUCTS_CACHE_KEY);
+            await _redisService.ClearAllCachedKeys();
 
             return new BaseResponseModel
             {
@@ -394,8 +392,7 @@ namespace HimariServer.Service.Services.Implements
             _unitOfWork.Save();
 
             // Remove cached product after update
-            await _redisService.RemoveAsync($"{PRODUCT_CACHE_KEY}{newProduct.Id}");
-            await _redisService.RemoveAsync(PRODUCTS_CACHE_KEY);
+            await _redisService.ClearAllCachedKeys();
 
             return new BaseResponseModel
             {
