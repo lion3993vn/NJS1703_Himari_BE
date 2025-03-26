@@ -169,5 +169,47 @@ namespace HimariServer.Service.Services.Implements
                 Data = newUserModel
             };
         }
+
+        public async Task<BaseResponseModel> GetNewProduct()
+        {
+            DateTime currentDate = DateTime.Now;
+            int currentMonth = currentDate.Month;
+            int previousMonth = currentDate.Month == 1 ? 12 : currentDate.Month - 1;
+            int currentYear = currentDate.Year;
+            int previousYear = currentDate.Month == 1 ? currentDate.Year - 1 : currentDate.Year;
+
+            int currentMonthProducts = await _unitOfWork.ProductRepository.GetProductCountByMonth(currentMonth, currentYear);
+            int previousMonthProducts = await _unitOfWork.ProductRepository.GetProductCountByMonth(previousMonth, previousYear);
+
+            double percentageChange = 0;
+            bool isIncrease = false;
+
+            if (previousMonthProducts > 0)
+            {
+                percentageChange = Math.Abs(((double)(currentMonthProducts - previousMonthProducts) / previousMonthProducts) * 100);
+                isIncrease = currentMonthProducts >= previousMonthProducts;
+            }
+            else if (currentMonthProducts > 0)
+            {
+                percentageChange = 100;
+                isIncrease = true;
+            }
+
+            // Create new product model with formatted values
+            var newProductModel = new NewProductModel
+            {
+                QuantityProduct = currentMonthProducts,
+                Percent = FormatPercentage(percentageChange),
+                IsIncrease = isIncrease
+            };
+
+            // Create and return response
+            return new BaseResponseModel
+            {
+                StatusCode = 200,
+                Message = MessageConstants.GET_NEW_PRODUCT_SUCCESS,
+                Data = newProductModel
+            };
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> GetNewOrder();
 
         Task<BaseResponseModel> GetNewUser();
+        Task<BaseResponseModel> GetNewProduct();
     }
 }

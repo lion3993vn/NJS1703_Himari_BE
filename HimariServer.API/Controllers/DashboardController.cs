@@ -33,5 +33,11 @@ namespace HimariServer.API.Controllers
         {
             return ValidateAndExecute(async () => await _dashboardService.GetNewUser());
         }
+
+        [HttpGet("new-product")]
+        public Task<IActionResult> GetNewProduct()
+        {
+            return ValidateAndExecute(async () => await _dashboardService.GetNewProduct());
+        }
     }
 }
