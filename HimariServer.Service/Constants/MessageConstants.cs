@@ -42,6 +42,7 @@ namespace HimariServer.Service.Constants
         public const string BRAND_DELETE_SUCCESS = "Brand deleted successfully";
         public const string BRAND_UPDATE_SUCCESS = "Brand updated successfully";
         public const string BRAND_CREATE_SUCCESS = "Brand created successfully";
+        public const string BRAND_DELETE_FAIL = "Failed to delete brand";
 
         public const string GET_LIST_SYMPTOM_SUCCESS = "Get list symptom successfully";
         public const string SYMPTOM_FOUND = "Symptom founds";
