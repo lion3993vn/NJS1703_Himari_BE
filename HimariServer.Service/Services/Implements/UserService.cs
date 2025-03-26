@@ -131,7 +131,7 @@ namespace HimariServer.Service.Services.Implements
                         ToEmail = newUser.Email
                     }));
 
-                var accessToken = AuthenTokenUtils.GenerateAccessToken(newUser.Email, newUser, role.RoleName, _configuration);
+                var accessToken = AuthenTokenUtils.GenerateAccessToken(newUser.Email, newUser, role.Id.ToString(), _configuration);
                 var refreshToken = AuthenTokenUtils.GenerateRefreshToken(newUser.Email, _configuration);
 
                 return new BaseResponseModel
@@ -172,7 +172,7 @@ namespace HimariServer.Service.Services.Implements
                     var existUser = await _unitOfWork.UsersRepository.GetUserByEmailAsync(email);
                     if (existUser != null)
                     {
-                        var accessToken = AuthenTokenUtils.GenerateAccessToken(email, existUser, existUser.Role.RoleName, _configuration);
+                        var accessToken = AuthenTokenUtils.GenerateAccessToken(email, existUser, existUser.Role.Id.ToString(), _configuration);
                         var refreshToken = AuthenTokenUtils.GenerateRefreshToken(email, _configuration);
                         return new BaseResponseModel
                         {
