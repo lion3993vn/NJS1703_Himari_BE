@@ -223,7 +223,7 @@ namespace HimariServer.Service.Services.Implements
 
             DateTime currentDate = DateTime.Now;
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 5; i >= 0; i--)
             {
                 int month = currentDate.Month - i;
                 int year = currentDate.Year;
@@ -236,7 +236,6 @@ namespace HimariServer.Service.Services.Implements
 
                 lastSixMonths.Add((year, month));
             }
-
             List<RevenueByMonthModel> data = new();
 
             foreach(var item in lastSixMonths)
