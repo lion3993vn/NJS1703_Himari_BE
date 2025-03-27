@@ -47,7 +47,7 @@ namespace HimariServer.API.Controllers
         }
 
         [HttpGet("search")]
-        public Task<IActionResult> SearchProducts([FromQuery] PaginationParameter paginationParameter, [FromQuery] string keyword)
+        public Task<IActionResult> SearchProducts([FromQuery] PaginationParameter paginationParameter, [FromQuery] string? keyword)
         {
             return ValidateAndExecute(async () => await _productService.SearchProductsByKeyword(paginationParameter, keyword));
         }
