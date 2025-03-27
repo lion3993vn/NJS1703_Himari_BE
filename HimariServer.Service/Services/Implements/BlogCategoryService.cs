@@ -57,7 +57,11 @@ namespace HimariServer.Service.Services.Implements
             }
             if (await _unitOfWork.BlogRepository.IsContainBlog(id))
             {
-                throw new NotExistException(MessageConstants.BLOG_CATEGORY_HAS_BLOG);
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = MessageConstants.BLOG_CATEGORY_HAS_BLOG,
+                };
             }
             _unitOfWork.BlogCategoryRepository.SoftDeleteAsync(blog);
             _unitOfWork.Save();

@@ -9,6 +9,7 @@ using HimariServer.Service.BusinessModels.ResultModels;
 using HimariServer.Service.Constants;
 using HimariServer.Service.Services.Interfaces;
 using HimariServer.Service.Utils;
+using MailKit;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace HimariServer.Service.Services.Implements
 
         public async Task<BaseResponseModel> AddBodyPart(AddBodyPartModel model)
         {
-            var bodyPart = _mapper.Map<BodyPart>(model);
+            var bodyPart = _mapper.Map<Repository.Entities.BodyPart>(model);
             bodyPart.BodyPartNameUnsign = StringUtils.ConvertToUnSign(bodyPart.BodyPartName);
             await _unitOfWork.BodyPartRepository.AddAsync(bodyPart);
             _unitOfWork.Save();
@@ -57,6 +58,15 @@ namespace HimariServer.Service.Services.Implements
                     Message = MessageConstants.BODY_PART_NOT_FOUND,
                 };
             }
+            if (await _unitOfWork.PartSymptomRepository.IsContainPartSymptom(id))
+            {
+                return new BaseResponseModel
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = MessageConstants.BODY_PART_HAS_PART_SYMPTOM
+                };
+            }
+
 
             _unitOfWork.BodyPartRepository.SoftDeleteAsync(bodyPart);
             _unitOfWork.Save();
