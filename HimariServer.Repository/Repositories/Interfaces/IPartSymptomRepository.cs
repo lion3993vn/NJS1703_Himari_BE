@@ -5,5 +5,6 @@ namespace HimariServer.Repository.Repositories.Interfaces
 {
     public interface IPartSymptomRepository : IGenericRepository<PartSymptom>
     {
+        Task<bool> IsContainPartSymptom(int bodyPartId);
     }
 }
