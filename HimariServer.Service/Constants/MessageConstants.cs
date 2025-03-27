@@ -57,6 +57,7 @@ namespace HimariServer.Service.Constants
         public const string BODY_PART_DELETE_SUCCESS = "Body part deleted successfully";
         public const string ADD_BODY_PART_SUCCESS = "Add body part successfully";
         public const string UPDATE_BODY_PART_SUCCESS = "Update body part successfully";
+        public const string BODY_PART_HAS_PART_SYMPTOM = "Body part has part symptom";
 
         public const string GET_LIST_BLOG_SUCCESS = "Get list blog successfully";
         public const string BLOG_FOUND = "Blog not founds";
@@ -74,6 +75,7 @@ namespace HimariServer.Service.Constants
         public const string BLOG_CATEGORY_UPDATE_SUCCESS = "Blog category updated successfully";
         public const string BLOG_CATEGORY_CREATE_SUCCESS = "Blog category create successfully";
         public const string BLOG_CATEROGY_REQUIRE_DATA = "Blog category is require data";
+        public const string BLOG_CATEGORY_HAS_BLOG = "Blog category has blog";
 
         public const string TOKEN_NOT_VALID = "Token not valid";
         public const string LOGIN_SUCCESS_MESSAGE = "Login successfully";
