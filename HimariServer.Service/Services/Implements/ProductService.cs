@@ -455,7 +455,7 @@ namespace HimariServer.Service.Services.Implements
             };
         }
 
-        public async Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string keyword)
+        public async Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string? keyword)
         {
             string searchKeyword = string.IsNullOrEmpty(keyword) ? string.Empty : StringUtils.ConvertToUnSign(keyword.ToLower());
 
