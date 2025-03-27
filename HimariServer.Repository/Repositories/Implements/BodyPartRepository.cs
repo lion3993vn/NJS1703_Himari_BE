@@ -19,5 +19,6 @@ namespace HimariServer.Repository.Repositories.Implements
         {
             _context = context;
         }
+
     }
 }
