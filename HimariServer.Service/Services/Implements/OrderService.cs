@@ -43,128 +43,133 @@ namespace HimariServer.Service.Services.Implements
             await _semaphore.WaitAsync();
             try
             {
-            #region create order
+                #region create order
 
-                        int totalAmount = 0;
-            foreach (var item in model.Items)
-            {
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
-                if (product == null)
+                int totalAmount = 0;
+                foreach (var item in model.Items)
                 {
-                    throw new NotExistException(MessageConstants.ORDER_ITEM_NOT_FOUND.Replace("{id}", item.ProductId.ToString()));
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                    if (product == null)
+                    {
+                        throw new NotExistException(MessageConstants.ORDER_ITEM_NOT_FOUND.Replace("{id}", item.ProductId.ToString()));
+                    }
+
+                    if (product.Quantity < item.Quantity)
+                    {
+                        throw new DefaultException(MessageConstants.INSUFFICIENT_STOCK_QUANTITY.Replace("{name}", product.ProductName));
+                    }
+
+                    var itemPrice = product.Price * item.Quantity;
+                    totalAmount += itemPrice ?? 0;
                 }
 
-                if (product.Quantity < item.Quantity)
+                if (totalAmount <= 0)
                 {
-                    throw new DefaultException(MessageConstants.INSUFFICIENT_STOCK_QUANTITY.Replace("{name}", product.ProductName));
+                    throw new Exception(MessageConstants.CANNOT_CREATE_ORDER);
                 }
 
-                var itemPrice = product.Price * item.Quantity;
-                totalAmount += itemPrice ?? 0;
-            }
+                var user = await _unitOfWork.UsersRepository.GetByIdAsync(model.UserId);
+                if (user == null)
+                {
+                    throw new NotExistException(MessageConstants.USER_NOT_EXIST);
+                }
 
-            var user = await _unitOfWork.UsersRepository.GetByIdAsync(model.UserId);
-            if (user == null)
-            {
-                throw new NotExistException(MessageConstants.USER_NOT_EXIST);
-            }
+                if (model.Items == null || !model.Items.Any())
+                {
+                    throw new DefaultException(MessageConstants.ORDER_ITEM_NOT_HAVE);
+                }
 
-            if (model.Items == null || !model.Items.Any())
-            {
-                throw new DefaultException(MessageConstants.ORDER_ITEM_NOT_HAVE);
-            }
+                int orderCode = await ValidateOrderCode();
 
-            int orderCode = await ValidateOrderCode();
+                var order = new Repository.Entities.Order
+                {
+                    UserId = model.UserId,
+                    OrderCode = orderCode,
+                    OrderPrice = 0,
+                    Address = model.Address,
+                    PhoneNumber = model.PhoneNumber,
+                    UnsignAddress = StringUtils.ConvertToUnSign(model.Address),
+                    DeliveryStatus = DeliveryStatus.NotStarted,
+                };
 
-            var order = new Repository.Entities.Order
-            {
-                UserId = model.UserId,
-                OrderCode = orderCode,
-                OrderPrice = 0,
-                Address = model.Address,
-                PhoneNumber = model.PhoneNumber,
-                UnsignAddress = StringUtils.ConvertToUnSign(model.Address),
-                DeliveryStatus = DeliveryStatus.NotStarted,
-            };
+                // Add order to database
+                await _unitOfWork.OrderRepository.AddAsync(order);
+                await _unitOfWork.SaveAsync();
 
-            // Add order to database
-            await _unitOfWork.OrderRepository.AddAsync(order);
-            await _unitOfWork.SaveAsync();
+                foreach (var item in model.Items)
+                {
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
 
-            foreach (var item in model.Items)
-            {
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                    var itemPrice = product.Price * item.Quantity;
 
-                var itemPrice = product.Price * item.Quantity;
+                    var orderDetail = new OrderDetail
+                    {
+                        OrderId = order.Id,
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        Price = product.Price
+                    };
 
-                var orderDetail = new OrderDetail
+                    await _unitOfWork.OrderDetailRepository.AddAsync(orderDetail);
+
+                    // Update product quantity
+                    product.Quantity -= item.Quantity;
+                    _unitOfWork.ProductRepository.UpdateAsync(product);
+
+                    ItemData itemPayment = new ItemData(product.ProductName, item.Quantity, (int)itemPrice);
+                }
+
+                order.OrderPrice = totalAmount;
+                _unitOfWork.OrderRepository.UpdateAsync(order);
+                #endregion
+
+                #region create payment
+                var payment = new Payment
                 {
                     OrderId = order.Id,
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    Price = product.Price
+                    Amount = totalAmount,
+                    Description = MessageConstants.PAYMENT_DESCRIPTION + order.OrderCode,
+                    PaymentMethod = model.PaymentMethod,
+                    Status = PaymentStatus.Pending,
                 };
 
-                await _unitOfWork.OrderDetailRepository.AddAsync(orderDetail);
+                await _unitOfWork.PaymentRepository.AddAsync(payment);
 
-                // Update product quantity
-                product.Quantity -= item.Quantity;
-                _unitOfWork.ProductRepository.UpdateAsync(product);
+                await _unitOfWork.SaveAsync();
+                #endregion
 
-                ItemData itemPayment = new ItemData(product.ProductName, item.Quantity, (int)itemPrice);
-            }
-
-            order.OrderPrice = totalAmount;
-            _unitOfWork.OrderRepository.UpdateAsync(order);
-            #endregion
-
-            #region create payment
-            var payment = new Payment
-            {
-                OrderId = order.Id,
-                Amount = totalAmount,
-                Description = MessageConstants.PAYMENT_DESCRIPTION + order.OrderCode,
-                PaymentMethod = model.PaymentMethod,
-                Status = PaymentStatus.Pending,
-            };
-
-            await _unitOfWork.PaymentRepository.AddAsync(payment);
-
-            await _unitOfWork.SaveAsync();
-            #endregion
-
-            #region handle payment payos
-            if (model.PaymentMethod == PaymentMethod.PayOS)
-            {
-                var paymenturl = await _payOSService.CreatePaymentUrl(order.Id);
-
-                return new BaseResponseModel
+                #region handle payment payos
+                if (model.PaymentMethod == PaymentMethod.PayOS)
                 {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = MessageConstants.ORDER_CREATE_SUCCESS,
-                    Data = new
-                    {
-                        OrderCode = order.OrderCode,
-                        PaymentUrl = paymenturl
-                    }
-                };
-            }
-            #endregion
+                    var paymenturl = await _payOSService.CreatePaymentUrl(order.Id);
 
-            #region handle payment momo
-            else
-            {
-                return new BaseResponseModel
-                {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = MessageConstants.ORDER_CREATE_SUCCESS,
-                    Data = new
+                    return new BaseResponseModel
                     {
-                        OrderCode = order.OrderCode
-                    }
-                };
-            }
-            #endregion
+                        StatusCode = StatusCodes.Status200OK,
+                        Message = MessageConstants.ORDER_CREATE_SUCCESS,
+                        Data = new
+                        {
+                            OrderCode = order.OrderCode,
+                            PaymentUrl = paymenturl
+                        }
+                    };
+                }
+                #endregion
+
+                #region handle payment momo
+                else
+                {
+                    return new BaseResponseModel
+                    {
+                        StatusCode = StatusCodes.Status200OK,
+                        Message = MessageConstants.ORDER_CREATE_SUCCESS,
+                        Data = new
+                        {
+                            OrderCode = order.OrderCode
+                        }
+                    };
+                }
+                #endregion
             }
             finally
             {
@@ -421,7 +426,7 @@ namespace HimariServer.Service.Services.Implements
                 include: query => query.Include(o => o.OrderDetails)
                                       .ThenInclude(od => od.Product)
                                       .Include(o => o.Payments)
-                                      .Include(o=>o.User));
+                                      .Include(o => o.User));
             if (order == null)
             {
                 throw new NotExistException(MessageConstants.ORDER_NOT_FOUND);

@@ -122,6 +122,7 @@ namespace HimariServer.Service.Constants
         public const string GET_ORDER_STATISTICS_SUCCESS = "Get order statistics successfully";
         public const string ORDER_UPDATE_SUCCESS = "Update order successfully";
         public const string ORDER_NOT_FOUND = "Order not found";
+        public const string CANNOT_CREATE_ORDER = "Create order fail";
         public const string ORDER_ITEM_NOT_HAVE = "Order item must be at least 1 item";
         public const string ORDER_ITEM_NOT_FOUND = "Item id {id} not found";
         public const string INSUFFICIENT_STOCK_QUANTITY = "Item {name} is insufficient for this order";
