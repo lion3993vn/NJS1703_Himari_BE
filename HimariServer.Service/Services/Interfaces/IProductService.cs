@@ -20,6 +20,6 @@ namespace HimariServer.Service.Services.Interfaces
         Task<BaseResponseModel> GetProductsPaginationAsync(PaginationParameter paginationParameter, ProductSortOption sortOption = ProductSortOption.Newest);
         Task<BaseResponseModel> UpdateProduct(UpdateProductModel product);
         Task<BaseResponseModel> GetProductsByBrand(PaginationParameter paginationParameter, int brandId);
-        Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string keyword);
+        Task<BaseResponseModel> SearchProductsByKeyword(PaginationParameter paginationParameter, string? keyword);
     }
 }
