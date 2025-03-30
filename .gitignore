@@ -483,3 +483,4 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 /HimariServer.API/appsettings.json
+/HimariServer.API/firebase-adminsdk.json
