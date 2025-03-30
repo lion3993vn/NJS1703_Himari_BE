@@ -1,6 +1,6 @@
 # 🎮 NJS1703 Himari Backend
 
-Backend API for the Himari project built with .NET 8.0 and Entity Framework Core.
+Backend API for the Himari project is built with .NET 8.0 and Entity Framework Core, featuring real-time AI chatbot streaming and PayOS VietQR payment integration.
 
 ## 🚀 Quick Start Guide
 
