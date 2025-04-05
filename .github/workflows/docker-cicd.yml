@@ -59,7 +59,7 @@ jobs:
       - name: Deploy to VPS
         run: |
           docker pull lion3993vn/himari-server:latest
-          docker run -d --name himari-server -p 12345:12345 lion3993vn/himari-server:latest
+          docker run -d --name himari-server -p 12345:12345 -e PATH_HIMARI="${{ secrets.PATH_HIMARI }}" lion3993vn/himari-server:latest
   
       - name: Verify running containers
         run: docker ps -a
