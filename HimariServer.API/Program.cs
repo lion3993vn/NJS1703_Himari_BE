@@ -19,6 +19,19 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var env = builder.Environment;
+
+if (!env.IsDevelopment())
+{
+    var deploymentPath = Environment.GetEnvironmentVariable("PATH_HIMARI");
+
+    if (string.IsNullOrEmpty(deploymentPath))
+    {
+        throw new Exception("Environment variable PATH_HIMARI is not set.");
+    }
+
+    builder.Configuration.AddJsonFile(deploymentPath, optional: false, reloadOnChange: true);
+}
 // Add services to the container.
 
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
