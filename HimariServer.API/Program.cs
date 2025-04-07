@@ -173,9 +173,14 @@ builder.Services.Configure<GeminiSettings>(builder.Configuration.GetSection("Gem
 builder.Services.Configure<ChromaDBSettings>(builder.Configuration.GetSection("ChromaDB"));
 builder.Services.Configure<RedisSettings>(builder.Configuration.GetSection("RedisSettings"));
 
+var pathFirebase = "firebase-adminsdk.json";
+if (!env.IsDevelopment())
+{
+    pathFirebase = "/appsettings/firebase-adminsdk.json";
+}
 FirebaseApp.Create(new AppOptions()
 {
-    Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
+    Credential = GoogleCredential.FromFile(pathFirebase)
 });
 
 builder.Services.AddSignalR(options =>
